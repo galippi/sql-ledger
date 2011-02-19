@@ -1,0 +1,32 @@
+$self{texts} = {
+  'About'                       => ' ',
+  'Continue'                    => 'Folytatás',
+  'Database Host'               => 'Adatbázis helye',
+  'Dataset'                     => 'Cégadatbázis',
+  'Dataset is newer than version!' => 'Dataset is newer than version!',
+  'Incorrect Dataset version!'  => 'Érvénytelen adatbázisverzió!',
+  'Incorrect Password!'         => 'Érvénytelen jelszó!',
+  'Licensed to'                 => 'Cég:',
+  'Login'                       => 'Belépés',
+  'Name'                        => 'Név',
+  'Password'                    => 'Jelszó',
+  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'User'                        => 'Felhasználó',
+  'Version'                     => 'Verzió',
+  'You are logged out!'         => 'Már kijelentkezett!',
+  'You did not enter a name!'   => 'Nem írt be nevet!',
+  'done'                        => 'done',
+  'is not a member!'            => 'nem tag!',
+  'localhost'                   => 'localhost',
+  'to Version'                  => 'to Version',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'belépés'                     => 'login',
+};
+
+1;

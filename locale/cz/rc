@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Úèet',
+  'Accounting Menu'             => 'Menu úèetnictví',
+  'Balance'                     => 'Balance',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Pokraèování',
+  'Date'                        => 'Datum',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Deposit',
+  'Description'                 => 'Popis',
+  'Difference'                  => 'Difference',
+  'Done'                        => 'Done',
+  'From'                        => 'z',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Out of balance!',
+  'Payment'                     => 'Platba',
+  'Reconciliation'              => 'Reconciliation',
+  'Select all'                  => 'Select all',
+  'Source'                      => 'Zdroj',
+  'Statement Balance'           => 'Statement Balance',
+  'To'                          => 'do',
+  'Update'                      => 'Update',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'pokraèování'                 => 'continue',
+  'done'                        => 'done',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+};
+
+1;

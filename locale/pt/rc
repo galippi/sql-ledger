@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Conta',
+  'Accounting Menu'             => 'Menu de Contabilidade',
+  'Balance'                     => 'Saldo',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Continuar',
+  'Date'                        => 'Data',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Depósito',
+  'Description'                 => 'Descrição',
+  'Difference'                  => 'Diferença',
+  'Done'                        => 'Pronto',
+  'From'                        => 'De',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Out of balance!',
+  'Payment'                     => 'Pagamento',
+  'Reconciliation'              => 'Reconciliação',
+  'Select all'                  => 'Seleccionar todos',
+  'Source'                      => 'Origem',
+  'Statement Balance'           => 'Statement Balance',
+  'To'                          => 'Até',
+  'Update'                      => 'Actualizar',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'continuar'                   => 'continue',
+  'pronto'                      => 'done',
+  'seleccionar_todos'           => 'select_all',
+  'actualizar'                  => 'update',
+};
+
+1;

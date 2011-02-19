@@ -1,0 +1,311 @@
+                SQL-Ledger Accounting
+                     Version 2.2
+
+
+DESCRIPTION:
+------------
+SQL-Ledger is a double-entry accounting program written
+in perl. It has been tested with PostgreSQL, Oracle, DB2,
+Apache, Netscape, Mozilla, Galeon, Explorer, Links, Lynx,
+Konqueror, Voyager, W3M and Opera clients on Linux, FreeBSD,
+Solaris, Windows and Mac computers.
+
+Data is stored in a SQL server, either locally or remote,
+the display is through a text or GUI web browser. The system
+is linked by a chart of accounts.  All transactions for AR,
+AP and GL are stored in a transaction table. Hyper-links
+from the chart of accounts let you view transactions posted
+through AR, AP and GL.
+
+Configuration files let you specify to which SQL server
+to connect to, personal preferences such as company name,
+language, number and date format, etc.
+
+The admin script can be used to create, edit or delete users
+and to create and delete datasets and to setup the Chart
+of Accounts and templates needed for the system.
+It can be used for PostgreSQL and Oracle. If you want to
+use another SQL server the tables and chart of accounts
+must be created by hand.
+
+You can have a group of users using the same dataset and
+templates for generating Invoices, Income Statements and
+Balance Sheets or a different set altogether.
+
+Templates are supplied in html and tex format to generate
+most of the forms. Forms can be printed to screen, sent
+to a printer or to a mailer agent. To use the tex forms
+latex must be installed. Most systems have a latex binary
+installed by default. Latex is also available for Windows
+and the Mac so we stay compatible across all major platforms.
+
+
+COPYRIGHT:
+----------
+Licensed under the terms of the GPL.
+
+
+LATEST VERSION:
+---------------
+available from http://www.sql-ledger.org
+
+
+PLATFORMS:
+----------
+Non specific, see requirements.
+
+
+REQUIREMENTS:
+-------------
+1 - Perl, 5+
+2 - http server (Apache, NCSA, httpi, ...)
+3 - SQL Server (PostgreSQL 7.1+, Oracle 8+, DB2 7.2+)
+4 - DBD (DBD-Pg, DBD-Oracle, DBD-DB2)
+5 - DBI
+6 - LaTeX (optional)
+
+
+FOREIGN LANGUAGE SUPPORT:
+-------------------------
+All the required files are in locale/country_code
+The main files are 'all' and 'missing'. You can enter
+translated strings in either file. When you are done
+run locales.pl from the command line to rebuild the
+required files.
+
+Some of the translation files are not 100% complete.
+If strings are missing, English is used instead.
+
+
+INSTALLATION:
+-------------
+unpack the tar.gz file in /usr/local
+
+  tar xzvf sql-ledger-x.x.x.tar.gz
+
+you should now have everything in /usr/local/sql-ledger
+
+copy sql-ledger.conf.default to sql-ledger.conf
+
+edit sql-ledger.conf
+
+create a file sql-ledger-httpd.conf in the same location
+where your httpd.conf is and copy the next section into the file
+
+  Alias /sql-ledger/ /usr/local/sql-ledger/
+  <Directory /usr/local/sql-ledger>
+    AllowOverride All
+    AddHandler cgi-script .pl
+    Options ExecCGI Includes FollowSymlinks
+    Order Allow,Deny
+    Allow from All
+  </Directory>
+
+  <Directory /usr/local/sql-ledger/users>
+    Order Deny,Allow
+    Deny from All
+  </Directory>
+
+edit httpd.conf and add
+
+  # SQL-Ledger
+  Include <ServerRoot>/sql-ledger-httpd.conf
+
+Note: Replace <ServerRoot> with the server's root directory!
+
+restart your web server.
+
+
+Note: /usr/local/sql-ledger is only a suggested
+path, you may install in any directory.
+
+
+INSTALLATION WITH setup.pl:
+---------------------------
+Make a directory
+
+  mkdir /usr/local/sql-ledger
+
+Copy setup.pl to /usr/local/sql-ledger
+
+run setup.pl as root and follow the prompts.
+
+Go to the next step, "PREPARE YOUR SQL SERVER".
+
+
+SET PERMISSION:
+---------------
+change directory to /usr/local/sql-ledger
+
+# chown nobody:nogroup users templates
+
+replace nobody:nogroup with the web server
+user of your system. Some systems use
+apache:apache, www, www-data, ...
+
+
+PREPARE YOUR SQL SERVER:
+------------------------
+
+  PostgreSQL:
+  -----------
+  add one database user with create database privileges
+  to manage the datasets and tables for SQL-Ledger
+  
+  # su postgres
+  $ createuser -d sql-ledger
+  
+  if you use passwords to access postgres use this command
+  $ createuser -d -P sql-ledger
+
+  Answer 'n' to the following question.
+  Shall the new user be allowed to create more new users? (y/n) n
+
+  You can add more database users to keep datasets
+  separated. Each dataset belongs to one company.
+  
+  
+  ORACLE:
+  -------
+  add one user and one tablespace
+  all datasets share the same tablespace
+
+
+  DB2:
+  ----
+  please see README.DB2
+
+
+SETUP A DATABASE AND THE TABLES:
+--------------------------------
+Load your web browser and connect to
+http://localhost/sql-ledger/admin.pl
+
+Select the "Database Administration" link,
+enter a host, port and the user you created
+in the previous step.
+
+The "Create Dataset" link queries the server
+for existing datasets and displays them in a
+table. Enter a name for the new dataset (use
+lowercase letters only!) and select one of the
+Chart of Accounts and click on Continue.
+Your new dataset and the tables will be created
+and the selected Chart of Accounts loaded. The
+owner of the tables will be the user you entered
+in the previous screen as the "User".
+
+NOTE: Be patient, some of the charts are really
+big and take some time to create.
+
+The "Delete Dataset" link queries the server
+for datasets which are in use by SQL-Ledger
+and are not used by any members. This may
+take a while to figure out. "Be patient".
+If there are any datasets not in use, you get
+a screen with the datasets listed where you
+select the one you want to delete.
+
+You cannot manage any other datasets from this
+interface, only the datasets used by SQL-Ledger.
+
+POSTGRESQL: template1 is only used to query
+the server, none of the information stored
+in template1 is manipulated in any way.
+
+DB2: The web interface does not work with DB2
+please see README.DB2 how to setup the tables
+and chart of accounts.
+
+
+SETUP A USER:
+-------------
+Load your web browser and connect to
+http://localhost/sql-ledger/admin.pl
+
+Click on "Add User". In the Database
+section select the driver and enter
+the user you used to create the dataset.
+
+
+LOAD THE ACCOUNTING PROGRAM:
+----------------------------
+Load your web browser and connect to
+http://localhost/sql-ledger/login.pl
+
+
+UPGRADING TO A NEWER VERSION:
+-----------------------------
+1. load admin.pl and lock the system
+2. untar the new version over top
+3. check the doc directory for specific notes
+4. load admin.pl and unlock the system
+5. login
+
+NOTE: datasets are upgraded when you login for
+the first time. If an error occurs the system
+will remain locked. Track down the error, fix it,
+load admin.pl, unlock the system and login again.
+
+
+UPGRADING WITH setup.pl:
+------------------------
+run setup.pl from the command line and follow
+the prompts.
+
+
+INSTALLATION CHECKLIST:
+-----------------------
+1. untar SL somewhere
+2. change permissions for the users and templates directory
+3. edit httpd.conf
+4. edit sql-ledger.conf
+5. a) add the database user sql-ledger in PostgreSQL
+   b) add a tablespace and the database user sql-ledger in Oracle
+   c) run the DB2 scripts
+6. load admin.pl
+7. create datasets for the companies
+8. add users
+
+   In the Database section enter
+   
+   a) PostgreSQL
+   
+      Host:     for local connections leave empty
+      Dataset:  the dataset created in step 7
+      Port:     for local connections leave empty
+      User:     sql-ledger
+      Password: password for sql-ledger
+      
+   b) Oracle
+   
+      SID:      system ID
+      Port:     the port Oracle is listening on
+      Dataset:  the dataset created in step 7
+      Password: password for connection
+
+   c) DB2
+
+      Host:	hostname or IP address
+      Dataset:	the dataset created in step 7
+      Port:	port number
+      User:	dba
+      Password:	password for dba
+      
+
+IF SOMETHING DOESN'T WORK:
+--------------------------
+There is a FAQ at http://www.sql-ledger.org/misc/faq.html
+or read the one included in the doc directory.
+
+There are also several mailing lists at
+http://www.sql-ledger.org/misc/mailinglist.html
+where you can seek free help.
+
+If you require commercial support you can order online at
+http://www.sql-ledger.com/misc/support.html
+
+
+=====================================================================
+December 14, 2003
+

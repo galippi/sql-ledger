@@ -1,0 +1,32 @@
+$self{texts} = {
+  'About'                       => 'Acerca',
+  'Continue'                    => 'Continuar',
+  'Database Host'               => 'Servidor de Base de Dados',
+  'Dataset'                     => 'Dataset',
+  'Dataset is newer than version!' => 'Dataset is newer than version!',
+  'Incorrect Dataset version!'  => 'Versão Dataset incorrecta!',
+  'Incorrect Password!'         => 'Password Incorrecta!',
+  'Licensed to'                 => 'Licenciado a',
+  'Login'                       => 'Login',
+  'Name'                        => 'Nome',
+  'Password'                    => 'Password',
+  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'User'                        => 'Utilizador',
+  'Version'                     => 'Versão',
+  'You are logged out!'         => 'Terminou a sessão!',
+  'You did not enter a name!'   => 'Não indicou nome!',
+  'done'                        => 'done',
+  'is not a member!'            => 'não é membro!',
+  'localhost'                   => 'localhost',
+  'to Version'                  => 'to Version',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'login'                       => 'login',
+};
+
+1;

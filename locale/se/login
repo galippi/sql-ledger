@@ -1,0 +1,32 @@
+$self{texts} = {
+  'About'                       => 'Om',
+  'Continue'                    => 'Fortsätt',
+  'Database Host'               => 'Databasvärd',
+  'Dataset'                     => 'Dataset',
+  'Dataset is newer than version!' => 'Dataset is newer than version!',
+  'Incorrect Dataset version!'  => 'Felaktig databasversion',
+  'Incorrect Password!'         => 'Felaktigt lösenord',
+  'Licensed to'                 => 'Licensierad till',
+  'Login'                       => 'Logga in',
+  'Name'                        => 'Namn',
+  'Password'                    => 'Lösenord',
+  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'User'                        => 'Användare',
+  'Version'                     => 'Version',
+  'You are logged out!'         => 'Du är utloggad',
+  'You did not enter a name!'   => 'Du skrev inte in något namn',
+  'done'                        => 'done',
+  'is not a member!'            => 'är inte medlem!',
+  'localhost'                   => 'localhost',
+  'to Version'                  => 'to Version',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'logga_in'                    => 'login',
+};
+
+1;

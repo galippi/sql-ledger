@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Hesap',
+  'Accounting Menu'             => 'Muhasebe Menüsü',
+  'Balance'                     => 'Balance',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Devam',
+  'Date'                        => 'Tarih',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Deposit',
+  'Description'                 => 'Açıklama',
+  'Difference'                  => 'Difference',
+  'Done'                        => 'Done',
+  'From'                        => 'Başlangıç',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Out of balance!',
+  'Payment'                     => 'Ödeme',
+  'Reconciliation'              => 'Reconciliation',
+  'Select all'                  => 'Select all',
+  'Source'                      => 'Kaynak',
+  'Statement Balance'           => 'Statement Balance',
+  'To'                          => 'Bitiş',
+  'Update'                      => 'Update',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'devam'                       => 'continue',
+  'done'                        => 'done',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+};
+
+1;

@@ -1,0 +1,23 @@
+$self{texts} = {
+  'Address'                     => 'Cím',
+  'Continue'                    => 'Folytatás',
+  'Customer not on file!'       => 'A vevõ hiányzik az adatbázisból!',
+  'Select from one of the names below' => 'Válasszon ki egyet az alábbi nevek közül',
+  'Vendor not on file!'         => 'Szállító nincs az adatbázisban!',
+};
+
+$self{subs} = {
+  'add_transaction'             => 'add_transaction',
+  'ap_transaction'              => 'ap_transaction',
+  'ar_transaction'              => 'ar_transaction',
+  'check_name'                  => 'check_name',
+  'continue'                    => 'continue',
+  'gl_transaction'              => 'gl_transaction',
+  'name_selected'               => 'name_selected',
+  'sales_invoice'               => 'sales_invoice',
+  'select_name'                 => 'select_name',
+  'vendor_invoice'              => 'vendor_invoice',
+  'folytatás'                   => 'continue',
+};
+
+1;

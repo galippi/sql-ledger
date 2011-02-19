@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Számla',
+  'Accounting Menu'             => 'Menü',
+  'Balance'                     => 'Egyenleg',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Folytatás',
+  'Date'                        => 'Dátum',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Betét',
+  'Description'                 => 'Szöveges leírás',
+  'Difference'                  => 'Eltérés',
+  'Done'                        => 'Elvégezve',
+  'From'                        => 'Mikortól:',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Az egyenleg nem stimmel!',
+  'Payment'                     => 'Kifizetés',
+  'Reconciliation'              => 'Egyeztetés',
+  'Select all'                  => 'Mindent kijelöl',
+  'Source'                      => 'Bizonylatszám',
+  'Statement Balance'           => 'Kimutatás egyenlege',
+  'To'                          => 'Meddig:',
+  'Update'                      => 'Frissítés',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'folytatás'                   => 'continue',
+  'elvégezve'                   => 'done',
+  'mindent_kijelöl'             => 'select_all',
+  'frissítés'                   => 'update',
+};
+
+1;

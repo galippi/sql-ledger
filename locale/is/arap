@@ -1,0 +1,23 @@
+$self{texts} = {
+  'Address'                     => 'Heimilisfang',
+  'Continue'                    => 'Áfram',
+  'Customer not on file!'       => 'Viðskiptavinur ekki á skrá!',
+  'Select from one of the names below' => 'Veljið einhvað að neðangreindum nöfnum',
+  'Vendor not on file!'         => 'Byrgir ekki til í gagnagrunni!',
+};
+
+$self{subs} = {
+  'add_transaction'             => 'add_transaction',
+  'ap_transaction'              => 'ap_transaction',
+  'ar_transaction'              => 'ar_transaction',
+  'check_name'                  => 'check_name',
+  'continue'                    => 'continue',
+  'gl_transaction'              => 'gl_transaction',
+  'name_selected'               => 'name_selected',
+  'sales_invoice'               => 'sales_invoice',
+  'select_name'                 => 'select_name',
+  'vendor_invoice'              => 'vendor_invoice',
+  'Áfram'                       => 'continue',
+};
+
+1;

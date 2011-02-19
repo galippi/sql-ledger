@@ -1,0 +1,23 @@
+$self{texts} = {
+  'Address'                     => 'Adres',
+  'Continue'                    => 'Devam',
+  'Customer not on file!'       => 'Customer not on file!',
+  'Select from one of the names below' => 'Select from one of the names below',
+  'Vendor not on file!'         => 'Vendor not on file!',
+};
+
+$self{subs} = {
+  'add_transaction'             => 'add_transaction',
+  'ap_transaction'              => 'ap_transaction',
+  'ar_transaction'              => 'ar_transaction',
+  'check_name'                  => 'check_name',
+  'continue'                    => 'continue',
+  'gl_transaction'              => 'gl_transaction',
+  'name_selected'               => 'name_selected',
+  'sales_invoice'               => 'sales_invoice',
+  'select_name'                 => 'select_name',
+  'vendor_invoice'              => 'vendor_invoice',
+  'devam'                       => 'continue',
+};
+
+1;

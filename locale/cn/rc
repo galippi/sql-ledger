@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => '科目',
+  'Accounting Menu'             => '会计选单',
+  'Balance'                     => '差额',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => '继续',
+  'Date'                        => '日期',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => '储存',
+  'Description'                 => '说明',
+  'Difference'                  => '差异',
+  'Done'                        => '完成',
+  'From'                        => '从',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => '出于差额!',
+  'Payment'                     => '付款方式',
+  'Reconciliation'              => '调停',
+  'Select all'                  => '选择全部',
+  'Source'                      => '来源',
+  'Statement Balance'           => '帐目陈述差额',
+  'To'                          => '至',
+  'Update'                      => '更新',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  '继续'                        => 'continue',
+  '完成'                        => 'done',
+  '选择全部'                    => 'select_all',
+  '更新'                        => 'update',
+};
+
+1;

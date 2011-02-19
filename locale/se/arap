@@ -1,0 +1,23 @@
+$self{texts} = {
+  'Address'                     => 'Adress',
+  'Continue'                    => 'Fortsätt',
+  'Customer not on file!'       => 'Kund finns ej',
+  'Select from one of the names below' => 'Välj ett av namnen nedan',
+  'Vendor not on file!'         => 'Leverantör finns ej',
+};
+
+$self{subs} = {
+  'add_transaction'             => 'add_transaction',
+  'ap_transaction'              => 'ap_transaction',
+  'ar_transaction'              => 'ar_transaction',
+  'check_name'                  => 'check_name',
+  'continue'                    => 'continue',
+  'gl_transaction'              => 'gl_transaction',
+  'name_selected'               => 'name_selected',
+  'sales_invoice'               => 'sales_invoice',
+  'select_name'                 => 'select_name',
+  'vendor_invoice'              => 'vendor_invoice',
+  'fortsätt'                    => 'continue',
+};
+
+1;

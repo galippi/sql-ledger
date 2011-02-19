@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Konto',
+  'Accounting Menu'             => 'Konto-meny',
+  'Balance'                     => 'Balanse',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Fortsett',
+  'Date'                        => 'Dato',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Depositum',
+  'Description'                 => 'Beskrivelse',
+  'Difference'                  => 'Forskjell',
+  'Done'                        => 'Ferdig',
+  'From'                        => 'Fra',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Ute av balanse!',
+  'Payment'                     => 'Betaling',
+  'Reconciliation'              => 'Bankoppgjør',
+  'Select all'                  => 'Velg alt',
+  'Source'                      => 'Bilag',
+  'Statement Balance'           => 'Balanseoppgjør',
+  'To'                          => 'Til',
+  'Update'                      => 'Oppdatér',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'fortsett'                    => 'continue',
+  'ferdig'                      => 'done',
+  'velg_alt'                    => 'select_all',
+  'oppdatér'                    => 'update',
+};
+
+1;

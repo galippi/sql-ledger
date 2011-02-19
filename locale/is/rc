@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Reikningur',
+  'Accounting Menu'             => 'Bókhalds valmynd',
+  'Balance'                     => 'Afstemming',
+  'Beginning Balance'           => 'Beginning Balance',
+  'Continue'                    => 'Áfram',
+  'Date'                        => 'Dagsetning',
+  'Decrease'                    => 'Decrease',
+  'Deposit'                     => 'Innlagt',
+  'Description'                 => 'Skıringar',
+  'Difference'                  => 'Mismunur',
+  'Done'                        => 'Búiğ',
+  'From'                        => 'Frá',
+  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Increase'                    => 'Increase',
+  'Out of balance!'             => 'Ekki jafnvægi!',
+  'Payment'                     => 'Greislur',
+  'Reconciliation'              => 'Afstemingar',
+  'Select all'                  => 'Velja allt',
+  'Source'                      => 'Frálag',
+  'Statement Balance'           => 'jöfnunaruppgjör',
+  'To'                          => 'til',
+  'Update'                      => 'Uppfærsla',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'display_form'                => 'display_form',
+  'done'                        => 'done',
+  'get_payments'                => 'get_payments',
+  'reconciliation'              => 'reconciliation',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'update'                      => 'update',
+  'Áfram'                       => 'continue',
+  'búiğ'                        => 'done',
+  'velja_allt'                  => 'select_all',
+  'uppfærsla'                   => 'update',
+};
+
+1;
