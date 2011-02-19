@@ -44,8 +44,8 @@
 \pagestyle{myheadings}
 %\thispagestyle{empty}     use this with letterhead paper
 
-<%pagebreak 90 27 48%>
-\end{tabularx}
+<%pagebreak 90 27 37%>
+\end{tabular*}
 
   \rule{\textwidth}{2pt}
   
@@ -60,7 +60,7 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrrr@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrrr@{}}
   \textbf{Nummer} & \textbf{Artikel} & \textbf{Anz} &
     \textbf{Einh} & \textbf{Preis} & \textbf{Rab} & \textbf{Total} \\
   & Übertrag von Seite <%lastpage%> & & & & & <%sumcarriedforward%> \\
@@ -73,13 +73,17 @@
 
 <%name%>
 
-<%addr1%>
+<%address1%>
 
-<%addr2%>
+<%if address2%>
+<%address2%>
+<%end address2%>
 
-<%addr3%>
+<%city%> <%state%> <%zipcode%>
 
-<%addr4%>
+<%if country%>
+<%country%>
+<%end country%>
 
 \vspace{3.5cm}
 
@@ -92,14 +96,14 @@
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrrr@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrrr@{}}
   \textbf{Nummer} & \textbf{Artikel} & \textbf{Anz} &
     \textbf{Einh} & \textbf{Preis} & \textbf{Rab} & \textbf{Total} \\
 <%foreach number%>
   <%number%> & <%description%> & <%qty%> &
     <%unit%> & <%sellprice%> & <%discount%> & <%linetotal%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{
@@ -144,7 +148,7 @@
 \footnotetext[1]{\tiny
 Rechnung ist bezahlbar innerhalb von <%terms%> Tagen.
 Nach dem <%duedate%> werden Zinsen zu einem
-jährlichen Zinsatz von 12\% verrechnet.
+monatlichen Satz von 1.5\% verrechnet.
 Waren bleiben im Besitz von <%company%> bis die Rechnung voll bezahlt ist.
 Rückgaben werden mit 10 Prozent Lagergebühren belastet. Beschädigte Waren
 und Waren ohne eine Rückgabenummer werden nicht entgegengenommen.

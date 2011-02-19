@@ -14,7 +14,7 @@ $self{texts} = {
   'Description'                 => 'Опис',
   'Feb'                         => 'лютого',
   'February'                    => 'Лютий',
-  'From'                        => 'В╕д / з',
+  'From'                        => 'В╕д/З',
   'GIFI'                        => 'GIFI',
   'Include in Report'           => 'Додати до Зв╕ту',
   'Jan'                         => 'с╕чня',
@@ -32,12 +32,11 @@ $self{texts} = {
   'November'                    => 'Листопад',
   'Oct'                         => 'жовтня',
   'October'                     => 'Жовтень',
-  'R'                           => 'R',
   'Reference'                   => 'Зсилка',
   'Sep'                         => 'вересня',
   'September'                   => 'Вересень',
   'Subtotal'                    => 'П╕дсумок по розд╕лу',
-  'to'                          => 'до',
+  'To'                          => 'До',
 };
 
 $self{subs} = {

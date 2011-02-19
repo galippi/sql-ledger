@@ -45,7 +45,7 @@
 %\thispagestyle{empty}     use this with letterhead paper
 
 <%pagebreak 90 27 48%>
-\end{tabularx}
+\end{tabular*}
 
 \newpage
 
@@ -53,9 +53,9 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}lXrll@{}}
-  \textbf{Nummer} & \textbf{Beskrivelse} & \textbf{Ant.} &
-    \textbf{Enhet} & \textbf{Kurv} \\
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rll@{}}
+  \textbf{Number} & \textbf{Description} & \textbf{Qt'y} &
+    \textbf{Unit} & \textbf{Bin} \\
 <%end pagebreak%>
 
 
@@ -86,14 +86,14 @@
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}lXrll@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rll@{}}
   \textbf{Nummer} & \textbf{Beskrivelse} & \textbf{Ant.} &
     \textbf{Enhet} & \textbf{Kurv} \\
 <%foreach number%>
   <%number%> & <%description%> & <%qty%> &
     <%unit%> & <%bin%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{

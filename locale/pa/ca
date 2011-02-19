@@ -4,7 +4,6 @@ $self{texts} = {
   'April'                       => 'Abril',
   'Aug'                         => 'Ago',
   'August'                      => 'Agosto',
-  'Balance'                     => 'Balance',
   'Chart of Accounts'           => 'Catálogo Contable',
   'Credit'                      => 'Crédito',
   'Date'                        => 'Fecha',
@@ -32,12 +31,10 @@ $self{texts} = {
   'November'                    => 'Noviembre',
   'Oct'                         => 'Oct',
   'October'                     => 'Octubre',
-  'R'                           => 'R',
-  'Reference'                   => 'Referencia',
   'Sep'                         => 'Sep',
   'September'                   => 'Septiembre',
   'Subtotal'                    => 'Subtotal',
-  'to'                          => 'a',
+  'To'                          => 'Hasta ',
 };
 
 $self{subs} = {

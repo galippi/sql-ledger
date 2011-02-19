@@ -125,7 +125,7 @@ sub num2text {
   my @textnumber = ();
 
   # split amount into chunks of 3
-  my @num = reverse split //, $amount;
+  my @num = reverse split //, abs($amount);
   my @numblock = ();
   my @a;
   my $i;

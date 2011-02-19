@@ -11,6 +11,7 @@ $self{texts} = {
   'Debit'                       => 'Debet',
   'Dec'                         => 'dec',
   'December'                    => 'december',
+  'Department'                  => 'Afdeling',
   'Description'                 => 'Beskrivelse',
   'Feb'                         => 'feb',
   'February'                    => 'februar',
@@ -23,7 +24,7 @@ $self{texts} = {
   'July'                        => 'juli',
   'Jun'                         => 'jun',
   'June'                        => 'juni',
-  'List Transactions'           => 'Vis bogføringer',
+  'List Transactions'           => 'Vís bogføringer',
   'Mar'                         => 'mar',
   'March'                       => 'marts',
   'May'                         => 'maj',
@@ -32,12 +33,13 @@ $self{texts} = {
   'November'                    => 'november',
   'Oct'                         => 'okt',
   'October'                     => 'oktober',
+  'Project Number'              => 'Projektnummer',
   'R'                           => 'R',
   'Reference'                   => 'Reference',
   'Sep'                         => 'sep',
   'September'                   => 'september',
   'Subtotal'                    => 'Subtotal',
-  'to'                          => 'til',
+  'To'                          => 'til',
 };
 
 $self{subs} = {
@@ -45,7 +47,7 @@ $self{subs} = {
   'chart_of_accounts'           => 'chart_of_accounts',
   'list'                        => 'list',
   'list_transactions'           => 'list_transactions',
-  'vis_bogføringer'             => 'list_transactions',
+  'vís_bogføringer'             => 'list_transactions',
 };
 
 1;

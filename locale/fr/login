@@ -1,16 +1,17 @@
 $self{texts} = {
-  'About'                       => 'A propos',
+  'About'                       => 'À propos',
+  'Company'                     => 'Société',
   'Continue'                    => 'Continuer',
   'Database Host'               => 'Hôte de base de données',
   'Dataset'                     => 'Fichier de données',
-  'Dataset is newer than version!' => 'Fichier de données plus recent que le logiciel!',
+  'Dataset is newer than version!' => 'Fichier de données plus récent que le logiciel!',
   'Incorrect Dataset version!'  => 'Fichier de données incorrect!',
   'Incorrect Password!'         => 'Mot de passe incorrect!',
   'Licensed to'                 => 'Licence à',
-  'Login'                       => 'Utilisateur',
+  'Login'                       => 'Login',
   'Name'                        => 'Nom',
   'Password'                    => 'Mot de passe',
-  'Upgrading Dataset'           => 'Mise à jour fichier de données',
+  'Upgrading to Version'        => 'Mise à jour à la version',
   'User'                        => 'Utilisateur',
   'Version'                     => 'Version',
   'You are logged out!'         => 'Vous êtes déconnecté!',
@@ -18,7 +19,6 @@ $self{texts} = {
   'done'                        => 'fait',
   'is not a member!'            => 'n\'est pas un membre!',
   'localhost'                   => 'hôte local',
-  'to Version'                  => 'jusqu\'à la version',
 };
 
 $self{subs} = {
@@ -26,7 +26,8 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
-  'utilisateur'                 => 'login',
+  'selectdataset'               => 'selectdataset',
+  'login'                       => 'login',
 };
 
 1;

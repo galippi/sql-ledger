@@ -1,24 +1,21 @@
 $self{texts} = {
   'About'                       => 'Lisätietoja',
+  'Company'                     => 'Yritys',
   'Continue'                    => 'Jatka',
   'Database Host'               => 'Tietokannan isäntä',
   'Dataset'                     => 'Tietolähde',
-  'Dataset is newer than version!' => 'Dataset is newer than version!',
   'Incorrect Dataset version!'  => 'Väärä tietolähdeversio!',
   'Incorrect Password!'         => 'Väärä salasana!',
   'Licensed to'                 => 'Lisenssin omistaja',
   'Login'                       => 'Kirjaudu',
   'Name'                        => 'Nimi',
   'Password'                    => 'Salasana',
-  'Upgrading Dataset'           => 'Upgrading Dataset',
   'User'                        => 'Käyttäjä',
   'Version'                     => 'Versio',
   'You are logged out!'         => 'Olet poistunut järjestelmästä',
   'You did not enter a name!'   => 'Et kirjoittanut nimeä',
-  'done'                        => 'done',
   'is not a member!'            => 'ei ole käyttäjä',
   'localhost'                   => 'paikallinen tietokone',
-  'to Version'                  => 'to Version',
 };
 
 $self{subs} = {
@@ -26,6 +23,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'kirjaudu'                    => 'login',
 };
 

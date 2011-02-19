@@ -45,8 +45,8 @@
 \pagestyle{myheadings}
 %\thispagestyle{empty}     use this with letterhead paper
 
-<%pagebreak 90 27 48%>
-\end{tabularx}
+<%pagebreak 90 27 37%>
+\end{tabular*}
 
   \rule{\textwidth}{2pt}
   
@@ -61,9 +61,9 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrr@{}}
-  \textbf{Numéro} & \textbf{Description} & \textbf{Qté} &
-    \textbf{Unité} & \textbf{Prix} & \textbf{Montant} \\
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrr@{}}
+  \textbf{Number} & \textbf{Description} & \textbf{Qt'y} &
+    \textbf{Unit} & \textbf{Price} & \textbf{Amount} \\
   & reporté de la page <%lastpage%> & & & & <%sumcarriedforward%> \\
 <%end pagebreak%>
 
@@ -74,13 +74,17 @@
 
 <%name%>
 
-<%addr1%>
+<%address1%>
 
-<%addr2%>
+<%if address2%>
+<%address2%>
+<%end address2%>
 
-<%addr3%>
+<%city%> <%state%> <%zipcode%>
 
-<%addr4%>
+<%if country%>
+<%country%>
+<%end country%>
 
 \vspace{3.5cm}
 
@@ -97,14 +101,14 @@
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrr@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrr@{}}
   \textbf{Numéro} & \textbf{Description} & \textbf{Qté} &
     \textbf{Unité} & \textbf{Prix} & \textbf{Montant} \\
 <%foreach number%>
   <%number%> & <%description%> & <%qty%> &
     <%unit%> & <%sellprice%> & <%linetotal%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{

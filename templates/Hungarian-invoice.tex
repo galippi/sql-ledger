@@ -140,10 +140,14 @@ fax: <%fax%>
 \begin{minipage}[t]{9.5cm}
 \textbf{Vevõ:} \\
 <%name%>\\
-<%addr1%>\\
-<%addr2%>\\
-<%addr3%>\\
-<%addr4%>
+<%address1%>\\
+<%if address2%>
+<%address2%>
+<%end address2%>\\
+<%city%> <%state%> <%zipcode%>\\
+<%if country%>
+<%country%>
+<%end country%>
 \end{minipage}
 }
 

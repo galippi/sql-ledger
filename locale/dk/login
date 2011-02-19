@@ -1,24 +1,24 @@
 $self{texts} = {
   'About'                       => 'Om',
+  'Company'                     => 'Firma',
   'Continue'                    => 'Fortsæt',
   'Database Host'               => 'Database-vært',
   'Dataset'                     => 'Datasæt',
-  'Dataset is newer than version!' => 'Dataset is newer than version!',
+  'Dataset is newer than version!' => 'Datasæt er nyere end version!',
   'Incorrect Dataset version!'  => 'Forkert version af datasæt!',
   'Incorrect Password!'         => 'Forkert adgangskode',
   'Licensed to'                 => 'Udført for',
   'Login'                       => 'Log på',
   'Name'                        => 'Navn',
   'Password'                    => 'Adgangskode',
-  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'Upgrading to Version'        => 'Opgraderer til version',
   'User'                        => 'Bruger',
   'Version'                     => 'Version',
   'You are logged out!'         => 'Du er logget ud',
   'You did not enter a name!'   => 'Du angav ikke et navn',
-  'done'                        => 'done',
+  'done'                        => 'færdig',
   'is not a member!'            => 'er ikke et medlem!',
   'localhost'                   => 'lokalt',
-  'to Version'                  => 'to Version',
 };
 
 $self{subs} = {
@@ -26,6 +26,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'log_på'                      => 'login',
 };
 

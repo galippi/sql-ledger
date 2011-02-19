@@ -1,8 +1,12 @@
 $self{texts} = {
   'Address'                     => 'Aadress',
   'Continue'                    => 'Edasi',
-  'Customer not on file!'       => 'Klienti pole failis',
+  'Customer not on file!'       => 'Klienti pole failis!',
+  'Description'                 => 'Selgitus',
+  'Number'                      => 'Kood',
+  'Project not on file!'        => 'Projekti pole failis!',
   'Select from one of the names below' => 'Vali üks alltoodud nimedest',
+  'Select from one of the projects below' => 'Vali üks alltoodud projektidest',
   'Vendor not on file!'         => 'Hankijat pole failis!',
 };
 
@@ -11,12 +15,15 @@ $self{subs} = {
   'ap_transaction'              => 'ap_transaction',
   'ar_transaction'              => 'ar_transaction',
   'check_name'                  => 'check_name',
+  'check_project'               => 'check_project',
   'continue'                    => 'continue',
   'gl_transaction'              => 'gl_transaction',
   'name_selected'               => 'name_selected',
-  'sales_invoice'               => 'sales_invoice',
+  'project_selected'            => 'project_selected',
+  'sales_invoice_'              => 'sales_invoice_',
   'select_name'                 => 'select_name',
-  'vendor_invoice'              => 'vendor_invoice',
+  'select_project'              => 'select_project',
+  'vendor_invoice_'             => 'vendor_invoice_',
   'edasi'                       => 'continue',
 };
 

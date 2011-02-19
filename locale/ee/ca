@@ -11,6 +11,7 @@ $self{texts} = {
   'Debit'                       => 'Deebet',
   'Dec'                         => 'Dets',
   'December'                    => 'Detsember',
+  'Department'                  => 'Osakond',
   'Description'                 => 'Selgitus',
   'Feb'                         => 'Veebr',
   'February'                    => 'Veebruar',
@@ -32,12 +33,12 @@ $self{texts} = {
   'November'                    => 'November',
   'Oct'                         => 'Okt',
   'October'                     => 'Oktoober',
-  'R'                           => 'R',
-  'Reference'                   => 'Viide',
+  'Project Number'              => 'Projekti number',
+  'Reference'                   => 'Referenss',
   'Sep'                         => 'Sept',
   'September'                   => 'September',
   'Subtotal'                    => 'Vahesumma',
-  'to'                          => 'kuni',
+  'To'                          => 'Kuhu',
 };
 
 $self{subs} = {

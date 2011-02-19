@@ -44,8 +44,8 @@
 \pagestyle{myheadings}
 %\thispagestyle{empty}     use this with letterhead paper
 
-<%pagebreak 90 27 48%>
-\end{tabularx}
+<%pagebreak 90 27 37%>
+\end{tabular*}
 
   \rule{\textwidth}{2pt}
   
@@ -60,9 +60,9 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrrr@{}}
-  \textbf{Número} & \textbf{Descrição} & \textbf{Quant.} &
-    \textbf{Unid.} & \textbf{Preço} & \textbf{Disc.} & \textbf{Total} \\
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrrr@{}}
+  \textbf{Number} & \textbf{Description} & \textbf{Qt'y} &
+    \textbf{Unit} & \textbf{Price} & \textbf{Disc} & \textbf{Amount} \\
   & carried forward from page <%lastpage%> & & & & & <%sumcarriedforward%> \\
 <%end pagebreak%>
 
@@ -78,13 +78,17 @@
 
 <%name%>
 
-<%addr1%>
+<%address1%>
 
-<%addr2%>
+<%if address2%>
+<%address2%>
+<%end address2%>
 
-<%addr3%>
+<%city%> <%state%> <%zipcode%>
 
-<%addr4%>
+<%if country%>
+<%country%>
+<%end country%>
 
 \vspace{0.3cm}
 
@@ -110,13 +114,17 @@ Fax: <%customerfax%>
 
 <%shiptoname%>
 
-<%shiptoaddr1%>
+<%shiptoaddress1%>
 
-<%shiptoaddr2%>
+<%if shiptoaddress2%>
+<%shiptoaddress2%>
+<%end shiptoaddress2%>
 
-<%shiptoaddr3%>
+<%shiptocity%> <%shiptostate%> <%shiptozipcode%>
 
-<%shiptoaddr4%>
+<%if shiptocountry%>
+<%shiptocountry%>
+<%end shiptocountry%>
 
 \vspace{0.3cm}
 
@@ -155,14 +163,14 @@ Fax: <%shiptofax%>
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}lXrlrrr@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rlrrr@{}}
   \textbf{Número} & \textbf{Descrição} & \textbf{Quant.} &
     \textbf{Unid.} & \textbf{Preço} & \textbf{Disc.} & \textbf{Total} \\
 <%foreach number%>
   <%number%> & <%description%> & <%qty%> &
     <%unit%> & <%sellprice%> & <%discount%> & <%linetotal%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{
@@ -215,9 +223,5 @@ Fax: <%shiptofax%>
 
 \centerline{\textbf{Obrigado por estarmos fazendo negócio!}}
 
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
-
 \end{document}
-
-
 

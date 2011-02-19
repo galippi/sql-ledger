@@ -30,12 +30,13 @@
 #
 #######################################################################
 
-# setup defaults, these are overidden by sql-ledger.conf
-# DO NOT CHANGE
+# setup defaults, DO NOT CHANGE
 $userspath = "users";
+$spool = "spool";
 $templates = "templates";
 $memberfile = "users/members";
 $sendmail = "| /usr/sbin/sendmail -t";
+%printer = ( Printer => 'lpr' );
 ########## end ###########################################
 
 
@@ -48,6 +49,9 @@ eval { require "sql-ledger.conf"; };
 
 $form = new Form;
 
+# send warnings and errors to browser
+$SIG{__WARN__} = sub { $form->info($_[0]) };
+$SIG{__DIE__} = sub { $form->error($_[0]) };
 
 # name of this script
 $0 =~ tr/\\/\//;
@@ -60,7 +64,7 @@ $form->{script} = $script;
 $script =~ s/\.pl//;
 
 # pull in DBI
-use DBI;
+use DBI qw(:sql_types);
 
 # check for user config file, could be missing or ???
 eval { require("$userspath/$form->{login}.conf"); };
@@ -75,12 +79,10 @@ if ($@) {
 
 
 $myconfig{dbpasswd} = unpack 'u', $myconfig{dbpasswd};
-map { $form->{$_} = $myconfig{$_} } qw(stylesheet charset) unless (($form->{action} eq "save") && ($form->{type} eq 'preferences'));
-
+map { $form->{$_} = $myconfig{$_} } qw(stylesheet charset) unless ($form->{type} eq 'preferences');
 
 # locale messages
 $locale = new Locale "$myconfig{countrycode}", "$script";
-
 
 # check password
 $form->error($locale->text('Incorrect Password!')) if ($form->{password} ne $myconfig{password});
@@ -116,7 +118,7 @@ if ($form->{action}) {
   # window title bar, user info
   $form->{titlebar} = "SQL-Ledger ".$locale->text('Version'). " $form->{version} - $myconfig{name} - $myconfig{dbname}";
 
-  if (substr($form->{action}, 0, 1) eq " ") {
+  if (substr($form->{action}, 0, 1) =~ /( |\.)/) {
     &{ $form->{nextsub} };
   } else {
     &{ $locale->findsub($form->{action}) };

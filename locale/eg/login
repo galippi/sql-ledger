@@ -1,0 +1,29 @@
+$self{texts} = {
+  'About'                       => 'عن',
+  'Company'                     => 'شركة',
+  'Continue'                    => 'تابع',
+  'Database Host'               => 'مضيف قواعد البيانات',
+  'Dataset'                     => 'مجموعة بيانات',
+  'Incorrect Dataset version!'  => 'نسخة غير صحيحة من مجموعة البيانات',
+  'Incorrect Password!'         => 'كلمة السر غير صحيحة',
+  'Licensed to'                 => 'ترخيص',
+  'Login'                       => 'دخول',
+  'Name'                        => 'الاسم',
+  'Password'                    => 'كلمة السر',
+  'User'                        => 'مستخدم',
+  'Version'                     => 'نسخة',
+  'You did not enter a name!'   => 'لم يتم ادخال الاسم',
+  'done'                        => 'نفذ',
+  'is not a member!'            => 'ليس عضوا',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
+  'دخول'                    => 'login',
+};
+
+1;

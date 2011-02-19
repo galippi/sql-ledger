@@ -54,6 +54,4 @@ create index vend_contact_x on vendor (contact)@
 create index vendtax_vendor_id on vendortax (vendor_id)@
 create index shipto_trans_id on shipto (trans_id)@
 create index project_id_x on project (id)@
-create unique index projectnumber_x on project (projectnumber)@
 create index partsgroup_id_x on partsgroup (id)@
-create unique index partsgroup_x on partsgroup (partsgroup)@

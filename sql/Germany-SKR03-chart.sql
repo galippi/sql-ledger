@@ -1,6 +1,4 @@
 -- General COA
--- provided by Yvonne
--- June 13, 2002
 --
 INSERT INTO chart (accno,description,charttype,category,link,gifi_accno) VALUES ('420','Büroeinrichtung','A','A','','420');
 INSERT INTO chart (accno,description,charttype,category,link,gifi_accno) VALUES ('430','Ladeneinrichtung','A','A','','430');
@@ -264,4 +262,3 @@ insert into tax (chart_id,rate) values ((select id from chart where accno = '840
 --
 update defaults set inventory_accno_id = (select id from chart where accno = '7140'), income_accno_id = (select id from chart where accno = '8400'), expense_accno_id = (select id from chart where accno = '4700'), fxgain_accno_id = (select id from chart where accno = '8840'), fxloss_accno_id = (select id from chart where accno = '8840'), invnumber = '1000', sonumber = '1000', ponumber = '1000', curr = 'EUR:USD', weightunit = 'kg';
 --
-

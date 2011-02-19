@@ -32,12 +32,12 @@ $self{texts} = {
   'November'                    => 'de noviembre',
   'Oct'                         => 'oct',
   'October'                     => 'de octubre',
-  'R'                           => 'R',
+  'Project Number'              => 'Número de Proyecto',
   'Reference'                   => 'Referencia',
   'Sep'                         => 'sep',
   'September'                   => 'de septiembre',
   'Subtotal'                    => 'Subtotal',
-  'to'                          => 'a',
+  'To'                          => 'Hasta',
 };
 
 $self{subs} = {

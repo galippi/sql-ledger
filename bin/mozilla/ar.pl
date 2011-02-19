@@ -1,11 +1,12 @@
 #=====================================================================
 # SQL-Ledger Accounting
-# Copyright (c) 2001
+# Copyright (c) 2000
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
 #
+#  Contributors:
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #======================================================================
 #
-# Accounts Receivables
+# Accounts Receivable
 #
 #======================================================================
 
@@ -97,17 +98,7 @@ sub create_links {
 
   $form->create_links("AR", \%myconfig, "customer");
   $duedate = $form->{duedate};
-  $notes = $form->{notes};
   
-  $taxincluded = $form->{taxincluded};
-  
-  IS->get_customer(\%myconfig, \%$form);
-
-  $form->{duedate} = $duedate;
-  $form->{notes} = $notes if $form->{id};
-  $form->{oldcustomer} = "$form->{customer}--$form->{customer_id}";
-  $form->{oldinvdate} = $form->{invdate};
-
   # currencies
   @curr = split /:/, $form->{currencies};
   chomp $curr[0];
@@ -115,28 +106,51 @@ sub create_links {
 
   map { $form->{selectcurrency} .= "<option>$_\n" } @curr;
 
+  IS->get_customer(\%myconfig, \%$form);
+
+  $form->{duedate} = $duedate if $duedate;
+  $form->{notes} = $form->{intnotes} if !$form->{id};
+  
+  $form->{oldcustomer} = "$form->{customer}--$form->{customer_id}";
+  $form->{oldtransdate} = $form->{transdate};
+
   # customers
   if (@{ $form->{all_customer} }) {
     $form->{customer} = "$form->{customer}--$form->{customer_id}";
-    map { $form->{selectcustomer} .= "<option>$_->{name}--$_->{id}\n" } (@{ $form->{all_customer} });
+    map { $form->{selectcustomer} .= qq|<option value="$_->{name}--$_->{id}">$_->{name}\n| } (@{ $form->{all_customer} });
   }
-
+  
+  # departments
+  if (@{ $form->{all_departments} }) {
+    $form->{selectdepartment} = "<option>\n";
+    $form->{department} = "$form->{department}--$form->{department_id}";
+    
+    map { $form->{selectdepartment} .= qq|<option value="$_->{description}--$_->{id}">$_->{description}\n| } (@{ $form->{all_departments} });
+  }
+  
+  $form->{employee} = "$form->{employee}--$form->{employee_id}";
+  # sales staff
+  if (@{ $form->{all_employees} }) {
+    $form->{selectemployee} = "";
+    map { $form->{selectemployee} .= qq|<option value="$_->{name}--$_->{id}">$_->{name}\n| } (@{ $form->{all_employees} });
+  }
+  
   # projects
-  if (@{ $form->{all_project} }) {
+  if (@{ $form->{all_projects} }) {
     $form->{selectprojectnumber} = "<option>\n";
-    map { $form->{selectprojectnumber} .= "<option>$_->{projectnumber}\n" } (@{ $form->{all_project} });
+    map { $form->{selectprojectnumber} .= qq|<option value="$_->{projectnumber}--$_->{id}">$_->{projectnumber}\n| } (@{ $form->{all_projects} });
   }
-
 
   # forex
   $form->{forex} = $form->{exchangerate};
   $exchangerate = ($form->{exchangerate}) ? $form->{exchangerate} : 1;
-  
+
   foreach $key (keys %{ $form->{AR_links} }) {
        
     foreach $ref (@{ $form->{AR_links}{$key} }) {
       if ($key eq 'AR_tax') {
 	$form->{"selectAR_tax_$ref->{accno}"} = "<option>$ref->{accno}--$ref->{description}\n";
+	$form->{"calctax_$ref->{accno}"} = 1;
 	next;
       }
       $form->{"select$key"} .= "<option>$ref->{accno}--$ref->{description}\n";
@@ -150,6 +164,7 @@ sub create_links {
 	$form->{"paid_$i"} = $form->{acc_trans}{$key}->[$i-1]->{amount} * -1;
 	$form->{"datepaid_$i"} = $form->{acc_trans}{$key}->[$i-1]->{transdate};
 	$form->{"source_$i"} = $form->{acc_trans}{$key}->[$i-1]->{source};
+	$form->{"memo_$i"} = $form->{acc_trans}{$key}->[$i-1]->{memo};
 	
 	$form->{"forex_$i"} = $form->{"exchangerate_$i"} = $form->{acc_trans}{$key}->[$i-1]->{exchangerate};
 	
@@ -160,17 +175,24 @@ sub create_links {
 	$akey =~ s/AR_//;
 	
         if ($key eq "AR_tax") {
-
 	  $form->{"${key}_$form->{acc_trans}{$key}->[$i-1]->{accno}"} = "$form->{acc_trans}{$key}->[$i-1]->{accno}--$form->{acc_trans}{$key}->[$i-1]->{description}";
 	  $form->{"${akey}_$form->{acc_trans}{$key}->[$i-1]->{accno}"} = $form->round_amount($form->{acc_trans}{$key}->[$i-1]->{amount} / $exchangerate, 2);
-	  $totaltax += $form->{"${akey}_$form->{acc_trans}{$key}->[$i-1]->{accno}"};
+	  
+	  if ($form->{"$form->{acc_trans}{$key}->[$i-1]->{accno}_rate"} > 0) {
+	    $totaltax += $form->{"${akey}_$form->{acc_trans}{$key}->[$i-1]->{accno}"};
+	    $taxrate += $form->{"$form->{acc_trans}{$key}->[$i-1]->{accno}_rate"};
+	  } else {
+	    $totalwithholding += $form->{"${akey}_$form->{acc_trans}{$key}->[$i-1]->{accno}"};
+	    $withholdingrate += $form->{"$form->{acc_trans}{$key}->[$i-1]->{accno}_rate"};
+	  }
+
 	} else {
 	  $form->{"${akey}_$i"} = $form->round_amount($form->{acc_trans}{$key}->[$i-1]->{amount} / $exchangerate, 2);
 	  if ($akey eq 'amount') {
 	    $form->{rowcount}++;
 	    $totalamount += $form->{"${akey}_$i"};
 
-            $form->{"projectnumber_$i"} = "$form->{acc_trans}{$key}->[$i-1]->{projectnumber}";
+            $form->{"projectnumber_$i"} = "$form->{acc_trans}{$key}->[$i-1]->{projectnumber}--$form->{acc_trans}{$key}->[$i-1]->{project_id}";
 	  }
 	  $form->{"${key}_$i"} = "$form->{acc_trans}{$key}->[$i-1]->{accno}--$form->{acc_trans}{$key}->[$i-1]->{description}";
 	}
@@ -178,25 +200,49 @@ sub create_links {
     }
   }
 
-  $form->{taxincluded} = $taxincluded if ($form->{id});
   $form->{paidaccounts} = 1 if not defined $form->{paidaccounts};
 
   if ($form->{taxincluded} && $totalamount) {
-    # add tax to amounts and invtotal
+    # add tax to individual amounts
     for $i (1 .. $form->{rowcount}) {
-      $taxamount = $totaltax * $form->{"amount_$i"} / $totalamount;
+      $taxamount = ($totaltax + $totalwithholding) * $form->{"amount_$i"} / $totalamount;
       $tax = $form->round_amount($taxamount, 2);
       $diff += ($taxamount - $tax);
       $form->{"amount_$i"} += $tax;
     }
     $form->{amount_1} += $form->round_amount($diff, 2);
   }
+  
+  # check if calculated is equal to stored
+  # taxincluded is terrible to calculate
+  # this works only if all taxes are checked
+  foreach $item (split / /, $form->{taxaccounts}) {
+    if ($form->{taxincluded}) {
+      if ($form->{"${item}_rate"} > 0) {
+	if ($taxrate) {
+	  $taxamount = $form->round_amount(($totalamount + $totaltax + $totalwithholding) * $taxrate / (1 + $taxrate), 2) * $form->{"${item}_rate"} / $taxrate;
+	}
+      } else {
+	if ($withholdingrate) {
+	  $taxamount = $form->round_amount(($totalamount + $totaltax + $totalwithholding) * $withholdingrate / (1 - $withholdingrate), 2) * $form->{"${item}_rate"} / $withholdingrate;
+	}
+      }
+    } else {
+      $taxamount = $totalamount * $form->{"${item}_rate"};
+    }
+    $taxamount = $form->round_amount($taxamount, 2);
 
-  $form->{invtotal} = $totalamount + $totaltax;
+    $form->{"calctax_$item"} = 0;
+    if ($form->{"tax_$item"} == $taxamount) {
+      $form->{"calctax_$item"} = 1;
+    }
+  }
+
+  $form->{invtotal} = $totalamount + $totaltax + $totalwithholding;
   $form->{rowcount}++ if $form->{id};
   
   $form->{AR} = $form->{AR_1};
-  $form->{rowcount} = 1 if ! $form->{amount_1};
+  $form->{rowcount} = 1 unless $form->{AR_amount_1};
   
   $form->{locked} = ($form->{revtrans}) ? '1' : ($form->datetonum($form->{transdate}, \%myconfig) <= $form->datetonum($form->{closedto}, \%myconfig));
 
@@ -217,10 +263,18 @@ sub form_header {
 # $locale->text('Edit Accounts Receivables Transaction')
 
   # set option selected
-  foreach $item (qw(AR customer currency)) {
+  foreach $item (qw(AR currency)) {
     $form->{"select$item"} =~ s/ selected//;
-    $form->{"select$item"} =~ s/option>\Q$form->{$item}\E/option selected>$form->{$item}/;
+    $form->{"select$item"} =~ s/<option>\Q$form->{$item}\E/<option selected>$form->{$item}/;
   }
+  
+  foreach $item (qw(customer department employee)) {
+    $form->{"select$item"} = $form->unescape($form->{"select$item"});
+    $form->{"select$item"} =~ s/ selected//;
+    $form->{"select$item"} =~ s/(<option value="\Q$form->{$item}\E")/$1 selected/;
+  }
+
+  $form->{selectprojectnumber} = $form->unescape($form->{selectprojectnumber});
   
   # format amounts
   $form->{exchangerate} = $form->format_amount(\%myconfig, $form->{exchangerate});
@@ -234,12 +288,12 @@ sub form_header {
   if ($form->{currency} ne $form->{defaultcurrency}) {
     if ($form->{forex}) {
       $exchangerate .= qq|
-	<th align=right>|.$locale->text('Exchangerate').qq|</th>
+	<th align=right>|.$locale->text('Exchange Rate').qq|</th>
 	<td><input type=hidden name=exchangerate value=$form->{exchangerate}>$form->{exchangerate}</td>
 |;
     } else {
       $exchangerate .= qq|
-        <th align=right>|.$locale->text('Exchangerate').qq|</th>
+        <th align=right>|.$locale->text('Exchange Rate').qq|</th>
         <td><input name=exchangerate size=10 value=$form->{exchangerate}></td>
 |;
     }
@@ -261,13 +315,34 @@ sub form_header {
   }
   $notes = qq|<textarea name=notes rows=$rows cols=50 wrap=soft>$form->{notes}</textarea>|;
   
+  $department = qq|
+	      <tr>
+		<th align="right" nowrap>|.$locale->text('Department').qq|</th>
+		<td colspan=3><select name=department>$form->{selectdepartment}</select>
+		<input type=hidden name=selectdepartment value="|.$form->escape($form->{selectdepartment},1).qq|">
+		</td>
+	      </tr>
+| if $form->{selectdepartment};
 
-  $form->header;
-  
+ 
   $n = ($form->{creditremaining} =~ /-/) ? "0" : "1";
 
   $customer = ($form->{selectcustomer}) ? qq|<select name=customer>$form->{selectcustomer}</select>| : qq|<input name=customer value="$form->{customer}" size=35>|;
- 
+
+  $employee = qq|
+                <input type=hidden name=employee value="$form->{employee}">
+|;
+
+  $employee = qq|
+	      <tr>
+		<th align=right nowrap>|.$locale->text('Salesperson').qq|</th>
+		<td><select name=employee>$form->{selectemployee}</select></td>
+		<input type=hidden name=selectemployee value="|.$form->escape($form->{selectemployee},1).qq|">
+	      </tr>
+| if $form->{selectemployee};
+
+  $form->header;
+  
   print qq|
 <body>
 
@@ -279,10 +354,10 @@ sub form_header {
 <input type=hidden name=locked value=$form->{locked}>
 <input type=hidden name=title value="$title">
 
-<input type=hidden name=oldinvdate value=$form->{oldinvdate}>
+<input type=hidden name=oldtransdate value=$form->{oldtransdate}>
 
 <table width=100%>
-  <tr>
+  <tr class=listtop>
     <th class=listtop>$form->{title}</th>
   </tr>
   <tr height="5"></tr>
@@ -295,7 +370,7 @@ sub form_header {
 	      <tr>
 		<th align="right" nowrap>|.$locale->text('Customer').qq|</th>
 		<td colspan=3>$customer</td>
-		<input type=hidden name=selectcustomer value="$form->{selectcustomer}">
+		<input type=hidden name=selectcustomer value="|.$form->escape($form->{selectcustomer},1).qq|">
 		<input type=hidden name=oldcustomer value="$form->{oldcustomer}">
 		<input type=hidden name=customer_id value="$form->{customer_id}">
 		<input type=hidden name=terms value=$form->{terms}>
@@ -315,7 +390,6 @@ sub form_header {
 		  </table>
 		</td>
 	      </tr>
-	      $taxincluded
 	      <tr>
 		<th align=right>|.$locale->text('Currency').qq|</th>
 		<td><select name=currency>$form->{selectcurrency}</select></td>
@@ -325,10 +399,13 @@ sub form_header {
 		<input type=hidden name=fxloss_accno value=$form->{fxloss_accno}>
 		$exchangerate
 	      </tr>
+	      $department
+	      $taxincluded
 	    </table>
 	  </td>
 	  <td align=right>
 	    <table>
+	      $employee
 	      <tr>
 		<th align=right nowrap>|.$locale->text('Invoice Number').qq|</th>
 		<td><input name=invnumber size=11 value="$form->{invnumber}"></td>
@@ -351,38 +428,38 @@ sub form_header {
       </table>
     </td>
   </tr>
-
-<input type=hidden name=selectAR_amount value="$form->{selectAR_amount}">
-<input type=hidden name=selectprojectnumber value="$form->{selectprojectnumber}">
-<input type=hidden name=rowcount value=$form->{rowcount}>
- 
   <tr>
     <td>
       <table width=100%>
     
+<input type=hidden name=selectAR_amount value="$form->{selectAR_amount}">
+<input type=hidden name=selectprojectnumber value="|.$form->escape($form->{selectprojectnumber},1).qq|">
+<input type=hidden name=rowcount value=$form->{rowcount}>
 |;
 
   $amount = $locale->text('Amount');
   
   for $i (1 .. $form->{rowcount}) {
-    
-    foreach $item (qw(AR_amount projectnumber)) {
-      $form->{"select$item"} =~ s/ selected//;
-      $form->{"select$item"} =~ s/option>\Q$form->{"${item}_$i"}\E/option selected>$form->{"${item}_$i"}/;
-    }
 
+    $selectAR_amount = $form->{selectAR_amount};
+    $selectAR_amount =~ s/option>\Q$form->{"AR_amount_$i"}\E/option selected>$form->{"AR_amount_$i"}/;
+    
+    $selectprojectnumber = $form->{selectprojectnumber};
+    $selectprojectnumber =~ s/(<option value="\Q$form->{"projectnumber_$i"}\E")/$1 selected/;
+    
     # format amounts
     $form->{"amount_$i"} = $form->format_amount(\%myconfig, $form->{"amount_$i"}, 2);
 
     $project = qq|
-	  <td align=right><select name="projectnumber_$i">$form->{selectprojectnumber}</select></td>
+	  <td align=right><select name="projectnumber_$i">$selectprojectnumber</select></td>
 | if $form->{selectprojectnumber};
-
+	  
     print qq|
 	<tr>
 	  <th align=right>$amount</th>
 	  <td><input name="amount_$i" size=10 value=$form->{"amount_$i"}></td>
-	  <td><select name="AR_amount_$i">$form->{selectAR_amount}</select></td>
+	  <td></td>
+	  <td><select name="AR_amount_$i">$selectAR_amount</select></td>
 	  $project
 	</tr>
 |;
@@ -394,13 +471,14 @@ sub form_header {
   
   foreach $item (split / /, $form->{taxaccounts}) {
 
-    $form->{"tax_$item"} = $form->format_amount(\%myconfig, $form->{"tax_$item"}, 2);
+    $form->{"calctax_$item"} = ($form->{"calctax_$item"}) ? "checked" : "";
 
-    
+    $form->{"tax_$item"} = $form->format_amount(\%myconfig, $form->{"tax_$item"}, 2);
     print qq|
         <tr>
 	  <th align=right nowrap>$taxlabel</th>
 	  <td><input name="tax_$item" size=10 value=$form->{"tax_$item"}></td>
+	  <td align=right><input name="calctax_$item" class=checkbox type=checkbox value=1 $form->{"calctax_$item"}></td>
 	  <td><select name="AR_tax_$item">$form->{"selectAR_tax_$item"}</select></td>
 	</tr>
 	<input type=hidden name="${item}_rate" value="$form->{"${item}_rate"}">
@@ -417,12 +495,15 @@ sub form_header {
 
 	  <th align=right>|.$locale->text('Total').qq|</th>
 	  <th align=left>$form->{invtotal}</th>
-	  <td><select name=AR>$form->{selectAR}</select></td>
-          <input type=hidden name=selectAR value="$form->{selectAR}">
-	  <input type=hidden name=taxaccounts value="$form->{taxaccounts}">
-	  
+	  <td></td>
+
 	  <input type=hidden name=oldinvtotal value=$form->{oldinvtotal}>
 	  <input type=hidden name=oldtotalpaid value=$form->{oldtotalpaid}>
+
+	  <input type=hidden name=taxaccounts value="$form->{taxaccounts}">
+
+	  <td><select name=AR>$form->{selectAR}</select></td>
+          <input type=hidden name=selectAR value="$form->{selectAR}">
   
         </tr>
         <tr>
@@ -435,16 +516,15 @@ sub form_header {
   <tr>
     <td>
       <table width=100%>
-	<tr>
-	  <th class=listheading colspan=5>|.$locale->text('Payments').qq|</th>
+	<tr class=listheading>
+	  <th colspan=6 class=listheading>|.$locale->text('Payments').qq|</th>
 	</tr>
 |;
 
-
   if ($form->{currency} eq $form->{defaultcurrency}) {
-    @column_index = qw(datepaid source paid AR_paid);
+    @column_index = qw(datepaid source memo paid AR_paid);
   } else {
-    @column_index = qw(datepaid source paid exchangerate AR_paid);
+    @column_index = qw(datepaid source memo paid exchangerate AR_paid);
   }
 
   $column_data{datepaid} = "<th>".$locale->text('Date')."</th>";
@@ -452,6 +532,7 @@ sub form_header {
   $column_data{exchangerate} = "<th>".$locale->text('Exch')."</th>";
   $column_data{AR_paid} = "<th>".$locale->text('Account')."</th>";
   $column_data{source} = "<th>".$locale->text('Source')."</th>";
+  $column_data{memo} = "<th>".$locale->text('Memo')."</th>";
   
   print "
         <tr>
@@ -460,6 +541,7 @@ sub form_header {
   print "
         </tr>
 ";
+
 
   $form->{paidaccounts}++ if ($form->{"paid_$form->{paidaccounts}"});
   for $i (1 .. $form->{paidaccounts}) {
@@ -487,13 +569,14 @@ sub form_header {
 <input type=hidden name="forex_$i" value=$form->{"forex_$i"}>
 |;
 
-    $column_data{"paid_$i"} = qq|<td align=center><input name="paid_$i" size=10 value=$form->{"paid_$i"}></td>|;
-    $column_data{"AR_paid_$i"} = qq|<td align=center><select name="AR_paid_$i">$form->{"selectAR_paid_$i"}</select></td>|;
-    $column_data{"exchangerate_$i"} = qq|<td align=center>$exchangerate</td>|;
-    $column_data{"datepaid_$i"} = qq|<td align=center><input name="datepaid_$i" size=11 value=$form->{"datepaid_$i"}></td>|;
-    $column_data{"source_$i"} = qq|<td align=center><input name="source_$i" size=10 value="$form->{"source_$i"}"></td>|;
+    $column_data{paid} = qq|<td align=center><input name="paid_$i" size=11 value=$form->{"paid_$i"}></td>|;
+    $column_data{AR_paid} = qq|<td align=center><select name="AR_paid_$i">$form->{"selectAR_paid_$i"}</select></td>|;
+    $column_data{exchangerate} = qq|<td align=center>$exchangerate</td>|;
+    $column_data{datepaid} = qq|<td align=center><input name="datepaid_$i" size=11 value=$form->{"datepaid_$i"}></td>|;
+    $column_data{source} = qq|<td align=center><input name="source_$i" size=11 value="$form->{"source_$i"}"></td>|;
+    $column_data{memo} = qq|<td align=center><input name="memo_$i" size=11 value="$form->{"memo_$i"}"></td>|;
 
-    map { print qq|$column_data{"${_}_$i"}\n| } @column_index;
+    map { print qq|$column_data{$_}\n| } @column_index;
     
     print "
         </tr>
@@ -501,7 +584,6 @@ sub form_header {
   }
   
   print qq|
-
 <input type=hidden name=paidaccounts value=$form->{paidaccounts}>
 <input type=hidden name=selectAR_paid value="$form->{selectAR_paid}">
 
@@ -534,16 +616,15 @@ sub form_footer {
   $closedto = $form->datetonum($form->{closedto}, \%myconfig);
   
   if (! $form->{readonly}) {
-    
     if ($form->{id}) {
-      
-	print qq|<input class=submit type=submit name=action value="|.$locale->text('Update').qq|">
+    
+      print qq|<input class=submit type=submit name=action value="|.$locale->text('Update').qq|">
 |;
 
       if (!$form->{locked}) {
 	print qq|
-      <input class=submit type=submit name=action value="|.$locale->text('Post').qq|">
-      <input class=submit type=submit name=action value="|.$locale->text('Delete').qq|">
+	<input class=submit type=submit name=action value="|.$locale->text('Post').qq|">
+	<input class=submit type=submit name=action value="|.$locale->text('Delete').qq|">
 |;
       }
 
@@ -554,9 +635,14 @@ sub form_footer {
     } else {
       if ($transdate > $closedto) {
 	print qq|<input class=submit type=submit name=action value="|.$locale->text('Update').qq|">
-      <input class=submit type=submit name=action value="|.$locale->text('Post').qq|">|;
+	<input class=submit type=submit name=action value="|.$locale->text('Post').qq|">|;
       }
     }
+  }
+
+  if ($form->{menubar}) {
+    require "$form->{path}/menu.pl";
+    &menubar;
   }
 
   print "
@@ -602,37 +688,68 @@ sub update {
   $form->{exchangerate} = $exchangerate if ($form->{forex} = ($exchangerate = $form->check_exchangerate(\%myconfig, $form->{currency}, $form->{transdate}, 'buy')));
 
 
-  $form->{invdate} = $form->{transdate};
-  &check_name(customer);
-
-  if ($form->{invdate} ne $form->{oldinvdate}) {
-    $form->{duedate} = $form->current_date(\%myconfig, $form->{invdate}, $form->{terms} * 1);
-    $form->{oldinvdate} = $form->{invdate};
+  if (&check_name(customer)) {
+    $form->{notes} = $form->{intnotes} unless $form->{id};
   }
 
+  if ($form->{transdate} ne $form->{oldtransdate}) {
+    $form->{duedate} = $form->current_date(\%myconfig, $form->{transdate}, $form->{terms} * 1);
+    $form->{oldtransdate} = $form->{transdate};
+  }
+  
 
 
 TAXCALC:
   # recalculate taxes
+
+  @taxaccounts = split / /, $form->{taxaccounts};
+  
+  map { $form->{"tax_$_"} = $form->parse_amount(\%myconfig, $form->{"tax_$_"}) } @taxaccounts;
+  
   if ($form->{taxincluded}) {
     $taxrate = 0;
+    $withholdingrate = 0;
 
-    map { $taxrate += $form->{"${_}_rate"} } split / /, $form->{taxaccounts};
+    foreach $item (@taxaccounts) {
+      $form->{"calctax_$item"} = 1 if $form->{calctax};
+      
+      if ($form->{"calctax_$item"}) {
+	if ($form->{"${item}_rate"} > 0) {
+	  $taxrate += $form->{"${item}_rate"};
+	} else {
+	  $withholdingrate += $form->{"${item}_rate"};
+	}
+      }
+    }
 
-    foreach $item (split / /, $form->{taxaccounts}) {
-      $amount = ($form->{invtotal} * (1 - 1 / (1 + $taxrate)) * $form->{"${item}_rate"} / $taxrate) if $taxrate;
-      $form->{"tax_$item"} = $form->round_amount($amount, 2);
-      $taxdiff += ($amount - $form->{"tax_$item"});
-      if (abs $taxdiff >= 0.005) {
-	$form->{"tax_$item"} += $form->round_amount($taxdiff, 2);
-	$taxdiff = 0;
+    foreach $item (@taxaccounts) {
+
+      if ($form->{"calctax_$item"}) {
+	if ($form->{"${item}_rate"} > 0) {
+	  $amount = $form->round_amount($form->{invtotal} * $taxrate / (1 + $taxrate), 2) * $form->{"${item}_rate"} / $taxrate;
+	  $form->{"tax_$item"} = $form->round_amount($amount, 2);
+	  $taxdiff += ($amount - $form->{"tax_$item"});
+	} else {
+	  $amount = $form->round_amount($form->{invtotal} * $withholdingrate / (1 - $withholdingrate), 2) * $form->{"${item}_rate"} / $withholdingrate;
+	  $form->{"tax_$item"} = $form->round_amount($amount, 2);
+	  $taxdiff += ($amount - $form->{"tax_$item"});
+	}
+
+	if (abs($taxdiff) >= 0.005) {
+	  $form->{"tax_$item"} += $form->round_amount($taxdiff, 2);
+	  $taxdiff = 0;
+	}
       }
       $form->{"selectAR_tax_$item"} = qq|<option>$item--$form->{"${item}_description"}|;
       $totaltax += $form->{"tax_$item"};
     }
   } else {
-    foreach $item (split / /, $form->{taxaccounts}) {
-      $form->{"tax_$item"} = $form->round_amount($form->{invtotal} * $form->{"${item}_rate"}, 2);
+    foreach $item (@taxaccounts) {
+      $form->{"calctax_$item"} = 1 if $form->{calctax};
+      
+      if ($form->{"calctax_$item"}) {
+	$form->{"tax_$item"} = $form->round_amount($form->{invtotal} * $form->{"${item}_rate"}, 2);
+      }
       $form->{"selectAR_tax_$item"} = qq|<option>$item--$form->{"${item}_description"}|;
       $totaltax += $form->{"tax_$item"};
     }
@@ -662,7 +779,6 @@ TAXCALC:
 sub post {
 
   # check if there is an invoice number, invoice and due date
-  $form->isblank("invnumber", $locale->text('Invoice Number missing!'));
   $form->isblank("transdate", $locale->text('Invoice Date missing!'));
   $form->isblank("duedate", $locale->text('Due Date missing!'));
   $form->isblank("customer", $locale->text('Customer missing!'));
@@ -672,7 +788,7 @@ sub post {
   
   $form->error($locale->text('Cannot post transaction for a closed period!')) if ($transdate <= $closedto);
 
-  $form->isblank("exchangerate", $locale->text('Exchangerate missing!')) if ($form->{currency} ne $form->{defaultcurrency});
+  $form->isblank("exchangerate", $locale->text('Exchange rate missing!')) if ($form->{currency} ne $form->{defaultcurrency});
   
   for $i (1 .. $form->{paidaccounts}) {
     if ($form->{"paid_$i"}) {
@@ -684,7 +800,7 @@ sub post {
 
       if ($form->{currency} ne $form->{defaultcurrency}) {
 	$form->{"exchangerate_$i"} = $form->{exchangerate} if ($transdate == $datepaid);
-	$form->isblank("exchangerate_$i", $locale->text('Exchangerate for payment missing!'));
+	$form->isblank("exchangerate_$i", $locale->text('Exchange rate for payment missing!'));
       }
     }
   }
@@ -695,6 +811,8 @@ sub post {
     &update;
     exit;
   }
+
+  $form->{invnumber} = $form->update_defaults(\%myconfig, "invnumber") unless $form->{invnumber};
 
   $form->{id} = 0 if $form->{postasnew};
 
@@ -717,6 +835,8 @@ sub delete {
   $form->{title} = $locale->text('Confirm!');
   
   $form->header;
+
+  delete $form->{header};
 
   print qq|
 <body>
@@ -746,7 +866,7 @@ sub delete {
 
 sub yes {
 
-  $form->redirect($locale->text('Transaction deleted!')) if (AR->delete_transaction(\%myconfig, \%$form));
+  $form->redirect($locale->text('Transaction deleted!')) if (AR->delete_transaction(\%myconfig, \%$form, $spool));
   $form->error($locale->text('Cannot delete transaction!'));
 
 }
@@ -758,18 +878,31 @@ sub search {
   
   $form->{selectAR} = "<option>\n";
   map { $form->{selectAR} .= "<option>$_->{accno}--$_->{description}\n" } @{ $form->{AR_links}{AR} };
-
-
+  
   if (@{ $form->{all_customer} }) { 
-    map { $customer .= "<option>$_->{name}--$_->{id}\n" } @{ $form->{all_customer} };
+    map { $customer .= qq|<option value="$_->{name}--$_->{id}">$_->{name}\n| } @{ $form->{all_customer} };
     $customer = qq|<select name=customer><option>\n$customer</select>|;
   } else {
     $customer = qq|<input name=customer size=35>|;
   }
 
+  # departments 
+  if (@{ $form->{all_departments} }) {
+    $form->{selectdepartment} = "<option>\n";
+
+    map { $form->{selectdepartment} .= qq|<option value="$_->{description}--$_->{id}">$_->{description}\n| } (@{ $form->{all_departments} });
+  }
+
+  $department = qq| 
+        <tr> 
+	  <th align=right nowrap>|.$locale->text('Department').qq|</th>
+	  <td colspan=3><select name=department>$form->{selectdepartment}</select></td>
+	</tr>
+| if $form->{selectdepartment};
+
 
   $form->{title} = $locale->text('AR Transactions');
-   
+
   $invnumber = qq|
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Invoice Number').qq|</th>
@@ -799,8 +932,8 @@ sub search {
     $invnumber = "";
     $openclosed = "";
   }
-  
 
+    
   $form->header;
   
   print qq|
@@ -825,11 +958,12 @@ sub search {
 	  <th align=right>|.$locale->text('Customer').qq|</th>
 	  <td colspan=3>$customer</td>
 	</tr>
+	$department
 	$invnumber
 	<tr>
 	  <th align=right nowrap>|.$locale->text('From').qq|</th>
 	  <td><input name=transdatefrom size=11 title="$myconfig{dateformat}"></td>
-	  <th align=right>|.$locale->text('to').qq|</th>
+	  <th align=right>|.$locale->text('To').qq|</th>
 	  <td><input name=transdateto size=11 title="$myconfig{dateformat}"></td>
 	</tr>
 	<input type=hidden name=sort value=transdate>
@@ -853,16 +987,18 @@ sub search {
 		<td nowrap>|.$locale->text('Order Number').qq|</td>
 		<td align=right><input name="l_transdate" class=checkbox type=checkbox value=Y checked></td>
 		<td nowrap>|.$locale->text('Invoice Date').qq|</td>
-	      </tr>
-	      <tr>
 		<td align=right><input name="l_name" class=checkbox type=checkbox value=Y checked></td>
 		<td nowrap>|.$locale->text('Customer').qq|</td>
+	      </tr>
+	      <tr>
 		<td align=right><input name="l_netamount" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('Amount').qq|</td>
 		<td align=right><input name="l_tax" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('Tax').qq|</td>
 		<td align=right><input name="l_amount" class=checkbox type=checkbox value=Y checked></td>
 		<td nowrap>|.$locale->text('Total').qq|</td>
+		<td align=right><input name="l_curr" class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Currency').qq|</td>
 	      </tr>
 	      <tr>
 		<td align=right><input name="l_datepaid" class=checkbox type=checkbox value=Y></td>
@@ -879,10 +1015,16 @@ sub search {
 		<td nowrap>|.$locale->text('Notes').qq|</td>
 		<td align=right><input name="l_till" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('Till').qq|</td>
+		<td align=right><input name="l_shippingpoint" class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Shipping Point').qq|</td>
+		<td align=right><input name="l_shipvia" class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Ship via').qq|</td>
+	      </tr>
+              <tr>
 		<td align=right><input name="l_employee" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('Salesperson').qq|</td>
-		<td align=right><input name="l_shippingpoint" class=checkbox type=checkbox value=Y></td>
-		<td nowrap>|.$locale->text('Ship via').qq|</td>
+		<td align=right><input name="l_manager" class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Manager').qq|</td>
 	      </tr>
 	      <tr>
 		<td align=right><input name="l_subtotal" class=checkbox type=checkbox value=Y></td>
@@ -921,16 +1063,20 @@ sub ar_transactions {
 
   if ($form->{customer}) {
     $form->{customer} = $form->unescape($form->{customer});
-    ($form->{customer}, $form->{customer_id}) = split /--/, $form->{customer};
+    ($form->{customer}, $form->{customer_id}) = split(/--/, $form->{customer});
   }
-
+  
   AR->ar_transactions(\%myconfig, \%$form);
 
-  $callback = "$form->{script}?action=ar_transactions&till=$form->{till}&outstanding=$form->{outstanding}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
-  $href = $callback;
+  $href = "$form->{script}?action=ar_transactions&direction=$form->{direction}&oldsort=$form->{oldsort}&till=$form->{till}&outstanding=$form->{outstanding}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
+  
+  $href .= "&title=".$form->escape($form->{title});
+  
+  $form->sort_order();
+  
+  $callback = "$form->{script}?action=ar_transactions&direction=$form->{direction}&oldsort=$form->{oldsort}&till=$form->{till}&outstanding=$form->{outstanding}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
 
   $callback .= "&title=".$form->escape($form->{title},1);
-  $href .= "&title=".$form->escape($form->{title});
 
   if ($form->{AR}) {
     $callback .= "&AR=".$form->escape($form->{AR},1);
@@ -938,12 +1084,19 @@ sub ar_transactions {
     $form->{AR} =~ s/--/ /;
     $option = $locale->text('Account')." : $form->{AR}";
   }
-
+  
   if ($form->{customer}) {
     $callback .= "&customer=".$form->escape($form->{customer},1)."--$form->{customer_id}";
     $href .= "&customer=".$form->escape($form->{customer})."--$form->{customer_id}";
     $option .= "\n<br>" if ($option);
     $option .= $locale->text('Customer')." : $form->{customer}";
+  }
+  if ($form->{department}) {
+    $callback .= "&department=".$form->escape($form->{department},1);
+    $href .= "&department=".$form->escape($form->{department});
+    ($department) = split /--/, $form->{department};
+    $option .= "\n<br>" if ($option);
+    $option .= $locale->text('Department')." : $department";
   }
   if ($form->{invnumber}) {
     $callback .= "&invnumber=".$form->escape($form->{invnumber},1);
@@ -974,7 +1127,7 @@ sub ar_transactions {
     $callback .= "&transdateto=$form->{transdateto}";
     $href .= "&transdateto=$form->{transdateto}";
     $option .= "\n<br>" if ($option);
-    $option .= $locale->text('to')."&nbsp;".$locale->date(\%myconfig, $form->{transdateto}, 1);
+    $option .= $locale->text('To')."&nbsp;".$locale->date(\%myconfig, $form->{transdateto}, 1);
   }
   if ($form->{open}) {
     $callback .= "&open=$form->{open}";
@@ -989,17 +1142,23 @@ sub ar_transactions {
     $option .= $locale->text('Closed');
   }
 
-  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid due datepaid duedate notes till employee shippingpoint));
+  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid due curr datepaid duedate notes till employee manager shippingpoint shipvia));
   
   foreach $item (@columns) {
     if ($form->{"l_$item"} eq "Y") {
       push @column_index, $item;
 
+      if ($form->{l_curr} && $item =~ /(amount|tax|paid|due)/) {
+	push @column_index, "fx_$item";
+      }
+	
       # add column to href and callback
       $callback .= "&l_$item=Y";
       $href .= "&l_$item=Y";
     }
   }
+
+    
 
   if ($form->{l_subtotal} eq 'Y') {
     $callback .= "&l_subtotal=Y";
@@ -1007,7 +1166,7 @@ sub ar_transactions {
   }
   
 
-  $column_header{id} = "<th><a class=listheading href=$href&sort=id>".$locale->text('ID')."</a></th>";
+  $column_header{id} = "<th><a class=listheading href=$href&sort=id}>".$locale->text('ID')."</a></th>";
   $column_header{transdate} = "<th><a class=listheading href=$href&sort=transdate>".$locale->text('Date')."</a></th>";
   $column_header{duedate} = "<th><a class=listheading href=$href&sort=duedate>".$locale->text('Due Date')."</a></th>";
   $column_header{invnumber} = "<th><a class=listheading href=$href&sort=invnumber>".$locale->text('Invoice')."</a></th>";
@@ -1020,12 +1179,16 @@ sub ar_transactions {
   $column_header{datepaid} = "<th><a class=listheading href=$href&sort=datepaid>" . $locale->text('Date Paid') . "</a></th>";
   $column_header{due} = "<th class=listheading>" . $locale->text('Amount Due') . "</th>";
   $column_header{notes} = "<th class=listheading>".$locale->text('Notes')."</th>";
-
-  $column_header{employee} = "<th class=listheading><a class=listheading href=$href&sort=employee>".$locale->text('Salesperson')."</th>";
+  $column_header{employee} = "<th><a class=listheading href=$href&sort=employee>".$locale->text('Salesperson')."</th>";
+  $column_header{manager} = "<th><a class=listheading href=$href&sort=manager>".$locale->text('Manager')."</th>";
   $column_header{till} = "<th class=listheading><a class=listheading href=$href&sort=till>".$locale->text('Till')."</th>";
-
-  $column_header{shippingpoint} = "<th class=listheading><a class=listheading href=$href&sort=shippingpoint>" . $locale->text('Ship via') . "</a></th>";
   
+  $column_header{shippingpoint} = "<th><a class=listheading href=$href&sort=shippingpoint>" . $locale->text('Shipping Point') . "</a></th>";
+  $column_header{shipvia} = "<th><a class=listheading href=$href&sort=shipvia>" . $locale->text('Ship via') . "</a></th>";
+
+  $column_header{curr} = "<th><a class=listheading href=$href&sort=curr>" . $locale->text('Curr') . "</a></th>";
+  map { $column_header{"fx_$_"} = "<th>&nbsp;</th>" } qw(amount tax netamount paid due);
+
   $form->{title} = ($form->{title}) ? $form->{title} : $locale->text('AR Transactions');
 
   $form->header;
@@ -1060,6 +1223,10 @@ sub ar_transactions {
   # escape callback for href
   $callback = $form->escape($callback);
   
+  # flip direction
+  $direction = ($form->{direction} eq 'ASC') ? "ASC" : "DESC";
+  $href =~ s/&direction=(\w+)&/&direction=$direction&/;
+  
   if (@{ $form->{transactions} }) {
     $sameitem = $form->{transactions}->[0]->{$form->{sort}};
   }
@@ -1073,22 +1240,38 @@ sub ar_transactions {
 	&ar_subtotal;
       }
     }
+
+    if ($form->{l_curr}) {
+      map { $ar->{"fx_$_"} = $ar->{$_}/$ar->{exchangerate} } qw(netamount amount paid);
+
+      map { $column_data{"fx_$_"} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{"fx_$_"}, 2, "&nbsp;")."</td>" } qw(netamount amount paid);
+      
+      $column_data{fx_tax} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{fx_amount} - $ar->{fx_netamount}, 2, "&nbsp;")."</td>";
+      $column_data{fx_due} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{fx_amount} - $ar->{fx_paid}, 2, "&nbsp;")."</td>";
+
+      $subtotalfxnetamount += $ar->{fx_netamount};
+      $subtotalfxamount += $ar->{fx_amount};
+      $subtotalfxpaid += $ar->{fx_paid};
+      
+      $totalfxnetamount += $ar->{fx_netamount};
+      $totalfxamount += $ar->{fx_amount};
+      $totalfxpaid += $ar->{fx_paid};
+      
+    }
     
-    $column_data{netamount} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{netamount}, 2, "&nbsp;")."</td>";
+    map { $column_data{$_} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{$_}, 2, "&nbsp;")."</td>" } qw(netamount amount paid);
+    
     $column_data{tax} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{amount} - $ar->{netamount}, 2, "&nbsp;")."</td>";
-    $column_data{amount} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{amount}, 2, "&nbsp;")."</td>";
-    $column_data{paid} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{paid}, 2, "&nbsp;")."</td>";
     $column_data{due} = "<td align=right>".$form->format_amount(\%myconfig, $ar->{amount} - $ar->{paid}, 2, "&nbsp;")."</td>";
+    
     
     $subtotalnetamount += $ar->{netamount};
     $subtotalamount += $ar->{amount};
     $subtotalpaid += $ar->{paid};
-    $subtotaldue += $ar->{amount} - $ar->{paid};
     
     $totalnetamount += $ar->{netamount};
     $totalamount += $ar->{amount};
     $totalpaid += $ar->{paid};
-    $totaldue += ($ar->{amount} - $ar->{paid});
     
     $column_data{transdate} = "<td>$ar->{transdate}&nbsp;</td>";
     $column_data{id} = "<td>$ar->{id}</td>";
@@ -1100,14 +1283,20 @@ sub ar_transactions {
 
     $column_data{invnumber} = "<td><a href=$module?action=edit&id=$ar->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&callback=$callback>$ar->{invnumber}</a></td>";
     $column_data{ordnumber} = "<td>$ar->{ordnumber}&nbsp;</td>";
-    $column_data{name} = "<td>$ar->{name}</td>";
+    
+
+    $name = $form->escape($ar->{name});
+    $column_data{name} = "<td><a href=$href&customer=$name--$ar->{customer_id}&sort=$form->{sort}>$ar->{name}</a></td>";
+    
     $ar->{notes} =~ s/\r\n/<br>/g;
     $column_data{notes} = "<td>$ar->{notes}&nbsp;</td>";
     $column_data{shippingpoint} = "<td>$ar->{shippingpoint}&nbsp;</td>";
-
+    $column_data{shipvia} = "<td>$ar->{shipvia}&nbsp;</td>";
     $column_data{employee} = "<td>$ar->{employee}&nbsp;</td>";
+    $column_data{manager} = "<td>$ar->{manager}&nbsp;</td>";
     $column_data{till} = "<td>$ar->{till}&nbsp;</td>";
-
+    $column_data{curr} = "<td>$ar->{curr}</td>";
+    
     $i++; $i %= 2;
     print "
         <tr class=listrow$i>
@@ -1137,7 +1326,15 @@ sub ar_transactions {
   $column_data{tax} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalamount - $totalnetamount, 2, "&nbsp;")."</th>";
   $column_data{amount} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalamount, 2, "&nbsp;")."</th>";
   $column_data{paid} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalpaid, 2, "&nbsp;")."</th>";
-  $column_data{due} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totaldue, 2, "&nbsp;")."</th>";
+  $column_data{due} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalamount - $totalpaid, 2, "&nbsp;")."</th>";
+
+  if ($form->{l_curr} && $form->{sort} eq 'curr' && $form->{l_subtotal}) {
+    $column_data{fx_netamount} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalfxnetamount, 2, "&nbsp;")."</th>";
+    $column_data{fx_tax} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalfxamount - $totalfxnetamount, 2, "&nbsp;")."</th>";
+    $column_data{fx_amount} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalfxamount, 2, "&nbsp;")."</th>";
+    $column_data{fx_paid} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalfxpaid, 2, "&nbsp;")."</th>";
+    $column_data{fx_due} = "<th class=listtotal align=right>".$form->format_amount(\%myconfig, $totalfxamount - $totalfxpaid, 2, "&nbsp;")."</th>";
+  }
 
   map { print "\n$column_data{$_}" } @column_index;
 
@@ -1145,15 +1342,14 @@ sub ar_transactions {
     $i = 1;
     $button{'AR--Add Transaction'}{code} = qq|<input class=submit type=submit name=action value="|.$locale->text('AR Transaction').qq|"> |;
     $button{'AR--Add Transaction'}{order} = $i++;
-    $button{'AR--Sales Invoice'}{code} = qq|<input class=submit type=submit name=action value="|.$locale->text('Sales Invoice').qq|"> |;
+    $button{'AR--Sales Invoice'}{code} = qq|<input class=submit type=submit name=action value="|.$locale->text('Sales Invoice').qq|."> |;
     $button{'AR--Sales Invoice'}{order} = $i++;
 
     foreach $item (split /;/, $myconfig{acs}) {
       delete $button{$item};
     }
   }
-  
-
+    
   print qq|
 	</tr>
       </table>
@@ -1169,6 +1365,10 @@ sub ar_transactions {
 
 <input name=callback type=hidden value="$form->{callback}">
 
+<input type=hidden name=customer value="$form->{customer}">
+<input type=hidden name=customer_id value=$form->{customer_id}>
+<input type=hidden name=vc value=customer>
+
 <input type=hidden name=path value=$form->{path}>
 <input type=hidden name=login value=$form->{login}>
 <input type=hidden name=password value=$form->{password}>
@@ -1178,6 +1378,11 @@ sub ar_transactions {
     foreach $item (sort { $a->{order} <=> $b->{order} } %button) {
       print $item->{code};
     }
+  }
+
+  if ($form->{menubar}) {
+    require "$form->{path}/menu.pl";
+    &menubar;
   }
 
   print qq|
@@ -1197,12 +1402,22 @@ sub ar_subtotal {
   $column_data{tax} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalamount - $subtotalnetamount, 2, "&nbsp;")."</th>";
   $column_data{amount} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalamount, 2, "&nbsp;")."</th>";
   $column_data{paid} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalpaid, 2, "&nbsp;")."</th>";
-  $column_data{due} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotaldue, 2, "&nbsp;")."</th>";
+  $column_data{due} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalamount - $subtotalpaid, 2, "&nbsp;")."</th>";
+
+  if ($form->{l_curr} && $form->{sort} eq 'curr' && $form->{l_subtotal}) {
+    $column_data{fx_tax} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalfxamount - $subtotalfxnetamount, 2, "&nbsp;")."</th>";
+    $column_data{fx_amount} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalfxamount, 2, "&nbsp;")."</th>";
+    $column_data{fx_paid} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalfxpaid, 2, "&nbsp;")."</th>";
+    $column_data{fx_due} = "<th class=listsubtotal align=right>".$form->format_amount(\%myconfig, $subtotalfxmount - $subtotalfxpaid, 2, "&nbsp;")."</th>";
+  }
   
   $subtotalnetamount = 0;
   $subtotalamount = 0;
   $subtotalpaid = 0;
-  $subtotaldue = 0;
+  
+  $subtotalfxnetamount = 0;
+  $subtotalfxamount = 0;
+  $subtotalfxpaid = 0;
 
   $sameitem = $ar->{$form->{sort}};
   

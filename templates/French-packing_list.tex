@@ -45,8 +45,8 @@
 \pagestyle{myheadings}
 %\thispagestyle{empty}     use this with letterhead paper
 
-<%pagebreak 90 27 48%>
-\end{tabularx}
+<%pagebreak 90 27 37%>
+\end{tabular*}
 
 \newpage
 
@@ -54,7 +54,7 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}lXrll@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rll@{}}
   \textbf{Numéro} & \textbf{Description} & \textbf{Qté} &
     \textbf{Unité} & \textbf{Bin} \\
 <%end pagebreak%>
@@ -88,14 +88,14 @@
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}lXrll@{}}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rll@{}}
   \textbf{Numéro} & \textbf{Description} & \textbf{Qté} &
     \textbf{Unité} & \textbf{Bin} \\
 <%foreach number%>
   <%number%> & <%description%> & <%qty%> &
     <%unit%> & <%bin%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{

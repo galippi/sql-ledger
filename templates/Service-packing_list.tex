@@ -44,8 +44,8 @@
 \pagestyle{myheadings}
 %\thispagestyle{empty}     use this with letterhead paper
 
-<%pagebreak 90 27 48%>
-\end{tabularx}
+<%pagebreak 90 27 37%>
+\end{tabular*}
 
 \newpage
 
@@ -53,7 +53,7 @@
 
 \vspace*{-12pt}
 
-\begin{tabularx}{\textwidth}{@{}Xrl@{}}
+\begin{tabular*}{\textwidth}{@{}p{\descrwidth}@{\extracolsep\fill}rl@{}}
   \textbf{Description} & \textbf{Qt'y} &
     \textbf{Unit} \\
 <%end pagebreak%>
@@ -86,12 +86,12 @@
 
 \vspace{1cm}
 
-\begin{tabularx}{\textwidth}{@{}Xrl@{}}
+\begin{tabular*}{\textwidth}{@{}p{\descrwidth}@{\extracolsep\fill}rl@{}}
   \textbf{Description} & \textbf{Qt'y} & \textbf{Unit} \\
 <%foreach number%>
   <%description%> & <%qty%> & <%unit%> \\
 <%end number%>
-\end{tabularx}
+\end{tabular*}
 
 
 \parbox{\textwidth}{
@@ -104,6 +104,17 @@
 <%end if%>
 
 }
+
+%\vfill
+%\centerline{\textbf{Thank You for your valued business!}}
+
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+%\footnotetext[1]{\tiny
+%Items returned are subject to a 10\% restocking charge.
+%A return authorization must be obtained from <%company%> before goods are
+%returned. Returns must be shipped prepaid and properly insured.
+%<%company%> will not be responsible for damages during transit.}
 
 \end{document}
 

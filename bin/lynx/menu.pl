@@ -1,12 +1,12 @@
 ######################################################################
 # SQL-Ledger Accounting
-# Copyright (c) 2001
+# Copyright (c) 2000
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
 #
-#  Contributors: Christopher Browne
+#  Contributors: Christopher Browne <cbrowne@acm.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,10 +24,6 @@
 #
 # menu for text based browsers (lynx)
 #
-# CHANGE LOG:
-#   DS. 2000-07-04  Created
-#   DS. 2001-08-07  access control
-#   CBB 2002-02-09  Refactored HTML out to subroutines
 #######################################################################
 
 $menufile = "menu.ini";
@@ -42,6 +38,8 @@ use SL::Menu;
 sub display {
 
   $menu = new Menu "$menufile";
+  $menu = new Menu "custom_$menufile" if (-f "custom_$menufile");
+  $menu = new Menu "$form->{login}_$menufile" if (-f "$form->{login}_$menufile");
   
   @menuorder = $menu->access_control(\%myconfig);
 
@@ -123,6 +121,32 @@ sub section_menu {
 sub acc_menu {
   
   &section_menu;
+  
+}
+
+
+sub menubar {
+  $menu = new Menu "$menufile", "";
+  
+  # build menubar
+  @menuorder = $menu->access_control(\%myconfig, "");
+
+  @neworder = ();
+  map { push @neworder, $_ unless ($_ =~ /--/) } @menuorder;
+  @menuorder = @neworder;
+
+  print "<p>";
+  $form->{script} = "menu.pl";
+
+  print "| ";
+  foreach $item (@menuorder) {
+    $label = $item;
+
+    # remove target
+    $menu->{$item}{target} = "";
+
+    print $menu->menuitem(\%myconfig, \%$form, $item, "").$locale->text($label)."</a> | ";
+  }
   
 }
 

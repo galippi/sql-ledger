@@ -1,24 +1,24 @@
 $self{texts} = {
-  'About'                       => 'Acerca',
+  'About'                       => 'Acerca de',
+  'Company'                     => 'Empresa',
   'Continue'                    => 'Continuar',
-  'Database Host'               => 'Servidor de Base de Datos',
-  'Dataset'                     => 'Set de datos',
-  'Dataset is newer than version!' => 'Dataset is newer than version!',
-  'Incorrect Dataset version!'  => '!Versisn incorrecta de conjunto de datos!',
-  'Incorrect Password!'         => 'Contraseña Incorrecta!',
+  'Database Host'               => 'Servidor de base de datos',
+  'Dataset'                     => 'Conjunto de datos',
+  'Dataset is newer than version!' => '¡El conjunto de datos es mas reciente que la versión del programa!',
+  'Incorrect Dataset version!'  => '¡La Versión del conjunto de datos es incorrecta!',
+  'Incorrect Password!'         => '¡La contraseña es incorrecta!',
   'Licensed to'                 => 'Licenciado a',
-  'Login'                       => 'Login',
+  'Login'                       => 'Entrada al sistema',
   'Name'                        => 'Nombre',
   'Password'                    => 'Contraseña',
-  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'Upgrading to Version'        => 'Actualizando a versión',
   'User'                        => 'Usuario',
   'Version'                     => 'Versión',
-  'You are logged out!'         => 'Ha salido del sistema!',
-  'You did not enter a name!'   => 'No introdujo un nombre!',
-  'done'                        => 'done',
-  'is not a member!'            => '!no es miembro!',
-  'localhost'                   => 'servidor local',
-  'to Version'                  => 'to Version',
+  'You are logged out!'         => '¡Ud. está fuera del sistema!',
+  'You did not enter a name!'   => '¡No ingresó un nombre!',
+  'done'                        => 'listo',
+  'is not a member!'            => '¡no es miembro!',
+  'localhost'                   => 'localhost',
 };
 
 $self{subs} = {
@@ -26,7 +26,8 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
-  'login'                       => 'login',
+  'selectdataset'               => 'selectdataset',
+  'entrada_al_sistema'          => 'login',
 };
 
 1;

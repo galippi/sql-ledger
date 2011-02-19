@@ -1,0 +1,32 @@
+$self{texts} = {
+  'About'                       => 'Acerca',
+  'Company'                     => 'Compañía',
+  'Continue'                    => 'Continuar',
+  'Database Host'               => 'Servidor de Base de Datos',
+  'Dataset'                     => 'Set de datos',
+  'Dataset is newer than version!' => 'El conjunto de datos es mas nuevo que la version!!',
+  'Incorrect Dataset version!'  => '!Version incorrecta de conjunto de datos!',
+  'Incorrect Password!'         => 'Contraseña Incorrecta!',
+  'Licensed to'                 => 'Licenciado a Moran Mendez y Asociados',
+  'Login'                       => 'Nombre de Acceso',
+  'Name'                        => 'Nombre',
+  'Password'                    => 'Contraseña',
+  'User'                        => 'Usuario',
+  'Version'                     => 'Versión',
+  'You are logged out!'         => 'Ha salido del sistema!',
+  'You did not enter a name!'   => 'No introdujo un nombre!',
+  'done'                        => 'Hecho',
+  'is not a member!'            => '!no es miembro!',
+  'localhost'                   => 'servidor local',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
+  'nombre_de_acceso'            => 'login',
+};
+
+1;

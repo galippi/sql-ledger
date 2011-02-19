@@ -1,12 +1,11 @@
 #=====================================================================
 # SQL-Ledger Accounting
-# Copyright (c) 1998-2003
+# Copyright (c) 2002
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
 #
-# Contributors: Jim Rawlings <jim@your-dba.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,10 +47,8 @@ if (-f "$form->{path}/custom_$form->{script}") {
 }
 
 
-if (-f "css/sql-ledger.css") {
-  $form->{stylesheet} = "sql-ledger.css";
-}
-
+$form->{stylesheet} = "sql-ledger.css";
+$form->{favicon} = "favicon.ico";
 
 if ($form->{action}) {
 
@@ -81,7 +78,7 @@ if ($form->{action}) {
 password=
 
 |;
-    close(FH);
+    close FH;
   }
 
   &adminlogin;
@@ -155,7 +152,8 @@ sub add_user {
   if (-f "css/sql-ledger.css") {
     $myconfig->{stylesheet} = "sql-ledger.css";
   }
-  $myconfig->{vclimit} = 500;
+  $myconfig->{vclimit} = 1000;
+  $myconfig->{menuwidth} = 155;
   
   &form_header;
   &form_footer;
@@ -203,14 +201,12 @@ $delete
 
 sub list_users {
 
-  $form->error("$memberfile : ".$locale->text('locked!')) if (-f "${memberfile}.LCK");
-
   open(FH, "$memberfile") or $form->error("$memberfile : $!");
 
   $nologin = qq|
 <input type=submit class=submit name=action value="|.$locale->text('Lock System').qq|">|;
 
-  if (-f "$userspath/nologin") {
+  if (-e "$userspath/nologin") {
     $nologin = qq|
 <input type=submit class=submit name=action value="|.$locale->text('Unlock System').qq|">|;
   }
@@ -236,8 +232,7 @@ sub list_users {
 # type=submit $locale->text('PgPP Database Administration')
 # type=submit $locale->text('Oracle Database Administration')
 
-# delete DB2 driver, database administration is done externally
-  foreach $item (grep !/DB2/, User->dbdrivers) {
+  foreach $item (User->dbdrivers) {
     $dbdrivers .= qq|<input name=action type=submit class=submit value="|.$locale->text("$item Database Administration").qq|">|;
   }
 
@@ -359,12 +354,13 @@ $nologin
 
 </form>
 
+<hr size=3 noshade>
+
 </body>
 </html>
 |;
 
 }
-
 
 
 
@@ -396,10 +392,11 @@ sub form_header {
 
   %countrycodes = User->country_codes;
   $countrycodes = "";
+  
   foreach $key (sort { $countrycodes{$a} cmp $countrycodes{$b} } keys %countrycodes) {
     $countrycodes .= ($myconfig->{countrycode} eq $key) ? "<option selected value=$key>$countrycodes{$key}" : "<option value=$key>$countrycodes{$key}";
   }
-  $countrycodes = qq|<option value="">American English\n$countrycodes|;
+  $countrycodes = qq|<option value="">English\n$countrycodes|;
 
   # is there a templates basedir
   if (! -d "$templates") {
@@ -437,6 +434,27 @@ sub form_header {
     }
   }
 
+  opendir CSS, "css/.";
+  @all = grep /.*\.css$/, readdir CSS;
+  closedir CSS;
+  
+  foreach $item (@all) {
+    if ($item eq $myconfig->{stylesheet}) {
+      $selectstylesheet .= qq|<option selected>$item\n|;
+    } else {
+      $selectstylesheet .= qq|<option>$item\n|;
+    }
+  }
+  $selectstylesheet .= "<option>\n";
+  
+  $selectprinter = "<option>\n";
+  foreach $item (sort keys %printer) {
+    if ($myconfig->{printer} eq $item) {
+      $selectprinter .= qq|<option value="$item" selected>$printer{$item}\n|;
+    } else {
+      $selectprinter .= qq|<option value="$item">$printer{$item}\n|;
+    }
+  }
   
   $form->header;
  
@@ -505,6 +523,10 @@ sub form_header {
 	  <td><input name=vclimit value="$myconfig->{vclimit}"></td>
 	</tr>
 	<tr>
+	  <th align=right>|.$locale->text('Menu Width').qq|</th>
+	  <td><input name=menuwidth value="$myconfig->{menuwidth}"></td>
+	</tr>
+	<tr>
 	  <th align=right>|.$locale->text('Language').qq|</th>
 	  <td><select name=countrycode>$countrycodes</select></td>
 	</tr>
@@ -514,15 +536,11 @@ sub form_header {
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Stylesheet').qq|</th>
-	  <td><input name=userstylesheet value="$myconfig->{stylesheet}"></td>
+	  <td><select name=userstylesheet>$selectstylesheet</select></td>
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Printer').qq|</th>
-	  <td><input name=printer size=20 value="$myconfig->{printer}"></td>
-	</tr>
-	<tr>
-	  <th align=right>|.$locale->text('Ship via').qq|</th>
-	  <td><input name=shippingpoint size=15 value="$myconfig->{shippingpoint}"></td>
+	  <td><select name=printer>$selectprinter</select></td>
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Use Templates').qq|</th>
@@ -563,20 +581,20 @@ sub form_header {
 	  <th align=right>|.$locale->text('Driver').qq|</th>
 	  <td><input name=dbdriver type=radio class=radio value=$item $checked>&nbsp;$item</td>
 	  <th align=right>|.$locale->text('Host').qq|</th>
-	  <td><input name="${item}_dbhost" value=$form->{"${item}_dbhost"}></td>
+	  <td><input name="${item}_dbhost" size=30 value=$form->{"${item}_dbhost"}></td>
 	</tr>
 	<tr>|;
 
-    if ($item =~ /(Pg|DB2)/) {
+    if ($item =~ /Pg/) {
       print qq|
 	  <th align=right>|.$locale->text('Dataset').qq|</th>
-	  <td><input name="${item}_dbname" size=10 value=$form->{"${item}_dbname"}></td>
+	  <td><input name="${item}_dbname" size=15 value=$form->{"${item}_dbname"}></td>
 	  <th align=right>|.$locale->text('Port').qq|</th>
 	  <td><input name="${item}_dbport" size=4 value=$form->{"${item}_dbport"}></td>
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('User').qq|</th>
-	  <td><input name="${item}_dbuser" size=10 value=$form->{"${item}_dbuser"}></td>
+	  <td><input name="${item}_dbuser" size=15 value=$form->{"${item}_dbuser"}></td>
 	  <th align=right>|.$locale->text('Password').qq|</th>
 	  <td><input name="${item}_dbpasswd" type=password size=10 value=$form->{"${item}_dbpasswd"}></td>
 	</tr>|;
@@ -588,17 +606,18 @@ sub form_header {
 	  <th align=right>SID</th>
 	  <td><input name=Oracle_sid value=$form->{Oracle_sid}></td>
 	  <th align=right>|.$locale->text('Port').qq|</th>
-	  <td><input name=Oracle_dbport size=4 value=$form->{Oracle_dbport}></td>
+	  <td><input name="${item}_dbport size=4 value=$form->{"${item}_dbport"}></td>
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Dataset').qq|</th>
-	  <td><input name="${item}_dbuser" size=10 value=$form->{"${item}_dbuser"}></td>
+	  <td><input name="${item}_dbuser" size=15 value=$form->{"${item}_dbuser"}></td>
 	  <th align=right>|.$locale->text('Password').qq|</th>
 	  <td><input name="${item}_dbpasswd" type=password size=10 value=$form->{"${item}_dbpasswd"}></td>
 	  
 	</tr>|;
     }
     
+      
     print qq|
 	<input type=hidden name=old_dbpasswd value=$myconfig->{dbpasswd}>
       </table>
@@ -642,14 +661,23 @@ sub form_header {
 
   }
   
-  $admincheck = "checked" if $myconfig->{admin};
+  %role = ( 'admin' => $locale->text('Administrator'),
+            'user' => $locale->text('User'),
+	    'manager' => $locale->text('Manager')
+
+	   );
+	    
+  $selectrole = "";
+  foreach $item (qw(user admin manager)) {
+    $selectrole .= ($myconfig->{role} eq $item) ? "<option selected value=$item>$role{$item}\n" : "<option value=$item>$role{$item}\n";
+  }
   
   print qq|
   <tr class=listheading>
     <th colspan=2>|.$locale->text('Access Control').qq|</th>
   </tr>
   <tr>
-    <td><input name=admin type=checkbox class=checkbox value=1 $admincheck>&nbsp;<b>|.$locale->text('Administrator').qq|</b></td>
+    <td><select name=role>$selectrole</select></td>
   </tr>
 |;
   
@@ -707,11 +735,8 @@ sub form_header {
    <tr>
     <td colspan=2><hr size=3 noshade></td>
   </tr>
-  <tr>
-    <td>
-    </td>
-  </tr>
 </table>
+</div>
 |;
 
 }
@@ -736,11 +761,6 @@ sub save {
     }
   }
   
-  # does stylesheet exist
-  if ($form->{userstylesheet}) {
-    $form->error($locale->text('Stylesheet').": css/$form->{userstylesheet} ".$locale->text('does not exist')) unless (-f "css/$form->{userstylesheet}");
-  }
-  
   # no spaces allowed in directories
   ($form->{newtemplates}) = split / /, $form->{newtemplates};
   
@@ -749,7 +769,6 @@ sub save {
   } else {
     $form->{templates} = ($form->{usetemplates}) ? $form->{usetemplates} : $form->{login};
   }
-  
   
   # is there a basedir
   if (! -d "$templates") {
@@ -774,40 +793,33 @@ sub save {
     }
     delete $form->{$item};
   }
-
+  
   # check which database was filled in
+  
+  $form->{dbhost} = $form->{"$form->{dbdriver}_dbhost"};
+  $form->{dbport} = $form->{"$form->{dbdriver}_dbport"};
+  $form->{dbpasswd} = $form->{"$form->{dbdriver}_dbpasswd"};
+  $form->{dbuser} = $form->{"$form->{dbdriver}_dbuser"};
+  $form->{dbname} = $form->{"$form->{dbdriver}_dbname"};
+ 
   if ($form->{dbdriver} eq 'Oracle') {
     $form->{sid} = $form->{Oracle_sid}, ;
-    $form->{dbhost} = $form->{Oracle_dbhost}, ;
-    $form->{dbport} = $form->{Oracle_dbport};
-    $form->{dbpasswd} = $form->{Oracle_dbpasswd};
-    $form->{dbuser} = $form->{Oracle_dbuser};
-    $form->{dbname} = $form->{Oracle_dbuser};
 
     $form->isblank("dbhost", $locale->text('Hostname missing!'));
     $form->isblank("dbport", $locale->text('Port missing!'));
     $form->isblank("dbuser", $locale->text('Dataset missing!'));
   }
-  if ($form->{dbdriver} =~ /(Pg|DB2)/) {
-    $form->{dbhost} = $form->{"$form->{dbdriver}_dbhost"};
-    $form->{dbport} = $form->{"$form->{dbdriver}_dbport"};
-    $form->{dbpasswd} = $form->{"$form->{dbdriver}_dbpasswd"};
-    $form->{dbuser} = $form->{"$form->{dbdriver}_dbuser"};
-    $form->{dbname} = $form->{"$form->{dbdriver}_dbname"};
-    
+  if ($form->{dbdriver} =~ /Pg/) {
     $form->isblank("dbname", $locale->text('Dataset missing!'));
     $form->isblank("dbuser", $locale->text('Database User missing!'));
   }
     
-  # set admin
-  $form->{admin} = "" unless $form->{admin};
-
   foreach $item (keys %{$form}) {
     $myconfig->{$item} = $form->{$item};
   }
 
   $myconfig->{password} = $form->{new_password} if $form->{new_password} ne $form->{old_password};
-  
+
   delete $myconfig->{stylesheet};
   if ($form->{userstylesheet}) {
     $myconfig->{stylesheet} = $form->{userstylesheet};
@@ -824,7 +836,7 @@ sub save {
       umask(007);
       
       # copy templates to the directory
-      opendir TEMPLATEDIR, "$templates/." or $form-error("$templates : $!");
+      opendir TEMPLATEDIR, "$templates/." or $form->error("$templates : $!");
       @templates = grep /$form->{mastertemplates}.*?\.(html|tex|txt)$/, readdir TEMPLATEDIR;
       closedir TEMPLATEDIR;
 
@@ -854,11 +866,14 @@ sub delete {
 
   $form->{templates} = ($form->{templates}) ? "$templates/$form->{templates}" : "$templates/$form->{login}";
   
-  $form->error("$memberfile : ".$locale->text('locked!')) if (-f ${memberfile}.LCK);
+  $form->error("$memberfile ".$locale->text('locked!')) if (-f ${memberfile}.LCK);
   open(FH, ">${memberfile}.LCK") or $form->error("${memberfile}.LCK : $!");
   close(FH);
   
-  open(CONF, "+<$memberfile") or $form->error("$memberfile : $!");
+  if (! open(CONF, "+<$memberfile")) {
+    unlink "${memberfile}.LCK";
+    $form->error("$memberfile : $!");
+  }
 
   @config = <CONF>;
 
@@ -887,12 +902,10 @@ sub delete {
 
     chop $line;
     
-    if ($line =~ /^templates=/) {
-      $templatedir = &get_value($line);
-    }
+    ($key, $value) = split /=/, $line, 2;
+    $myconfig{$key} = $value;
     
     last if ($line =~ /^\[/);
-    
   }
 
   # this one is either the next login or EOF
@@ -904,7 +917,7 @@ sub delete {
   while ($line = shift @config) {
 
     chop $line;
-    
+
     if ($line =~ /^\[/) {
       $login = &login_name($line);
     }
@@ -921,9 +934,11 @@ sub delete {
 
   # scan %user for $templatedir
   foreach $login (keys %user) {
-    last if ($found = ($templatedir eq $user{$login}));
+    last if ($found = ($myconfig{templates} eq $user{$login}));
   }
 
+  map { $form->{$_} = $myconfig{$_} } keys %myconfig;
+  
   # if found keep directory otherwise delete
   if (!$found) {
     # delete it if there is a template directory
@@ -938,7 +953,9 @@ sub delete {
   
   # delete config file for user
   unlink "$userspath/$form->{login}.conf";
-    
+
+  User::delete_login("", \%$form);
+  
   $form->redirect($locale->text('User deleted!'));
   
 }
@@ -1073,7 +1090,7 @@ sub dbdriver_defaults {
   $driverdefaults{PgPP} = $driverdefaults{Pg};
 
   map { $form->{$_} = $driverdefaults{$form->{dbdriver}}{$_} } keys %{ $driverdefaults{Pg} };
-
+  
 }
   
 
@@ -1149,7 +1166,6 @@ sub dbselect_source {
 <input type=hidden name=path value=$form->{path}>
 <input type=hidden name=rpw value=$form->{rpw}>
 
-<hr size=3 noshade>
 <br>
 
 <input type=submit class=submit name=action value="|.$locale->text('Create Dataset').qq|">
@@ -1199,8 +1215,8 @@ sub update_dataset {
 
 
   foreach $key (sort keys %needsupdate) {
-    if ($needsupdate{$key} lt $form->{dbversion}) {
-      $upd .= qq|<br><input name="db$key" type=checkbox value=1 checked> $key\n|;
+    if ($needsupdate{$key} ne $form->{dbversion}) {
+      $upd .= qq|<input name="db$key" type=checkbox value=1 checked> $key\n|;
       $form->{dbupdate} .= "db$key ";
     }
   }
@@ -1211,7 +1227,7 @@ sub update_dataset {
   if ($form->{dbupdate}) {
 
     print qq|
-<table>
+<table width=100%>
 <form method=post action=$form->{script}>
 
 <input type=hidden name=dbdriver value=$form->{dbdriver}>
@@ -1229,8 +1245,10 @@ sub update_dataset {
 
 $upd
 
-</td></tr>
-<tr><td>
+</td>
+</tr>
+<tr>
+<td>
 
 <input name=dbupdate type=hidden value="$form->{dbupdate}">
 
@@ -1242,6 +1260,9 @@ $upd
 
 <input type=hidden name=nextsub value=dbupdate>
 
+<hr size=3 noshade>
+
+<br>
 <input type=submit class=submit name=action value="|.$locale->text('Continue').qq|">
 
 </td></tr>
@@ -1277,16 +1298,16 @@ sub create_dataset {
 
   @dbsources = sort User->dbsources(\%$form);
 
-  opendir SQLDIR, "sql/." or $form-error($!);
+  opendir SQLDIR, "sql/." or $form->error($!);
   foreach $item (sort grep /-chart\.sql/, readdir SQLDIR) {
     next if ($item eq 'Default-chart.sql');
     $item =~ s/-chart\.sql//;
-    push @charts, qq|<td><input name=chart class=radio type=radio value="$item">&nbsp;$item</td>|;
+    push @charts, qq|<input name=chart class=radio type=radio value="$item">$item|;
   }
   closedir SQLDIR;
 
   # add Default at beginning
-  unshift @charts, (qq|<td><input name=chart class=radio type=radio value="Default" checked>&nbsp;Default</td>|);
+  unshift @charts, qq|<input name=chart class=radio type=radio value="Default" checked>Default|;
 
   $selectencoding = qq|<option>
   <option value=SQL_ASCII>ASCII
@@ -1332,7 +1353,7 @@ sub create_dataset {
 
 <form method=post action=$form->{script}>
 
-<table>
+<table width=100%>
   <tr class=listheading>
     <th colspan=2>&nbsp;</th>
   </tr>
@@ -1342,9 +1363,9 @@ sub create_dataset {
     <th align=right nowrap>|.$locale->text('Existing Datasets').qq|</th>
     <td>
 |;
-     
+
     map { print "[&nbsp;$_&nbsp;] " } @dbsources;
-      
+    
     print qq|
     </td>
   </tr>
@@ -1355,7 +1376,7 @@ sub create_dataset {
     <td><input name=db></td>
 
   </tr>
-  
+
   <tr>
 
     <th align=right nowrap>|.$locale->text('Multibyte Encoding').qq|</th>
@@ -1365,21 +1386,24 @@ sub create_dataset {
  
   <tr>
 
-    <th align=right>|.$locale->text('Create Chart of Accounts').qq|</th>
+    <th align=right nowrap>|.$locale->text('Create Chart of Accounts').qq|</th>
     <td>
-      <table>\n|;
+      <table>
+|;
 
-      while (@charts) {
-	print qq|
-	<tr>\n|;
-	
-        map { print "$charts[$_]\n" } (0 .. 2);
+  while (@charts) {
+    print qq|
+        <tr>
+|;
 
-	print qq|
-	</tr>\n|;
-	
-	splice @charts, 0, 3;
-      }
+    map { print "<td>$charts[$_]</td>\n" } (0 .. 2);
+
+    print qq|
+        </tr>
+|;
+
+    splice @charts, 0, 3;
+  }
 
   print qq|
       </table>
@@ -1387,12 +1411,11 @@ sub create_dataset {
   </tr>
   <tr>
     <td colspan=2>
-      <hr size=3 noshade>
+    <hr size=3 noshade>
     </td>
   </tr>
 </table>
-
-<br>
+ 
 <input type=hidden name=dbdriver value=$form->{dbdriver}>
 <input type=hidden name=dbuser value=$form->{dbuser}>
 <input type=hidden name=dbhost value=$form->{dbhost}>
@@ -1408,7 +1431,9 @@ sub create_dataset {
 
 <input type=hidden name=nextsub value=dbcreate>
 
+<br>
 <input type=submit class=submit name=action value="|.$locale->text('Continue').qq|">
+
 
 </form>
 
@@ -1463,7 +1488,7 @@ sub delete_dataset {
 
   if (@dbsources = User->dbsources_unused(\%$form, $memberfile)) {
     foreach $item (sort @dbsources) {
-      $dbsources .= qq|<input name=db class=radio type=radio value=$item>&nbsp;$item\n<br>|;
+      $dbsources .= qq|<input name=db class=radio type=radio value=$item>&nbsp;$item |;
     }
   } else {
     $form->error($locale->text('Nothing to delete!'));
@@ -1476,13 +1501,11 @@ sub delete_dataset {
   print qq|
 <body class=admin>
 
-
-<center>
 <h2>$form->{title}</h2>
 
 <form method=post action=$form->{script}>
 
-<table>
+<table width=100%>
   <tr class=listheading>
     <th>|.$locale->text('The following Datasets are not in use and can be deleted').qq|</th>
   </tr>
@@ -1494,9 +1517,7 @@ sub delete_dataset {
   </tr>
   
   <tr><td>
-
-<hr size=3 noshade>
-<br>
+<p>
 <input type=hidden name=dbdriver value=$form->{dbdriver}>
 <input type=hidden name=dbuser value=$form->{dbuser}>
 <input type=hidden name=dbhost value=$form->{dbhost}>
@@ -1512,17 +1533,15 @@ sub delete_dataset {
 
 <input type=hidden name=nextsub value=dbdelete>
 
+<hr size=3 noshade>
+
+<br>
 <input type=submit class=submit name=action value="|.$locale->text('Continue').qq|">
 
   </td></tr>
 </table>
 
 </form>
-
-<p>|.$locale->text('Select a Dataset to delete and press "Continue"')
-
-.qq|
-
 
 </body>
 </html>
@@ -1576,7 +1595,7 @@ $form->{db} |.$locale->text('successfully deleted!')
 sub unlock_system {
 
   unlink "$userspath/nologin";
-
+  
   $form->{callback} = "$form->{script}?action=list_users&path=$form->{path}&root=$form->{root}&rpw=$root->{password}";
 
   $form->redirect($locale->text('Lockfile removed!'));
@@ -1586,9 +1605,9 @@ sub unlock_system {
 
 sub lock_system {
 
-  open(FH, ">$userspath/nologin") or $form->error($locale->text('Cannot create Lockfile!'));
+  open(FH, ">$userspath/nologin") or $form->error($locale->text('Cannot create Lock!'));
   close(FH);
-
+  
   $form->{callback} = "$form->{script}?action=list_users&path=$form->{path}&root=$form->{root}&rpw=$root->{password}";
 
   $form->redirect($locale->text('Lockfile created!'));

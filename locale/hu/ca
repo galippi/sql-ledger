@@ -32,12 +32,13 @@ $self{texts} = {
   'November'                    => 'November',
   'Oct'                         => 'Okt.',
   'October'                     => 'Október',
+  'Project Number'              => 'Munkaszám',
   'R'                           => 'E',
   'Reference'                   => 'Hivatkozás',
   'Sep'                         => 'Szept.',
   'September'                   => 'Szeptember',
   'Subtotal'                    => 'Részösszeg',
-  'to'                          => 'Meddig:',
+  'To'                          => 'Meddig:',
 };
 
 $self{subs} = {

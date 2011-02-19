@@ -1,5 +1,6 @@
 $self{texts} = {
   'About'                       => 'Over',
+  'Company'                     => 'Bedrijf',
   'Continue'                    => 'Verder',
   'Database Host'               => 'Database computer',
   'Dataset'                     => 'Dataset',
@@ -10,15 +11,14 @@ $self{texts} = {
   'Login'                       => 'Login',
   'Name'                        => 'Naam',
   'Password'                    => 'Wachtwoord',
-  'Upgrading Dataset'           => 'Breng dataset naar hoger nivo',
+  'Upgrading to Version'        => 'Opwaarderen naar Versie',
   'User'                        => 'Gebruiker',
   'Version'                     => 'Versie',
   'You are logged out!'         => 'U bent uitgelogd!',
   'You did not enter a name!'   => 'U heeft geen naam gegeven!',
-  'done'                        => 'klaar',
+  'done'                        => 'gebeurd',
   'is not a member!'            => 'is geen gebruiker',
   'localhost'                   => 'localhost',
-  'to Version'                  => 'tot versie',
 };
 
 $self{subs} = {
@@ -26,6 +26,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'login'                       => 'login',
 };
 

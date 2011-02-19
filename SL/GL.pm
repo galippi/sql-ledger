@@ -1,6 +1,6 @@
 #=====================================================================
 # SQL-Ledger Accounting
-# Copyright (C) 2001
+# Copyright (C) 2000
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
@@ -34,6 +34,14 @@ sub delete_transaction {
   
   # connect to database
   my $dbh = $form->dbconnect_noauto($myconfig);
+  
+  my %audittrail = ( tablename  => 'gl',
+                     reference  => $form->{reference},
+		     formname   => 'transaction',
+		     action     => 'deleted',
+		     id         => $form->{id} );
+ 
+  $form->audittrail($dbh, "", \%audittrail);
 
   my $query = qq|DELETE FROM gl WHERE id = $form->{id}|;
   $dbh->do($query) || $form->dberror($query);
@@ -53,7 +61,9 @@ sub delete_transaction {
 sub post_transaction {
   my ($self, $myconfig, $form) = @_;
   
-  my ($null, $project_id);
+  my $null;
+  my $project_id;
+  my $department_id;
   my $i;
 
   # connect to database, turn off AutoCommit
@@ -68,11 +78,8 @@ sub post_transaction {
   # if there is a $form->{id} replace the old transaction
   # delete all acc_trans entries and add the new ones
 
-  # escape '
-  map { $form->{$_} =~ s/'/''/g } qw(reference description);
-
-
-  my ($query, $sth);
+  my $query;
+  my $sth;
   
   if ($form->{id}) {
     # delete individual transactions
@@ -96,23 +103,27 @@ sub post_transaction {
 
     ($form->{id}) = $sth->fetchrow_array;
     $sth->finish;
-
   }
   
+  ($null, $department_id) = split /--/, $form->{department};
+  $department_id *= 1;
+  
   $query = qq|UPDATE gl SET 
-	      reference = '$form->{reference}',
-	      description = '$form->{description}',
-	      notes = '$form->{notes}',
-	      transdate = '$form->{transdate}'
+	      reference = |.$dbh->quote($form->{reference}).qq|,
+	      description = |.$dbh->quote($form->{description}).qq|,
+	      notes = |.$dbh->quote($form->{notes}).qq|,
+	      transdate = '$form->{transdate}',
+	      department_id = $department_id
 	      WHERE id = $form->{id}|;
 	   
   $dbh->do($query) || $form->dberror($query);
+
 
   my $amount = 0;
   my $posted = 0;
   # insert acc_trans transactions
   for $i (1 .. $form->{rowcount}) {
-    
+
     $form->{"debit_$i"} = $form->parse_amount($myconfig, $form->{"debit_$i"});
     $form->{"credit_$i"} = $form->parse_amount($myconfig, $form->{"credit_$i"});
 
@@ -132,30 +143,35 @@ sub post_transaction {
 
     # add the record
     if (! $posted) {
-      $project_id = 'NULL';
-      if ($form->{"projectnumber_$i"}) {
-
-	$form->{"$projectnumber_$i"} =~ s/'/''/g;
-	$project_id = qq|(SELECT id
-			  FROM project
-			  WHERE projectnumber = '$form->{"projectnumber_$i"}')|;
-      }
-
+      
+      ($null, $project_id) = split /--/, $form->{"projectnumber_$i"};
+      $project_id *= 1;
       $form->{"fx_transaction_$i"} *= 1;
+      
       $query = qq|INSERT INTO acc_trans (trans_id, chart_id, amount, transdate,
 		  source, project_id, fx_transaction)
 		  VALUES
 		  ($form->{id}, (SELECT id
 				 FROM chart
 				 WHERE accno = '$accno'),
-		   $amount, '$form->{transdate}', '$form->{reference}',
+		   $amount, '$form->{transdate}', |
+		   .$dbh->quote($form->{reference}).qq|,
 		  $project_id, '$form->{"fx_transaction_$i"}')|;
     
       $dbh->do($query) || $form->dberror($query);
 
       $posted = 1;
     }
+
   }
+  
+  my %audittrail = ( tablename  => 'gl',
+                     reference  => $form->{reference},
+		     formname   => 'transaction',
+		     action     => 'posted',
+		     id         => $form->{id} );
+ 
+  $form->audittrail($dbh, "", \%audittrail);
 
   # commit and redirect
   my $rc = $dbh->commit;
@@ -174,20 +190,29 @@ sub all_transactions {
   my $dbh = $form->dbconnect($myconfig);
   my $query;
   my $sth;
+  my $var;
+  my $null;
 
   my ($glwhere, $arwhere, $apwhere) = ("1 = 1", "1 = 1", "1 = 1");
   
   if ($form->{reference}) {
-    my $source = $form->like(lc $form->{reference});
-    $glwhere .= " AND lower(g.reference) LIKE '$source'";
-    $arwhere .= " AND lower(a.invnumber) LIKE '$source'";
-    $apwhere .= " AND lower(a.invnumber) LIKE '$source'";
+    $var = $form->like(lc $form->{reference});
+    $glwhere .= " AND lower(g.reference) LIKE '$var'";
+    $arwhere .= " AND lower(a.invnumber) LIKE '$var'";
+    $apwhere .= " AND lower(a.invnumber) LIKE '$var'";
   }
+  if ($form->{department}) {
+    ($null, $var) = split /--/, $form->{department};
+    $glwhere .= " AND g.department_id = $var";
+    $arwhere .= " AND a.department_id = $var";
+    $apwhere .= " AND a.department_id = $var";
+  }
+
   if ($form->{source}) {
-    my $source = $form->like(lc $form->{source});
-    $glwhere .= " AND lower(ac.source) LIKE '$source'";
-    $arwhere .= " AND lower(ac.source) LIKE '$source'";
-    $apwhere .= " AND lower(ac.source) LIKE '$source'";
+    $var = $form->like(lc $form->{source});
+    $glwhere .= " AND lower(ac.source) LIKE '$var'";
+    $arwhere .= " AND lower(ac.source) LIKE '$var'";
+    $apwhere .= " AND lower(ac.source) LIKE '$var'";
   }
   if ($form->{datefrom}) {
     $glwhere .= " AND ac.transdate >= '$form->{datefrom}'";
@@ -200,26 +225,26 @@ sub all_transactions {
     $apwhere .= " AND ac.transdate <= '$form->{dateto}'";
   }
   if ($form->{amountfrom}) {
-    $glwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
-    $arwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
-    $apwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
+    $glwhere .= " AND abs(ac.amount) >= $form->{amountfrom}";
+    $arwhere .= " AND abs(ac.amount) >= $form->{amountfrom}";
+    $apwhere .= " AND abs(ac.amount) >= $form->{amountfrom}";
   }
   if ($form->{amountto}) {
-    $glwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
-    $arwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
-    $apwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
+    $glwhere .= " AND abs(ac.amount) <= $form->{amountto}";
+    $arwhere .= " AND abs(ac.amount) <= $form->{amountto}";
+    $apwhere .= " AND abs(ac.amount) <= $form->{amountto}";
   }
   if ($form->{description}) {
-    my $description = $form->like(lc $form->{description});
-    $glwhere .= " AND lower(g.description) LIKE '$description'";
-    $arwhere .= " AND lower(ct.name) LIKE '$description'";
-    $apwhere .= " AND lower(ct.name) LIKE '$description'";
+    $var = $form->like(lc $form->{description});
+    $glwhere .= " AND lower(g.description) LIKE '$var'";
+    $arwhere .= " AND lower(ct.name) LIKE '$var'";
+    $apwhere .= " AND lower(ct.name) LIKE '$var'";
   }
   if ($form->{notes}) {
-    my $notes = $form->like(lc $form->{notes});
-    $glwhere .= " AND lower(g.notes) LIKE '$notes'";
-    $arwhere .= " AND lower(a.notes) LIKE '$notes'";
-    $apwhere .= " AND lower(a.notes) LIKE '$notes'";
+    $var = $form->like(lc $form->{notes});
+    $glwhere .= " AND lower(g.notes) LIKE '$var'";
+    $arwhere .= " AND lower(a.notes) LIKE '$var'";
+    $apwhere .= " AND lower(a.notes) LIKE '$var'";
   }
   if ($form->{accno}) {
     $glwhere .= " AND c.accno = '$form->{accno}'";
@@ -242,24 +267,16 @@ sub all_transactions {
     $query = qq|SELECT category, link
                 FROM chart
 		WHERE accno = '$form->{accno}'|;
-    $sth = $dbh->prepare($query); 
-
-    $sth->execute || $form->dberror($query); 
-    ($form->{ml}, $form->{link}) = $sth->fetchrow_array; 
-    $sth->finish; 
+    ($form->{ml}, $form->{link}) = $dbh->selectrow_array($query); 
     
     if ($form->{datefrom}) {
       $query = qq|SELECT SUM(ac.amount)
-		  FROM acc_trans ac, chart c
-		  WHERE ac.chart_id = c.id
-		  AND c.accno = '$form->{accno}'
+		  FROM acc_trans ac
+		  JOIN chart c ON (ac.chart_id = c.id)
+		  WHERE c.accno = '$form->{accno}'
 		  AND ac.transdate < date '$form->{datefrom}'
 		  |;
-      $sth = $dbh->prepare($query);
-      $sth->execute || $form->dberror($query);
-
-      ($form->{balance}) = $sth->fetchrow_array;
-      $sth->finish;
+      ($form->{balance}) = $dbh->selectrow_array($query);
     }
   }
   
@@ -268,42 +285,34 @@ sub all_transactions {
     $query = qq|SELECT category, link
                 FROM chart
 		WHERE gifi_accno = '$form->{gifi_accno}'|;
-    $sth = $dbh->prepare($query); 
-
-    $sth->execute || $form->dberror($query); 
-    ($form->{ml}, $form->{link}) = $sth->fetchrow_array; 
-    $sth->finish; 
+    ($form->{ml}, $form->{link}) = $dbh->selectrow_array($query); 
    
     if ($form->{datefrom}) {
       $query = qq|SELECT SUM(ac.amount)
-		  FROM acc_trans ac, chart c
-		  WHERE ac.chart_id = c.id
-		  AND c.gifi_accno = '$form->{gifi_accno}'
+		  FROM acc_trans ac
+		  JOIN chart c ON (ac.chart_id = c.id)
+		  WHERE c.gifi_accno = '$form->{gifi_accno}'
 		  AND ac.transdate < date '$form->{datefrom}'
 		  |;
-      $sth = $dbh->prepare($query);
-      $sth->execute || $form->dberror($query);
-
-      ($form->{balance}) = $sth->fetchrow_array;
-      $sth->finish;
+      ($form->{balance}) = $dbh->selectrow_array($query);
     }
   }
 
   my $false = ($myconfig->{dbdriver} =~ /Pg/) ? FALSE : q|'0'|;
 
   my %ordinal = ( id => 1,
+                  accno => 9,
                   transdate => 6,
                   reference => 4,
                   source => 7,
-		  accno => 9,
 		  description => 5 );
   
-  my $sortorder = join ',', $form->sort_columns(qw(transdate reference source description accno id));
-  map { $sortorder =~ s/$_/$ordinal{$_}/ } keys %ordinal;
+  my @a = (id, transdate, reference, source, description, accno);
+  my $sortorder = $form->sort_order(\@a, \%ordinal);
   
   my $query = qq|SELECT g.id, 'gl' AS type, $false AS invoice, g.reference,
                  g.description, ac.transdate, ac.source,
-		 ac.amount, c.accno, c.gifi_accno, g.notes,
+		 ac.amount, c.accno, c.gifi_accno, g.notes, c.link,
 		 '' AS till, ac.cleared
                  FROM gl g, acc_trans ac, chart c
                  WHERE $glwhere
@@ -312,7 +321,7 @@ sub all_transactions {
 	UNION ALL
 	         SELECT a.id, 'ar' AS type, a.invoice, a.invnumber,
 		 ct.name, ac.transdate, ac.source,
-		 ac.amount, c.accno, c.gifi_accno, a.notes,
+		 ac.amount, c.accno, c.gifi_accno, a.notes, c.link,
 		 a.till, ac.cleared
 		 FROM ar a, acc_trans ac, chart c, customer ct
 		 WHERE $arwhere
@@ -322,7 +331,7 @@ sub all_transactions {
 	UNION ALL
 	         SELECT a.id, 'ap' AS type, a.invoice, a.invnumber,
 		 ct.name, ac.transdate, ac.source,
-		 ac.amount, c.accno, c.gifi_accno, a.notes,
+		 ac.amount, c.accno, c.gifi_accno, a.notes, c.link,
 		 a.till, ac.cleared
 		 FROM ap a, acc_trans ac, chart c, vendor ct
 		 WHERE $apwhere
@@ -333,6 +342,7 @@ sub all_transactions {
   my $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);
 
+  
   while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
 
     # gl
@@ -370,6 +380,7 @@ sub all_transactions {
     
   }
 
+
   $sth->finish;
 
   if ($form->{accno}) {
@@ -396,7 +407,7 @@ sub all_transactions {
 
 sub transaction {
   my ($self, $myconfig, $form) = @_;
-
+  
   my ($query, $sth, $ref);
   
   # connect to database
@@ -411,26 +422,29 @@ sub transaction {
     ($form->{closedto}, $form->{revtrans}) = $sth->fetchrow_array;
     $sth->finish;
 
-    $query = "SELECT reference, description, notes, transdate
-              FROM gl
-	      WHERE id = $form->{id}";
+    $query = qq|SELECT g.*,
+                d.description AS department
+                FROM gl g
+	        LEFT JOIN department d ON (d.id = g.department_id)  
+	        WHERE g.id = $form->{id}|;
     $sth = $dbh->prepare($query);
     $sth->execute || $form->dberror($query);
 
-    ($form->{reference}, $form->{description}, $form->{notes}, $form->{transdate}) = $sth->fetchrow_array;
+    $ref = $sth->fetchrow_hashref(NAME_lc);
+    map { $form->{$_} = $ref->{$_} } keys %$ref;
     $sth->finish;
-
+  
     # retrieve individual rows
     $query = qq|SELECT c.accno, c.description, ac.amount, ac.project_id,
                 p.projectnumber, ac.fx_transaction
 	        FROM acc_trans ac
 	        JOIN chart c ON (ac.chart_id = c.id)
-	        LEFT JOIN project p ON (ac.project_id = p.id)
+	        LEFT JOIN project p ON (p.id = ac.project_id)
 	        WHERE ac.trans_id = $form->{id}
 	        ORDER BY accno|;
     $sth = $dbh->prepare($query);
     $sth->execute || $form->dberror($query);
-
+    
     while ($ref = $sth->fetchrow_hashref(NAME_lc)) {
       if ($ref->{fx_transaction}) {
 	$form->{transfer} = 1;
@@ -452,9 +466,16 @@ sub transaction {
   if ($form->{transfer}) {
     $paid = "AND link LIKE '%_paid%'
              AND NOT (category = 'I'
-	          OR category = 'E')";
+	          OR category = 'E')
+	     
+	  UNION
+	  
+	     SELECT accno,description
+	     FROM chart
+	     WHERE id IN (SELECT fxgain_accno_id FROM defaults)
+	     OR id IN (SELECT fxloss_accno_id FROM defaults)";
   }
-    
+  
   # get chart of accounts
   $query = qq|SELECT accno,description
               FROM chart
@@ -468,9 +489,18 @@ sub transaction {
     push @{ $form->{all_accno} }, $ref;
   }
   $sth->finish;
-
+  
   # get projects
-  $form->get_project($dbh);
+  $query = qq|SELECT *
+              FROM project
+	      ORDER BY projectnumber|;
+  $sth = $dbh->prepare($query);
+  $sth->execute || $form->dberror($query);
+
+  while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
+    push @{ $form->{all_projects} }, $ref;
+  }
+  $sth->finish;
   
   $dbh->disconnect;
 

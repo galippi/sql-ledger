@@ -2,7 +2,6 @@
 
 use SL::AR;
 use SL::IS;
-use SL::CP;
 use SL::RP;
 
 require "$form->{path}/ar.pl";

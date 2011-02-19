@@ -1,24 +1,24 @@
 $self{texts} = {
-  'About'                       => 'Programmi info',
+  'About'                       => 'Programmi Info',
+  'Company'                     => 'Ettevõte',
   'Continue'                    => 'Edasi',
   'Database Host'               => 'Andmebaasiserver',
-  'Dataset'                     => 'Andmebaas',
-  'Dataset is newer than version!' => 'Andmebaas on uuem kui programm',
+  'Dataset'                     => 'Andmekogu',
+  'Dataset is newer than version!' => 'Andmekogu versioon, on uuem süsteemi omast!',
   'Incorrect Dataset version!'  => 'Vale andmebaasi versioon',
   'Incorrect Password!'         => 'Vale parool!',
   'Licensed to'                 => 'Kasutaja andmed:',
   'Login'                       => 'Login',
   'Name'                        => 'Nimi',
   'Password'                    => 'Parool',
-  'Upgrading Dataset'           => 'Uuendan andmebaasi',
+  'Upgrading to Version'        => 'Viin vastavusse Versiooniga',
   'User'                        => 'Kasutaja',
   'Version'                     => 'Versioon',
   'You are logged out!'         => 'Oled välja loginud!',
   'You did not enter a name!'   => 'Nimi sisestamata!',
-  'done'                        => 'valmis',
+  'done'                        => 'tehtud',
   'is not a member!'            => 'ei ole kasutaja!',
   'localhost'                   => 'localhost',
-  'to Version'                  => 'versiooniks',
 };
 
 $self{subs} = {
@@ -26,6 +26,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'login'                       => 'login',
 };
 

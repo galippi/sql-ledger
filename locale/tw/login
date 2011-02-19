@@ -1,24 +1,20 @@
 $self{texts} = {
   'About'                       => '關於',
+  'Company'                     => '公司名稱',
   'Continue'                    => '繼續',
   'Database Host'               => '資料庫主機',
   'Dataset'                     => '資料集',
-  'Dataset is newer than version!' => '資料集比SL版本新',
   'Incorrect Dataset version!'  => '資料集版本錯誤!',
   'Incorrect Password!'         => '密碼錯誤!',
   'Licensed to'                 => '授權予',
   'Login'                       => '登入',
   'Name'                        => '名稱',
   'Password'                    => '密碼',
-  'Upgrading Dataset'           => '資料集升級',
   'User'                        => '使用者',
   'Version'                     => '版本',
-  'You are logged out!'         => '你已登出',
   'You did not enter a name!'   => '您並未鍵入名稱!',
-  'done'                        => '完成',
   'is not a member!'            => '並不是成員!',
   'localhost'                   => 'localhost',
-  'to Version'                  => '版本至',
 };
 
 $self{subs} = {
@@ -26,6 +22,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   '登大'                        => 'login',
 };
 

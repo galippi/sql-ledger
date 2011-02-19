@@ -1,24 +1,24 @@
 $self{texts} = {
   'About'                       => 'Sobre',
+  'Company'                     => 'Companhia',
   'Continue'                    => 'Continuar',
   'Database Host'               => 'Servidor de Base de Dados',
   'Dataset'                     => 'Conjunto de dados',
-  'Dataset is newer than version!' => 'Dataset is newer than version!',
+  'Dataset is newer than version!' => 'Conjunto de dados é mais novo que a versão!',
   'Incorrect Dataset version!'  => 'Versão incorreta de grupos de dados!',
   'Incorrect Password!'         => 'Senha incorreta!',
   'Licensed to'                 => 'Licenciado a',
   'Login'                       => 'Acessar/login',
   'Name'                        => 'Nome',
   'Password'                    => 'Senha',
-  'Upgrading Dataset'           => 'Upgrading Dataset',
+  'Upgrading to Version'        => 'Atualizado para versão',
   'User'                        => 'Usuário',
   'Version'                     => 'Versão',
   'You are logged out!'         => 'Você saiu do sistema!',
   'You did not enter a name!'   => 'Você não entrou com um nome',
-  'done'                        => 'done',
+  'done'                        => 'feito',
   'is not a member!'            => 'não é um membro!',
   'localhost'                   => 'localhost /servidor local',
-  'to Version'                  => 'to Version',
 };
 
 $self{subs} = {
@@ -26,6 +26,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'acessar/login'               => 'login',
 };
 

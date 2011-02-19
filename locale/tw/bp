@@ -1,0 +1,39 @@
+$self{texts} = {
+  'Account'                     => '科目',
+  'Accounting Menu'             => '會計選單',
+  'Confirm!'                    => '入帳成功!',
+  'Continue'                    => '繼續',
+  'Customer'                    => '客戶',
+  'Date'                        => '日期',
+  'From'                        => '從',
+  'Invoice'                     => '發票',
+  'Invoice Number'              => '發票編號',
+  'Order'                       => '訂單',
+  'Order Number'                => '訂單編號',
+  'Purchase Orders'             => '採購單',
+  'Sales Orders'                => '銷貨單',
+  'To'                          => '至',
+  'Vendor'                      => '廠商',
+  'Yes'                         => '是',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'list_spool'                  => 'list_spool',
+  'menubar'                     => 'menubar',
+  'print'                       => 'print',
+  'remove'                      => 'remove',
+  'search'                      => 'search',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'yes'                         => 'yes',
+  '繼續'                        => 'continue',
+  'print'                       => 'print',
+  'remove'                      => 'remove',
+  'select_all'                  => 'select_all',
+  '殃'                          => 'yes',
+};
+
+1;

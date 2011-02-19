@@ -1,0 +1,43 @@
+$self{texts} = {
+  'Account'                     => 'Konts',
+  'Accounting Menu'             => 'Pârskata izvçle',
+  'Confirm!'                    => 'Apstiprinât!',
+  'Continue'                    => 'Turpinât',
+  'Customer'                    => 'Klients',
+  'Date'                        => 'Datums',
+  'From'                        => 'No',
+  'Invoice'                     => 'Rçíins',
+  'Invoice Number'              => 'Rçíina numurs',
+  'Order'                       => 'Maksâjuma uzdevums',
+  'Order Number'                => 'Maksâjuma uzdevuma nr.',
+  'Print'                       => 'Drukât',
+  'Purchase Orders'             => 'Pirkğanas uzdevumi',
+  'Receipts'                    => 'Kvîtis',
+  'Reference'                   => 'Norâde',
+  'Sales Orders'                => 'Pârdoğanas uzdevumi',
+  'Select all'                  => 'Iezîmçt visu',
+  'To'                          => 'uz',
+  'Vendor'                      => 'Pârdevçjs',
+  'Yes'                         => 'Jâ',
+};
+
+$self{subs} = {
+  'acc_menu'                    => 'acc_menu',
+  'continue'                    => 'continue',
+  'display'                     => 'display',
+  'list_spool'                  => 'list_spool',
+  'menubar'                     => 'menubar',
+  'print'                       => 'print',
+  'remove'                      => 'remove',
+  'search'                      => 'search',
+  'section_menu'                => 'section_menu',
+  'select_all'                  => 'select_all',
+  'yes'                         => 'yes',
+  'turpinât'                    => 'continue',
+  'drukât'                      => 'print',
+  'remove'                      => 'remove',
+  'iezîmçt_visu'                => 'select_all',
+  'jâ'                          => 'yes',
+};
+
+1;

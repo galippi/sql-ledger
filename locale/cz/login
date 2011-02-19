@@ -1,24 +1,20 @@
 $self{texts} = {
   'About'                       => 'O programu',
+  'Company'                     => 'Firma',
   'Continue'                    => 'Pokraèování',
   'Database Host'               => 'Databázový server',
-  'Dataset'                     => 'Databáze',
-  'Dataset is newer than version!' => 'Instalována verze databáze je novìj¹í ne¾ u¾ívaná verze',
-  'Incorrect Dataset version!'  => '©patná verze databáze!',
+  'Dataset'                     => 'Dataset',
+  'Incorrect Dataset version!'  => '©patná verze dat!',
   'Incorrect Password!'         => 'Nesprávné heslo!',
   'Licensed to'                 => 'Licencováno pro',
   'Login'                       => 'U¾ivatelské jméno',
   'Name'                        => 'Jméno',
   'Password'                    => 'Heslo',
-  'Upgrading Dataset'           => 'Obnova databáze ze',
   'User'                        => 'U¾ivatel',
   'Version'                     => 'Verze',
-  'You are logged out!'         => 'Odhlá¹ení-nashledanou',
   'You did not enter a name!'   => 'Nezadal jste jméno!',
-  'done'                        => 'Provedeno',
   'is not a member!'            => 'není platným u¾ivatelem',
   'localhost'                   => 'lokální server',
-  'to Version'                  => 'do Verze',
 };
 
 $self{subs} = {
@@ -26,6 +22,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'u¾ivatelské_jméno'           => 'login',
 };
 

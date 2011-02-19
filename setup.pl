@@ -23,8 +23,10 @@ $gzip = `gzip -V 2>&1`;            # gz decompression utility
 $tar = `tar --version 2>&1`;       # tar archiver
 $latex = `latex -version`;
 
-@source = ( "http://abacus.sql-ledger.org/source",
-	    "http://www.sql-ledger.org/source" );
+@source = ( "http://www.sql-ledger.org/source",
+            "http://www.sql-ledger.com/source",
+            "http://abacus.sql-ledger.org/source",
+	    "http://pluto.sql-ledger.org/source" );
 
 $userspath = "users";         # default for new installation
 
@@ -77,18 +79,13 @@ if ($httpd = `find /etc /usr/local/etc -type f -name 'httpd.conf'`) {
   chomp $httpd;
   $webowner = `grep "^User " $httpd`;
   $webgroup = `grep "^Group " $httpd`;
-  $serverroot = `grep "^ServerRoot " $httpd`;
 
   chomp $webowner;
   chomp $webgroup;
-  chomp $serverroot;
   
   ($null, $webowner) = split / /, $webowner;
   ($null, $webgroup) = split / /, $webgroup;
-  ($null, $serverroot) = split / /, $serverroot;
 
-  $serverroot =~ s/"//g;
-  
 }
 
 system("tput clear");
@@ -122,7 +119,7 @@ $install .= "\n(d)ownload $latest_version (no installation)" unless $filename;
   print qq|
 
 
-               SQL-Ledger Accounting Software Installation
+               SQL-Ledger Accounting Installation
 
 
 
@@ -290,17 +287,6 @@ sub install {
 
   &decompress;
 
-  # if this is not root, check if user is part of $webgroup
-  if ($>) {
-    if ($permset = ($) =~ getgrnam $webgroup)) {
-      `chown -R :$webgroup *`;
-    }
-  } else {
-    `chown -R $webowner:$webgroup *`;
-  }
-  
-  chmod 0771, 'users', 'templates';
-
   if ($newinstall) {
     open(FH, "sql-ledger.conf.default");
     @f = <FH>;
@@ -357,10 +343,8 @@ Webserver directives were written to $filename
 Copy $filename to $httpddir and add
 |;
 
-      # strip serverroot off httpddir
-      $httpddir =~ s/$serverroot\///;
-
       print qq|
+# SQL-Ledger
 Include $httpddir/$filename
 
 to $httpd
@@ -370,11 +354,11 @@ Don't forget to restart your webserver!
 
       if (!$permset) {
 	print qq|
-WARNING: permissions for templates and users directory
+WARNING: permissions for templates, users and spool directory
 could not be set. Login as root and set permissions
 
-# chown $webowner:$webgroup users templates
-# chmod 771 users templates
+# chown :$webgroup users templates spool
+# chmod 771 users templates spool
 
 |;
       }
@@ -382,8 +366,6 @@ could not be set. Login as root and set permissions
     } else {
       
       if (!(`grep "^# SQL-Ledger" $httpd`)) {
-	# append Include directive
-	$httpddir =~ s/$serverroot\///;
 
 	open(FH, ">>$httpd");
 
@@ -407,11 +389,26 @@ Webserver directives were written to
       if ($f = `find /var -type f -name 'httpd.pid'`) {
 	$pid = `cat $f`;
 	chomp $pid;
-	system("kill -s HUP $pid");
+	if ($pid) {
+	  system("kill -s HUP $pid");
+	}
       }
     }
   }
-
+  
+  # if this is not root, check if user is part of $webgroup
+  if ($>) {
+    if ($permset = ($) =~ getgrnam $webgroup)) {
+      `chown :$webgroup users templates spool`;
+      chmod 0771, 'users', 'templates', 'spool';
+    }
+  } else {
+    # root
+    `chown -hR 0:0 *`;
+    `chown $webowner:$webgroup users templates spool`;
+    chmod 0771, 'users', 'templates', 'spool';
+  }
+  
   unlink "sql-ledger.conf.default";
 
   &cleanup;

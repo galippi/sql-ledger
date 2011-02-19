@@ -4,7 +4,6 @@
 -- Jim Rawlings modified for use with SL 2.0.8 and DB2 v7.2 
 -- and higher August 27, 2003
 --
--- DS updated to 2.2.0
 --
 ---------------------------------------------------------
 -- DDL Statements for sequence id
@@ -74,7 +73,7 @@ CREATE TABLE defaults (
   ponumber VARCHAR(30)                    
 ) IN LEDGER_TS
 @
-INSERT INTO defaults (version) VALUES ('2.2.0')
+INSERT INTO defaults (version) VALUES ('2.0.10')
 @
 ---------------------------------------------------------
 -- DDL Statements for table acc_trans
@@ -216,8 +215,7 @@ CREATE TABLE ar (
   notes VARCHAR(4000),                                  
   curr CHAR(3),                                         
   ordnumber VARCHAR(30),                                
-  employee_id INTEGER,
-  till VARCHAR(20)
+  employee_id INTEGER                                      
 ) IN LEDGER_TS
 @
 ---------------------------------------------------------
@@ -238,8 +236,7 @@ CREATE TABLE ap (
   ordnumber VARCHAR(30),                                
   curr CHAR(3),                                         
   notes VARCHAR(4000),                                  
-  employee_id INTEGER,
-  till VARCHAR(20)
+  employee_id INTEGER                                   
 ) IN LEDGER_TS
 @
 ---------------------------------------------------------

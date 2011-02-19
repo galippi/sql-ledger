@@ -1,5 +1,6 @@
 $self{texts} = {
   'About'                       => 'Na Temat',
+  'Company'                     => 'Firma',
   'Continue'                    => 'Kontynuj',
   'Database Host'               => 'Host Bazy Danych',
   'Dataset'                     => 'Zbiór Danych',
@@ -10,15 +11,14 @@ $self{texts} = {
   'Login'                       => 'Zarejestrój siê',
   'Name'                        => 'Nazwa',
   'Password'                    => 'Has³o',
-  'Upgrading Dataset'           => 'Aktualizacja Zbioru Danych',
+  'Upgrading to Version'        => 'Uaktualnienie do nowej wersji',
   'User'                        => 'U¿ytkownik',
   'Version'                     => 'Wersja',
   'You are logged out!'         => 'Jeste¶ wyrejestrowany!',
   'You did not enter a name!'   => 'Nie wstawiono nazwy!',
-  'done'                        => 'wykonano',
+  'done'                        => 'wykonane',
   'is not a member!'            => 'Nie jest cz³onkiem',
   'localhost'                   => 'host lokalny',
-  'to Version'                  => 'do Wersji',
 };
 
 $self{subs} = {
@@ -26,6 +26,7 @@ $self{subs} = {
   'login'                       => 'login',
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
+  'selectdataset'               => 'selectdataset',
   'zarejestrój_siê'             => 'login',
 };
 
