@@ -58,7 +58,7 @@ sub new {
     $self->{action} =~ s/( |-|,)/_/g;
   }
 
-  $self->{version} = "2.2.2";
+  $self->{version} = "2.2.3";
   $self->{dbversion} = "2.2.0";
 
   bless $self, $type;
@@ -1333,15 +1333,18 @@ sub lastname_used {
 # JJR added DAYS for DB2
   my $days = ($myconfig->{dbdriver} eq 'DB2') ? "DAYS" : "";
   
-  $query = qq|SELECT ct.name, a.curr, a.${table}_id,
-              current_date + ct.terms $days AS duedate
+  $query = qq|SELECT ct.name AS $table, a.curr AS currency, a.${table}_id,
+              current_date + ct.terms $days AS duedate,
+	      ct.notes
 	      FROM $arap a
 	      JOIN $table ct ON (a.${table}_id = ct.id)
 	      WHERE a.id = $trans_id|;
   $sth = $dbh->prepare($query);
   $sth->execute || $self->dberror($query);
 
-  ($self->{$table}, $self->{currency}, $self->{"${table}_id"}, $self->{duedate}) = $sth->fetchrow_array;
+  my $ref = $sth->fetchrow_hashref(NAME_lc);
+
+  map { $self->{$_} = $ref->{$_} } keys %$ref;
   $sth->finish;
 
 }

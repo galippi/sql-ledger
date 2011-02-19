@@ -1,9 +1,9 @@
 $self{texts} = {
   'Address'                     => '地址',
   'Continue'                    => '繼續',
-  'Customer not on file!'       => 'Customer not on file!',
-  'Select from one of the names below' => 'Select from one of the names below',
-  'Vendor not on file!'         => 'Vendor not on file!',
+  'Customer not on file!'       => '客戶不在檔案內',
+  'Select from one of the names below' => '於下列名稱中選擇一個',
+  'Vendor not on file!'         => '供應商不在檔案內',
 };
 
 $self{subs} = {

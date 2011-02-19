@@ -21,6 +21,7 @@ $self{texts} = {
   'Cannot delete default account!' => 'Konto Domy¶lne nie mo¿e byæ usuniête!',
   'Cannot save account!'        => 'Nie mo¿na zapisaæ konta!',
   'Cannot save preferences!'    => 'Nie mo¿na zapisaæ preferencji!',
+  'Cannot set account for more than one of AR, AP or IC' => 'Nie mo¿na ustawiæ konta na wiêcej ni¿ jeden rodzaj',
   'Character Set'               => 'Zestaw Znaków',
   'Chart of Accounts'           => 'Plan Kont',
   'Close Books up to'           => 'Zamkniêcie Ksi±g do',
@@ -96,6 +97,7 @@ $self{texts} = {
   'Weight Unit'                 => 'Jednostka Wagi',
   'Year End'                    => 'Koniec Roku Finansowego',
   'Yes'                         => 'Tak',
+  'account cannot be set to any other type of account' => 'rodzaj konta nie mo¿e byæ zmienione na inny',
   'does not exist'              => 'nie istnieje',
 };
 

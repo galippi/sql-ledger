@@ -320,18 +320,25 @@ sub ap_transactions {
   # connect to database
   my $dbh = $form->dbconnect($myconfig);
 
-  my $incemp = qq|, (SELECT e.name FROM employee e
-                   WHERE a.employee_id = e.id) AS employee
-		 | if ($form->{l_employee});
-		    
+  my $paid = "a.paid";
+  
+  if ($form->{outstanding}) {
+    $paid = qq|SELECT SUM(ac.amount)
+               FROM acc_trans ac
+	       JOIN chart c ON (c.id = ac.chart_id)
+	       WHERE ac.trans_id = a.id
+	       AND (c.link LIKE '%AP_paid%' OR c.link = '')|;
+    $paid .= qq|
+               AND ac.transdate <= '$form->{transdateto}'| if $form->{transdateto};
+  }
+
   my $query = qq|SELECT a.id, a.invnumber, a.transdate, a.duedate,
-                 a.amount, a.paid, a.ordnumber, v.name, a.invoice,
-	         a.netamount, a.datepaid, a.notes
-		 
-		 $incemp
-		 
-	         FROM ap a, vendor v
-	         WHERE a.vendor_id = v.id|;
+                 a.amount, ($paid) AS paid, a.ordnumber, v.name, a.invoice,
+	         a.netamount, a.datepaid, a.notes, e.name AS employee
+	         FROM ap a
+		 JOIN vendor v ON (a.vendor_id = v.id)
+		 LEFT JOIN employee e ON (a.employee_id = e.id)
+	         WHERE 1=1|;
 
   my %ordinal = ( 'transdate' => 3,
                   'invnumber' => 2,
@@ -380,18 +387,32 @@ sub ap_transactions {
     }
   }
 
+
+  if ($form->{AP}) {
+    my ($accno) = split /--/, $form->{AP};
+    $query .= qq| 
+                AND a.id IN (SELECT ac.trans_id
+		             FROM acc_trans ac
+			     JOIN chart c ON (c.id = ac.chart_id)
+			     WHERE a.id = ac.trans_id
+			     AND c.accno = '$accno')
+		|;
+  }
+    
+   
   $query .= " ORDER by $sortorder";
 
   my $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);
 
-  while (my $ap = $sth->fetchrow_hashref(NAME_lc)) {
-    push @{ $form->{AP} }, $ap;
+  while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
+    next if $form->{outstanding} && $ref->{amount} == $ref->{paid};
+    push @{ $form->{transactions} }, $ref;
   }
   
   $sth->finish;
   $dbh->disconnect;
-  
+
 }
 
 

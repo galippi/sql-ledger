@@ -35,8 +35,12 @@ $self{texts} = {
   'Tax Included'                => 'Koos maksuga',
   'Taxable'                     => 'Maksustatav',
   'Terms: Net'                  => 'Maksetingimus',
-  'Transactions exist, cannot delete customer!' => 'Kanded aktiivsed, klienti ei saa kustutada!',
-  'Transactions exist, cannot delete vendor!' => 'Kanded aktiivsed, hankijat ei saa kustutada!',
+  'Transactions exist, cannot delete customer!' => 'Kanded aktiivsed,
+klienti ei saa
+kustutada!',
+  'Transactions exist, cannot delete vendor!' => 'Kanded aktiivsed,
+hankijat ei saa
+kustutada!',
   'Vendor deleted!'             => 'Hankija kustutatud!',
   'Vendor saved!'               => 'Hankija salvestatud!',
   'Vendors'                     => 'Hankijad',

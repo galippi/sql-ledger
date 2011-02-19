@@ -38,7 +38,7 @@ $self{texts} = {
   'Hostname missing!'           => 'Serveri nimi puudub!',
   'Incorrect Password!'         => 'Vale parool!',
   'Language'                    => 'Keel',
-  'Leave host and port field empty unless you want to make a remote connection.' => 'Jäta serveri ja pordi väljad tühjaks kui sa ei soovi kaugühendust luua',
+  'Leave host and port field empty unless you want to make a remote connection.' => 'Leave host and port field empty unless you want to make a remote connection.',
   'Lock System'                 => 'Lukusta süsteem',
   'Lockfile created!'           => 'Lukufail loodud',
   'Lockfile removed!'           => 'Lukufail eemaldatud',
@@ -47,7 +47,8 @@ $self{texts} = {
   'Multibyte Encoding'          => 'Mitmebaidine kodeering',
   'Name'                        => 'Nimi',
   'New Templates'               => 'Uued mallid',
-  'No Database Drivers available!' => 'Ühtegi andmebaasidraiverit ei leitud!',
+  'No Database Drivers available!' => 'Ühtegi andmebaasidraiverit ei
+leitud!',
   'No Dataset selected!'        => 'Andmebaas valimata!',
   'Nothing to delete!'          => 'Midagi ei ole kustutada',
   'Number Format'               => 'Numbri formaat',
@@ -61,16 +62,21 @@ $self{texts} = {
   'Port missing!'               => 'Port puudub',
   'Printer'                     => 'Printer',
   'Save'                        => 'Salvesta',
-  'Select a Dataset to delete and press "Continue"' => 'Vali andmebaas ja vajuta "Jätka"',
+  'Select a Dataset to delete and press "Continue"' => 'Vali andmebaas ja
+vajuta
+"Jätka"',
   'Setup Templates'             => 'Mallide seadistamine',
   'Ship via'                    => 'Tarneviis',
   'Signature'                   => 'Signatuur',
   'Stylesheet'                  => 'Laaditabel',
   'Templates'                   => 'Mallid',
-  'The following Datasets are not in use and can be deleted' => 'Järgnevad andmebaasid ei ole kasutusel ning võib kustutada',
-  'The following Datasets need to be updated' => 'Järgmised andmebaasid vajavad uuendamist',
-  'This is a preliminary check for existing sources. Nothing will be created or deleted at this stage!' => 'Olemasolevate allikate eelkontroll. Praeguses staadiumis ei toimu andmete lisamist ega kustutamist.',
-  'To add a user to a group edit a name, change the login name and save.  A new user with the same variables will then be saved under the new login name.' => 'Kasutaja gruppi lisamiseks redigeeri nime, muuda kasutajanimi ja salvesta. Luuakse samade parameetritega uus kasutaja',
+  'The following Datasets are not in use and can be deleted' => 'Järgnevad
+andmebaasid ei ole kasutusel ning võib kustutada',
+  'The following Datasets need to be updated' => 'Järgmised andmebaasid
+vajavad
+uuendamist',
+  'This is a preliminary check for existing sources. Nothing will be created or deleted at this stage!' => 'This is a preliminary check for existing sources. Nothing will be created or deleted at this stage!',
+  'To add a user to a group edit a name, change the login name and save.  A new user with the same variables will then be saved under the new login name.' => 'To add a user to a group edit a name, change the login name and save.  A new user with the same variables will then be saved under the new login name.',
   'Unlock System'               => 'Ava süsteem',
   'Update Dataset'              => 'Uuenda andmebaas',
   'Use Templates'               => 'Kasuta malli',
@@ -78,7 +84,8 @@ $self{texts} = {
   'User deleted!'               => 'Kasutaja kustutatud!',
   'User saved!'                 => 'Kasutaja salvestatud!',
   'Version'                     => 'Versioon',
-  'You must enter a host and port for local and remote connections!' => 'Ühenduse loomiseks palun sisesta serveri nimi ja port',
+  'You must enter a host and port for local and remote connections!' => 'Ühenduse
+loomiseks palun sisesta serveri nimi ja port',
   'does not exist'              => 'ei eksisteeri',
   'is already a member!'        => 'on juba kasutaja!',
   'localhost'                   => 'localhost',

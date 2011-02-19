@@ -137,6 +137,9 @@ sub login {
       open FH, ">$userspath/nologin" or $form->error($!);
 
       map { $form->{$_} = $user->{$_} } qw(dbname dbhost dbport dbdriver dbuser dbpasswd);
+
+      $form->{dbpasswd} = unpack 'u', $form->{dbpasswd};
+      
       $form->{dbupdate} = "db$user->{dbname}";
       $form->{$form->{dbupdate}} = 1;
 
@@ -150,7 +153,6 @@ sub login {
       $SIG{INT} = 'IGNORE';
 
       $user->dbupdate(\%$form);
-
       # remove lock file
       unlink "$userspath/nologin";
 

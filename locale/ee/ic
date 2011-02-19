@@ -52,8 +52,9 @@ $self{texts} = {
   'Income'                      => 'Tulu',
   'Individual Items'            => 'Komponendid',
   'Inventory'                   => 'Ladu',
-  'Inventory quantity must be zero before you can set this assembly obsolete!' => 'Enne komplekti aegunuks märkimist peab laoseis null olema!',
-  'Inventory quantity must be zero before you can set this part obsolete!' => 'Enne toote aegunuks märkimist peab laoseis null olema!',
+  'Inventory quantity must be zero before you can set this assembly obsolete!' => 'Inventory quantity must be zero before you can set this assembly obsolete!',
+  'Inventory quantity must be zero before you can set this part obsolete!' => 'Enne
+toote aegunuks märkimist peab laoseis null olema!',
   'Invoice'                     => 'Arve',
   'Invoice Date missing!'       => 'Arve kuupäev puudub!',
   'Invoice Number'              => 'Arve number',

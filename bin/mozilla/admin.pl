@@ -801,7 +801,7 @@ sub save {
     
   # set admin
   $form->{admin} = "" unless $form->{admin};
-  
+
   foreach $item (keys %{$form}) {
     $myconfig->{$item} = $form->{$item};
   }

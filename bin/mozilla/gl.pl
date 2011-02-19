@@ -177,6 +177,12 @@ sub search {
 	  <td><input name=dateto size=11 title="$myconfig{dateformat}"></td>
 	</tr>
 	<tr>
+	  <th align=right>|.$locale->text('Amount').qq| >=</th>
+	  <td><input name=amountfrom size=11</td>
+	  <th align=right>|.$locale->text('Amount').qq| <=</th>
+	  <td><input name=amountto size=11></td>
+	</tr>
+	<tr>
 	  <th align=right>|.$locale->text('Include in Report').qq|</th>
 	  <td colspan=3>
 	    <table>
@@ -313,8 +319,30 @@ sub generate_report {
     $option .= $locale->text('to')." ".$locale->date(\%myconfig, $form->{dateto}, 1);
   }
 
-
+  if ($form->{amountfrom}) {
+    $href .= "&amountfrom=$form->{amountfrom}";
+    $callback .= "&amountfrom=$form->{amountfrom}";
+    $option .= "\n<br>" if $option;
+    $option .= $locale->text('Amount')." >= ".$form->format_amount(\%myconfig, $form->{amountfrom}, 2);
+  }
+  if ($form->{amountto}) {
+    $href .= "&amountto=$form->{amountto}";
+    $callback .= "&amountto=$form->{amountto}";
+    if ($form->{amountfrom}) {
+      $option .= " <= ";
+    } else {
+      $option .= "\n<br>" if $option;
+      $option .= $locale->text('Amount')." <= ";
+    }
+    $option .= $form->format_amount(\%myconfig, $form->{amountto}, 2);
+  }
+  
   @columns = $form->sort_columns(qw(transdate id reference description notes source debit credit accno gifi_accno));
+  if ($form->{link} =~ /_paid/) {
+    @columns = $form->sort_columns(qw(transdate id reference description notes source cleared debit credit accno gifi_accno));
+    $form->{l_cleared} = "Y";
+  }
+
 
   if ($form->{accno} || $form->{gifi_accno}) {
     @columns = grep !/(accno|gifi_accno)/, @columns;
@@ -353,6 +381,9 @@ sub generate_report {
   $column_header{accno} = "<th><a class=listheading href=$callback&sort=accno>".$locale->text('Account')."</a></th>";
   $column_header{gifi_accno} = "<th><a class=listheading href=$callback&sort=gifi_accno>".$locale->text('GIFI')."</a></th>";
   $column_header{balance} = "<th class=listheading>".$locale->text('Balance')."</th>";
+
+  $column_header{cleared} = qq|<th>|.$locale->text('R').qq|</th>|;
+  
  
   $form->header;
 
@@ -435,6 +466,8 @@ print "
     $column_data{accno} = "<td><a href=$href&accno=$ref->{accno}&callback=$callback>$ref->{accno}</a></td>";
     $column_data{gifi_accno} = "<td><a href=$href&gifi_accno=$ref->{gifi_accno}&callback=$callback>$ref->{gifi_accno}</a>&nbsp;</td>";
     $column_data{balance} = "<td align=right>".$form->format_amount(\%myconfig, $form->{balance} * $ml, 2, 0)."</td>";
+    
+    $column_data{cleared} = ($ref->{cleared}) ? "<td>*</td>" : "<td>&nbsp;</td>";
 
     $i++; $i %= 2;
     print "

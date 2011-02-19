@@ -738,7 +738,7 @@ sub config {
   foreach $key (sort { $countrycodes{$a} cmp $countrycodes{$b} } keys %countrycodes) {
     $countrycodes .= ($myconfig{countrycode} eq $key) ? "<option selected value=$key>$countrycodes{$key}\n" : "<option value=$key>$countrycodes{$key}\n";
   }
-  $countrycodes = "<option>American English\n$countrycodes";
+  $countrycodes = qq|<option value="">American English\n$countrycodes|;
 
   foreach $key (keys %{ $form->{IC} }) {
     foreach $accno (sort keys %{ $form->{IC}{$key} }) {
@@ -836,7 +836,7 @@ sub config {
 	    <table width=100%>
 	      <tr>
 		<th align=right>|.$locale->text('Year End').qq| (mm/dd)</th>
-		<td><input name=yearend size=5 maxsize=5 value=$form->{defaults}{yearend}></td>
+		<td><input name=yearend size=5 maxlength=5 value=$form->{defaults}{yearend}></td>
 		<th align=right>|.$locale->text('Weight Unit').qq|</th>
 		<td><input name=weightunit size=5 value="$form->{defaults}{weightunit}"></td>
 	      </tr>

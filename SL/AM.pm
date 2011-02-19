@@ -423,7 +423,7 @@ sub save_preferences {
   }
 
   $myconfig->{password} = $form->{new_password} if ($form->{old_password} ne $form->{new_password});
-
+  
   $myconfig->save_member($memberfile, $userspath);
 
   $rc;
@@ -638,6 +638,7 @@ DELETE FROM $table;
 
     my ($id) = $sth->fetchrow_array;
     $sth->finish;
+    $id++;
 
     print OUT qq|--
 DROP SEQUENCE id RESTRICT;
@@ -653,6 +654,7 @@ CREATE SEQUENCE id AS INTEGER START WITH $id INCREMENT BY 1 MAXVALUE 2147483647 
 
     my ($id) = $sth->fetchrow_array;
     $sth->finish;
+    $id++;
     
     print OUT qq|--
 DROP SEQUENCE id;

@@ -7,7 +7,9 @@ $self{texts} = {
   'Amount'                      => 'Summa',
   'Apr'                         => 'Apr',
   'April'                       => 'Aprill',
-  'Are you sure you want to delete Order Number' => 'Kas oled kindel, et soovid tellimuse kustutada',
+  'Are you sure you want to delete Order Number' => 'Kas oled kindel, et
+soovid
+tellimuse kustutada',
   'Attachment'                  => 'Kaasatud fail',
   'Aug'                         => 'Aug',
   'August'                      => 'August',

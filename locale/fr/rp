@@ -36,7 +36,7 @@ $self{texts} = {
   'Heading'                     => 'En-tête',
   'ID'                          => 'ID',
   'In-line'                     => 'En ligne',
-  'Include Exchangerate Difference' => 'Include Exchangerate Difference',
+  'Include Exchangerate Difference' => 'Inclure différence conversion devises',
   'Include in Report'           => 'Inclure dans l\'état',
   'Income Statement'            => 'Compte de résultat',
   'Invoice'                     => 'Facture',
@@ -68,8 +68,8 @@ $self{texts} = {
   'Retained Earnings'           => 'Éxcédents non distribués',
   'Salesperson'                 => 'Vendeur',
   'Screen'                      => 'Écran',
-  'Select all'                  => 'Sélectionner tout',
-  'Select postscript or PDF!'   => 'Sélectionner Postscript ou PDF',
+  'Select all'                  => 'Tout sélectionner',
+  'Select postscript or PDF!'   => 'Sélectionner Postscript ou PDF!',
   'Sep'                         => 'Sept.',
   'September'                   => 'Septembre',
   'Source'                      => 'Source',
@@ -82,14 +82,14 @@ $self{texts} = {
   'Tax'                         => 'Taxe',
   'Tax collected'               => 'Taxe collectée',
   'Tax paid'                    => 'Taxe payée',
-  'Till'                        => 'Till',
+  'Till'                        => 'Caisse',
   'Total'                       => 'Total',
-  'Trial Balance'               => 'Balance Globale',
+  'Trial Balance'               => 'Balance d\'inventaire',
   'Vendor'                      => 'Fournisseur',
   'as at'                       => 'au',
   'collected on sales'          => 'collectée sur les ventes',
   'for Period'                  => 'pour la période',
-  'paid on purchases'           => 'payée sur les achats',
+  'paid on purchases'           => 'payé sur les achats',
   'to'                          => 'jusqu\'au',
 };
 
@@ -117,7 +117,7 @@ $self{subs} = {
   'continuer'                   => 'continue',
   'email'                       => 'e_mail',
   'imprimer'                    => 'print',
-  'sélectionner_tout'           => 'select_all',
+  'tout_sélectionner'           => 'select_all',
 };
 
 1;

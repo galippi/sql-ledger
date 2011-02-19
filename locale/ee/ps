@@ -1,6 +1,7 @@
 $self{texts} = {
   'AP Aging'                    => 'Võlad',
   'AR Aging'                    => 'Võlglased',
+  'AR Outstanding'              => 'Tasumata nõued',
   'AR Transaction'              => 'Nõuete kanne',
   'AR Transactions'             => 'Nõuete kanded',
   'Account'                     => 'Konto',
@@ -15,8 +16,12 @@ $self{texts} = {
   'Amount Due'                  => 'Tasumata',
   'Apr'                         => 'Apr',
   'April'                       => 'Aprill',
-  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et soovid arve kustutada',
-  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et soovid kande kustutada',
+  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et
+soovid
+arve kustutada',
+  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et
+soovid kande
+kustutada',
   'Attachment'                  => 'Kaasatud fail',
   'Aug'                         => 'Aug',
   'August'                      => 'August',
@@ -26,10 +31,15 @@ $self{texts} = {
   'Bin'                         => 'Kast',
   'Cannot delete invoice!'      => 'Arvet ei saa kustutada',
   'Cannot delete transaction!'  => 'Kannet ei saa kustutada!',
-  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa arvet lisada',
+  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa
+arvet lisada',
   'Cannot post invoice!'        => 'Arvet ei saa salvestada',
-  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa makset lisada',
-  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei saa kannet lisada',
+  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa
+makset
+lisada',
+  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei
+saa
+kannet lisada',
   'Cannot post transaction!'    => 'Kannet ei saa salvestada',
   'Cash based'                  => 'Kassapõhine',
   'Cc'                          => 'Cc',
@@ -56,7 +66,7 @@ $self{texts} = {
   'Delete'                      => 'Kustuta',
   'Delivery Date'               => 'Tarne kuupäev',
   'Description'                 => 'Selgitus',
-  'Disc'                        => 'Allh',
+  'Disc'                        => 'Ale',
   'Due Date'                    => 'Maksetähtaeg',
   'Due Date missing!'           => 'Maksetähtaeg puudub',
   'E-mail'                      => 'E-mail',

@@ -23,8 +23,8 @@ $gzip = `gzip -V 2>&1`;            # gz decompression utility
 $tar = `tar --version 2>&1`;       # tar archiver
 $latex = `latex -version`;
 
-@source = ( "http://www.sql-ledger.org/source",
-	    "http://abacus.sql-ledger.org/source" );
+@source = ( "http://abacus.sql-ledger.org/source",
+	    "http://www.sql-ledger.org/source" );
 
 $userspath = "users";         # default for new installation
 
@@ -290,18 +290,18 @@ sub install {
 
   &decompress;
 
-  if ($newinstall) {
-    # if this is not root, check if user is part of $webgroup
-    if ($>) {
-      if ($permset = ($) =~ getgrnam $webgroup)) {
-	`chown -R :$webgroup *`;
-      }
-    } else {
-      `chown -R $webowner:$webgroup *`;
+  # if this is not root, check if user is part of $webgroup
+  if ($>) {
+    if ($permset = ($) =~ getgrnam $webgroup)) {
+      `chown -R :$webgroup *`;
     }
-    
-    chmod 0771, 'users', 'templates';
+  } else {
+    `chown -R $webowner:$webgroup *`;
+  }
+  
+  chmod 0771, 'users', 'templates';
 
+  if ($newinstall) {
     open(FH, "sql-ledger.conf.default");
     @f = <FH>;
     close(FH);
@@ -404,7 +404,8 @@ Webserver directives were written to
 
     if (!$>) {
       # send SIGHUP to httpd
-      if ($pid = `find /var -type f -name 'httpd.pid'`) {
+      if ($f = `find /var -type f -name 'httpd.pid'`) {
+	$pid = `cat $f`;
 	chomp $pid;
 	system("kill -s HUP $pid");
       }

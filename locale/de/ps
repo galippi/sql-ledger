@@ -1,6 +1,7 @@
 $self{texts} = {
   'AP Aging'                    => 'Offene Verbindl.',
   'AR Aging'                    => 'Offene Forderungen',
+  'AR Outstanding'              => 'Offene Ausgangsbuchungen',
   'AR Transaction'              => 'Ausgangsbuchung',
   'AR Transactions'             => 'Ausgangsbuchungen',
   'Account'                     => 'Konto',

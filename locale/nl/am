@@ -17,10 +17,11 @@ $self{texts} = {
   'Books are open'              => 'Boekingsperiode is open',
   'Business Number'             => 'Kamer van Koophandel nummer',
   'COGS'                        => 'Kostprijs Verkopen',
-  'Cannot delete account!'      => 'Kan bedrag niet verwijderen!',
+  'Cannot delete account!'      => 'Kan rekening niet verwijderen!',
   'Cannot delete default account!' => 'Kan standaardrekening niet verwijderen!',
   'Cannot save account!'        => 'Kan rekening niet opslaan!',
   'Cannot save preferences!'    => 'Kan voorkeuren niet opslaan!',
+  'Cannot set account for more than one of AR, AP or IC' => 'Kan de rekening niet instellen voor meer dan een van de Debiteuren, Crediteuren of IC',
   'Character Set'               => 'Karakter set',
   'Chart of Accounts'           => 'Rekeningstelsel',
   'Close Books up to'           => 'Boeken afsluiten tot',
@@ -96,6 +97,7 @@ $self{texts} = {
   'Weight Unit'                 => 'Gewichtseenheid',
   'Year End'                    => 'Einde van het boekjaar',
   'Yes'                         => 'Ja',
+  'account cannot be set to any other type of account' => 'Rekening kan niet ingesteld worden als enig ander type rekening',
   'does not exist'              => 'bestaat niet',
 };
 

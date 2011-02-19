@@ -1024,7 +1024,7 @@ sub get_customer {
   my $query = qq|SELECT c.name AS customer, c.discount, c.creditlimit, c.terms,
                  c.email, c.cc, c.bcc, c.taxincluded,
 		 c.addr1, c.addr2, c.addr3, c.addr4,
-	         $duedate AS duedate
+	         $duedate AS duedate, c.notes
                  FROM customer c
 	         WHERE c.id = $form->{customer_id}|;
   my $sth = $dbh->prepare($query);

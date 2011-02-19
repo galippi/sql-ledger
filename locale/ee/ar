@@ -1,4 +1,5 @@
 $self{texts} = {
+  'AR Outstanding'              => 'Tasumata nõued',
   'AR Transaction'              => 'Nõuete kanne',
   'AR Transactions'             => 'Nõuete kanded',
   'Account'                     => 'Konto',
@@ -8,12 +9,18 @@ $self{texts} = {
   'Amount Due'                  => 'Tasumata',
   'Apr'                         => 'Apr',
   'April'                       => 'Aprill',
-  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et soovid kande kustutada',
+  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et
+soovid kande
+kustutada',
   'Aug'                         => 'Aug',
   'August'                      => 'August',
   'Cannot delete transaction!'  => 'Kannet ei saa kustutada!',
-  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa makset lisada',
-  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei saa kannet lisada',
+  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa
+makset
+lisada',
+  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei
+saa
+kannet lisada',
   'Cannot post transaction!'    => 'Kannet ei saa salvestada',
   'Closed'                      => 'Suletud',
   'Confirm!'                    => 'Kinnita',

@@ -6,10 +6,12 @@
 $self{texts} = {
   'AP'                          => 'Kohustused',
   'AP Aging'                    => 'Võlad',
+  'AP Outstanding'              => 'Tasumata kohustused',
   'AP Transaction'              => 'Kohustuste kanne',
   'AP Transactions'             => 'Kohustuste kanded',
   'AR'                          => 'Nõuded',
   'AR Aging'                    => 'Võlglased',
+  'AR Outstanding'              => 'Tasumata nõued',
   'AR Transaction'              => 'Nõuete kanne',
   'AR Transactions'             => 'Nõuete kanded',
   'About'                       => 'Programmi info',
@@ -30,7 +32,7 @@ $self{texts} = {
   'Add Accounts Payables Transaction' => 'Lisa kohustuste kanne',
   'Add Accounts Receivables Transaction' => 'Lisa nõuete kanne',
   'Add Assembly'                => 'Lisa komplekt',
-  'Add Cash Transfer Transaction' => '',
+  'Add Cash Transfer Transaction' => 'Lisa raha ülekanne',
   'Add Customer'                => 'Lisa klient',
   'Add GIFI'                    => 'Lisa GIFI',
   'Add General Ledger Transaction' => 'Lisa pearaamatu kanne',
@@ -58,9 +60,15 @@ $self{texts} = {
   'Applied'                     => 'Makstud',
   'Apr'                         => 'Apr',
   'April'                       => 'Aprill',
-  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et soovid arve kustutada',
-  'Are you sure you want to delete Order Number' => 'Kas oled kindel, et soovid tellimuse kustutada',
-  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et soovid kande kustutada',
+  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et
+soovid
+arve kustutada',
+  'Are you sure you want to delete Order Number' => 'Kas oled kindel, et
+soovid
+tellimuse kustutada',
+  'Are you sure you want to delete Transaction' => 'Kas oled kindel, et
+soovid kande
+kustutada',
   'Assemblies'                  => 'Komplektid',
   'Assemblies restocked!'       => 'Komplektid lattu tagastatud',
   'Assembly Number missing!'    => 'Komplekti number puudub',
@@ -91,16 +99,26 @@ $self{texts} = {
   'Cannot delete order!'        => 'Tellimust ei saa kustutada',
   'Cannot delete transaction!'  => 'Kannet ei saa kustutada!',
   'Cannot delete vendor!'       => 'Tarnijat ei saa kustutada',
-  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa arvet lisada',
+  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa
+arvet lisada',
   'Cannot post invoice!'        => 'Arvet ei saa salvestada',
-  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa makset lisada',
+  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa
+makset
+lisada',
   'Cannot post payment!'        => 'Makset ei saa salvestada',
-  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei saa kannet lisada',
+  'Cannot post transaction for a closed period!' => 'Suletud perioodile ei
+saa
+kannet lisada',
   'Cannot post transaction!'    => 'Kannet ei saa salvestada',
-  'Cannot process payment for a closed period!' => 'Suletud perioodi makset ei saa töödelda',
+  'Cannot process payment for a closed period!' => 'Suletud perioodi
+makset ei saa
+töödelda',
   'Cannot save account!'        => 'Kontot ei saa salvestada',
   'Cannot save order!'          => 'Arvet ei saa salvestada',
   'Cannot save preferences!'    => 'Määranguid ei saa salvestada',
+  'Cannot set account for more than one of AR, AP or IC' => 'Konto ei saa
+olla
+samaaegselt AR, AP või IC',
   'Cannot stock assemblies!'    => 'Komplekte ei saa lattu võtta',
   'Cash'                        => 'Kassa',
   'Cash based'                  => 'Kassapõhine',
@@ -110,9 +128,9 @@ $self{texts} = {
   'Change Password'             => 'Muuda parool',
   'Character Set'               => 'Kooditabel',
   'Chart of Accounts'           => 'Kontoplaan',
-  'Check'                       => 'T¨ekk',
-  'Check printed!'              => 'T¨ekk on türkitud',
-  'Check printing failed!'      => 'T¨eki trükkimine ebaõnnestus',
+  'Check'                       => 'Tsekk',
+  'Check printed!'              => 'Tsekk on türkitud',
+  'Check printing failed!'      => 'Tseki trükkimine ebaõnnestus',
   'Click on login name to edit!' => 'Redigeerimiseks kliki kasutajanimel',
   'Close Books up to'           => 'Sulge kanded kuni',
   'Closed'                      => 'Suletud',
@@ -164,7 +182,7 @@ $self{texts} = {
   'Description'                 => 'Selgitus',
   'Difference'                  => 'Vahe',
   'Directory'                   => 'Kataloog',
-  'Disc'                        => 'Allh',
+  'Disc'                        => 'Ale',
   'Discount'                    => 'Allahindlus',
   'Done'                        => 'Teostatud',
   'Drawing'                     => 'Pildid',
@@ -180,7 +198,7 @@ $self{texts} = {
   'Edit Accounts Payables Transaction' => 'Nõuete kande muutmine',
   'Edit Accounts Receivables Transaction' => 'Kohustuste kande muutmine',
   'Edit Assembly'               => 'Komplekti muutmine',
-  'Edit Cash Transfer Transaction' => '',
+  'Edit Cash Transfer Transaction' => 'Redigeeri raha ülekanne',
   'Edit Customer'               => 'Kliendi andmete muutmine',
   'Edit GIFI'                   => 'GIFI muutmine',
   'Edit General Ledger Transaction' => 'Pearaamatu kande muutmine',
@@ -198,8 +216,10 @@ $self{texts} = {
   'Edit Vendor'                 => 'Tarnija andmete muutmine',
   'Edit Vendor Invoice'         => 'Tarnija arve muutmine',
   'Employee'                    => 'Töötaja',
-  'Enforce transaction reversal for all dates' => 'Muuda kannete pööramine kõikide kuupäevade ulatuses kohustuslikuks',
-  'Enter up to 3 letters separated by a colon (i.e CAD:USD:EUR) for your native and foreign currencies' => 'Sisesta kohalikud- ja välisvaluutad (kuni 3 tähemärki, koolonitega eraltatud, nt. CAD:USD:EUR)',
+  'Enforce transaction reversal for all dates' => 'Muuda kannete pööramine
+kõikide
+kuupäevade ulatuses kohustuslikuks',
+  'Enter up to 3 letters separated by a colon (i.e CAD:USD:EUR) for your native and foreign currencies' => '',
   'Equity'                      => 'Omakapital',
   'Exch'                        => 'Kurss',
   'Exchangerate'                => 'Valuutakurss',
@@ -210,7 +230,7 @@ $self{texts} = {
   'Expense Account'             => 'Kulukonto',
   'Expense/Asset'               => 'Kulu/Vara',
   'Extended'                    => 'Summa',
-  'FX'                          => '',
+  'FX'                          => 'Valuuta vahetus',
   'Fax'                         => 'Faks',
   'Feb'                         => 'Veebr',
   'February'                    => 'Veebruar',
@@ -240,7 +260,7 @@ $self{texts} = {
   'Include Exchangerate Difference' => 'Kaasa valuutakursi vahe',
   'Include in Report'           => 'Kaasa aruandesse',
   'Include in drop-down menus'  => 'Kaasa valikmenüüdes',
-  'Include this account on the customer/vendor forms to flag customer/vendor as taxable?' => 'Kaasa antud konto klient/tarnija vormides, et märkida klient/tarnija maksustatavaks',
+  'Include this account on the customer/vendor forms to flag customer/vendor as taxable?' => '',
   'Income'                      => 'Tulu',
   'Income Account'              => 'Tulukonto',
   'Income Statement'            => 'Kasumiaruanne',
@@ -250,8 +270,9 @@ $self{texts} = {
   'Individual Items'            => 'Komponendid',
   'Inventory'                   => 'Ladu',
   'Inventory Account'           => 'Laokonto',
-  'Inventory quantity must be zero before you can set this assembly obsolete!' => 'Enne komplekti aegunuks märkimist peab laoseis null olema!',
-  'Inventory quantity must be zero before you can set this part obsolete!' => 'Enne toote aegunuks märkimist peab laoseis null olema!',
+  'Inventory quantity must be zero before you can set this assembly obsolete!' => '',
+  'Inventory quantity must be zero before you can set this part obsolete!' => 'Enne
+toote aegunuks märkimist peab laoseis null olema!',
   'Invoice'                     => 'Arve',
   'Invoice Date'                => 'Arve kuupäev',
   'Invoice Date missing!'       => 'Arve kuupäev puudub!',
@@ -273,10 +294,11 @@ $self{texts} = {
   'Language'                    => 'Keel',
   'Last Cost'                   => 'Viimane ostuhind',
   'Last Invoice Number'         => 'Viimane arve number',
-  'Last Numbers & Default Accounts' => 'Viimased numbrid ja vaikimisi kontod',
+  'Last Numbers & Default Accounts' => 'Viimased numbrid ja vaikimisi
+kontod',
   'Last Purchase Order Number'  => 'Viimane ostutellimuse number',
   'Last Sales Order Number'     => 'Viimane müügitellimuse number',
-  'Leave host and port field empty unless you want to make a remote connection.' => 'Jäta serveri ja pordi väljad tühjaks kui sa ei soovi kaugühendust luua',
+  'Leave host and port field empty unless you want to make a remote connection.' => '',
   'Liability'                   => 'Kohustus',
   'Licensed to'                 => 'Kasutaja andmed:',
   'Line Total'                  => 'Rea summa',
@@ -306,7 +328,8 @@ $self{texts} = {
   'Name missing!'               => 'Nimi puudub!',
   'New Templates'               => 'Uued mallid',
   'No'                          => 'Ei',
-  'No Database Drivers available!' => 'Ühtegi andmebaasidraiverit ei leitud!',
+  'No Database Drivers available!' => 'Ühtegi andmebaasidraiverit ei
+leitud!',
   'No Dataset selected!'        => 'Andmebaas valimata!',
   'No email address for'        => 'E-maili aadress puudub',
   'No.'                         => 'Nr.',
@@ -338,6 +361,7 @@ $self{texts} = {
   'Ordered'                     => 'Tellitud',
   'Orphaned'                    => 'Seosteta',
   'Out of balance!'             => 'Bilanss ei klapi!',
+  'Outstanding'                 => 'Tasumata',
   'PDF'                         => 'PDF',
   'POS'                         => 'POS',
   'POS Invoice'                 => 'POS arve',
@@ -408,7 +432,9 @@ $self{texts} = {
   'Save as new'                 => 'Salvesta uuena',
   'Save to File'                => 'Salvesta faili',
   'Screen'                      => 'Ekraan',
-  'Select a Dataset to delete and press "Continue"' => 'Vali andmebaas ja vajuta "Jätka"',
+  'Select a Dataset to delete and press "Continue"' => 'Vali andmebaas ja
+vajuta
+"Jätka"',
   'Select all'                  => 'Vali kõik',
   'Select from one of the items below' => 'Vali üks alltoodud toodetest',
   'Select from one of the names below' => 'Vali üks alltoodud nimedest',
@@ -450,24 +476,36 @@ $self{texts} = {
   'Templates'                   => 'Mallid',
   'Terms: Net'                  => 'Maksetingimus',
   'Text Templates'              => 'Tekstimallid',
-  'The following Datasets are not in use and can be deleted' => 'Järgnevad andmebaasid ei ole kasutusel ning võib kustutada',
-  'The following Datasets need to be updated' => 'Järgmised andmebaasid vajavad uuendamist',
-  'This is a preliminary check for existing sources. Nothing will be created or deleted at this stage!' => 'Olemasolevate allikate eelkontroll. Praeguses staadiumis ei toimu andmete lisamist ega kustutamist.',
+  'The following Datasets are not in use and can be deleted' => 'Järgnevad
+andmebaasid ei ole kasutusel ning võib kustutada',
+  'The following Datasets need to be updated' => 'Järgmised andmebaasid
+vajavad
+uuendamist',
+  'This is a preliminary check for existing sources. Nothing will be created or deleted at this stage!' => '',
   'Till'                        => 'Kuni',
   'To'                          => 'Kuhu',
-  'To add a user to a group edit a name, change the login name and save.  A new user with the same variables will then be saved under the new login name.' => 'Kasutaja gruppi lisamiseks redigeeri nime, muuda kasutajanimi ja salvesta. Luuakse samade parameetritega uus kasutaja',
+  'To add a user to a group edit a name, change the login name and save.  A new user with the same variables will then be saved under the new login name.' => '',
   'Top Level'                   => 'Ülemine tase',
   'Total'                       => 'Kokku',
   'Transaction Date missing!'   => 'Kande kuupäev puudub!',
   'Transaction deleted!'        => 'Kanne kustutatud!',
   'Transaction posted!'         => 'Kanne tud!',
-  'Transaction reversal enforced for all dates' => 'Kannete pööramine on kohustuslik kõikide kuupäevade ulatuses',
-  'Transaction reversal enforced up to' => 'Kannete pööramine on kohustuslik kuni',
+  'Transaction reversal enforced for all dates' => 'Kannete pööramine on
+kohustuslik
+kõikide kuupäevade ulatuses',
+  'Transaction reversal enforced up to' => 'Kannete pööramine on
+kohustuslik kuni',
   'Transactions'                => 'Kanded',
-  'Transactions exist, cannot delete customer!' => 'Kanded aktiivsed, klienti ei saa kustutada!',
-  'Transactions exist, cannot delete vendor!' => 'Kanded aktiivsed, hankijat ei saa kustutada!',
-  'Transactions exist; cannot delete account!' => 'Kanded aktiivsed; kontot ei saa kustutada!',
-  'Transfer'                    => '',
+  'Transactions exist, cannot delete customer!' => 'Kanded aktiivsed,
+klienti ei saa
+kustutada!',
+  'Transactions exist, cannot delete vendor!' => 'Kanded aktiivsed,
+hankijat ei saa
+kustutada!',
+  'Transactions exist; cannot delete account!' => 'Kanded aktiivsed;
+kontot ei saa
+kustutada!',
+  'Transfer'                    => 'Ülekanne',
   'Trial Balance'               => 'Proovibilanss',
   'Unit'                        => 'Ühik',
   'Unit of measure'             => 'Mõõtühik',
@@ -495,7 +533,10 @@ $self{texts} = {
   'Yes'                         => 'Jah',
   'You are logged out!'         => 'Oled välja loginud!',
   'You did not enter a name!'   => 'Nimi sisestamata!',
-  'You must enter a host and port for local and remote connections!' => 'Ühenduse loomiseks palun sisesta serveri nimi ja port',
+  'You must enter a host and port for local and remote connections!' => 'Ühenduse
+loomiseks palun sisesta serveri nimi ja port',
+  'account cannot be set to any other type of account' => 'Konto tüüpi ei
+saa muuta',
   'as at'                       => 'Seisuga',
   'collected on sales'          => 'kogutud müügilt',
   'days'                        => 'päeva',

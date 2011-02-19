@@ -1114,7 +1114,7 @@ sub form_header {
 	      $lastcost
 	      <tr>
 		<th align="right" nowrap="true">|.$locale->text('Unit').qq|</th>
-		<td><input name=unit size=5 maxsize=5 value="$form->{unit}"></td>
+		<td><input name=unit size=5 maxlength=5 value="$form->{unit}"></td>
 	      </tr>
 	      $weight
 	      $rop

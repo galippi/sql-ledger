@@ -1,7 +1,7 @@
 $self{texts} = {
   'Address'                     => 'Adres',
   'Continue'                    => 'Kontynuj',
-  'Customer not on file!'       => 'Brak Klienta w bazie danych',
+  'Customer not on file!'       => 'Brak Odbiorcy w bazie danych',
   'Select from one of the names below' => 'Wybierz nazwê z poni¿szych',
   'Vendor not on file!'         => 'Brak Dostawcy w bazie danych',
 };

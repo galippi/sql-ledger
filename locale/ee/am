@@ -21,6 +21,9 @@ $self{texts} = {
   'Cannot delete default account!' => 'Vaikimisi kontot ei saa kustutada',
   'Cannot save account!'        => 'Kontot ei saa salvestada',
   'Cannot save preferences!'    => 'Määranguid ei saa salvestada',
+  'Cannot set account for more than one of AR, AP or IC' => 'Konto ei saa
+olla
+samaaegselt AR, AP või IC',
   'Character Set'               => 'Kooditabel',
   'Chart of Accounts'           => 'Kontoplaan',
   'Close Books up to'           => 'Sulge kanded kuni',
@@ -40,8 +43,10 @@ $self{texts} = {
   'Edit GIFI'                   => 'GIFI muutmine',
   'Edit Preferences for'        => 'Määrangute muutmine: ',
   'Edit Template'               => 'Malli muutmine',
-  'Enforce transaction reversal for all dates' => 'Muuda kannete pööramine kõikide kuupäevade ulatuses kohustuslikuks',
-  'Enter up to 3 letters separated by a colon (i.e CAD:USD:EUR) for your native and foreign currencies' => 'Sisesta kohalikud- ja välisvaluutad (kuni 3 tähemärki, koolonitega eraltatud, nt. CAD:USD:EUR)',
+  'Enforce transaction reversal for all dates' => 'Muuda kannete pööramine
+kõikide
+kuupäevade ulatuses kohustuslikuks',
+  'Enter up to 3 letters separated by a colon (i.e CAD:USD:EUR) for your native and foreign currencies' => 'Enter up to 3 letters separated by a colon (i.e CAD:USD:EUR) for your native and foreign currencies',
   'Equity'                      => 'Omakapital',
   'Expense'                     => 'Kulu',
   'Expense Account'             => 'Kulukonto',
@@ -55,7 +60,7 @@ $self{texts} = {
   'GIFI saved!'                 => 'GIFI salvestatud',
   'Heading'                     => 'Päis',
   'Include in drop-down menus'  => 'Kaasa valikmenüüdes',
-  'Include this account on the customer/vendor forms to flag customer/vendor as taxable?' => 'Kaasa antud konto klient/tarnija vormides, et märkida klient/tarnija maksustatavaks',
+  'Include this account on the customer/vendor forms to flag customer/vendor as taxable?' => 'Include this account on the customer/vendor forms to flag customer/vendor as taxable?',
   'Income'                      => 'Tulu',
   'Income Account'              => 'Tulukonto',
   'Inventory'                   => 'Ladu',
@@ -63,7 +68,8 @@ $self{texts} = {
   'Is this a summary account to record' => 'Kirje summaarne konto',
   'Language'                    => 'Keel',
   'Last Invoice Number'         => 'Viimane arve number',
-  'Last Numbers & Default Accounts' => 'Viimased numbrid ja vaikimisi kontod',
+  'Last Numbers & Default Accounts' => 'Viimased numbrid ja vaikimisi
+kontod',
   'Last Purchase Order Number'  => 'Viimane ostutellimuse number',
   'Last Sales Order Number'     => 'Viimane müügitellimuse number',
   'Liability'                   => 'Kohustus',
@@ -90,12 +96,19 @@ $self{texts} = {
   'Tax'                         => 'Maks',
   'Tax Accounts'                => 'Maksukontod',
   'Template saved!'             => 'Mall salvestatud!',
-  'Transaction reversal enforced for all dates' => 'Kannete pööramine on kohustuslik kõikide kuupäevade ulatuses',
-  'Transaction reversal enforced up to' => 'Kannete pööramine on kohustuslik kuni',
-  'Transactions exist; cannot delete account!' => 'Kanded aktiivsed; kontot ei saa kustutada!',
+  'Transaction reversal enforced for all dates' => 'Kannete pööramine on
+kohustuslik
+kõikide kuupäevade ulatuses',
+  'Transaction reversal enforced up to' => 'Kannete pööramine on
+kohustuslik kuni',
+  'Transactions exist; cannot delete account!' => 'Kanded aktiivsed;
+kontot ei saa
+kustutada!',
   'Weight Unit'                 => 'Kaaluühik',
   'Year End'                    => 'Aasta lõpp',
   'Yes'                         => 'Jah',
+  'account cannot be set to any other type of account' => 'Konto tüüpi ei
+saa muuta',
   'does not exist'              => 'ei eksisteeri',
 };
 

@@ -7,10 +7,12 @@ $self{texts} = {
   'Amount missing!'             => 'Summa puudub',
   'Applied'                     => 'Makstud',
   'Cannot post payment!'        => 'Makset ei saa salvestada',
-  'Cannot process payment for a closed period!' => 'Suletud perioodi makset ei saa töödelda',
-  'Check'                       => 'T¨ekk',
-  'Check printed!'              => 'T¨ekk on türkitud',
-  'Check printing failed!'      => 'T¨eki trükkimine ebaõnnestus',
+  'Cannot process payment for a closed period!' => 'Suletud perioodi
+makset ei saa
+töödelda',
+  'Check'                       => 'Tsekk',
+  'Check printed!'              => 'Tsekk on türkitud',
+  'Check printing failed!'      => 'Tseki trükkimine ebaõnnestus',
   'Continue'                    => 'Edasi',
   'Currency'                    => 'Valuuta',
   'Customer'                    => 'Klient',

@@ -21,6 +21,7 @@ $self{texts} = {
   'Cannot delete default account!' => 'Das Standard-Konto kann nicht gelöscht werden!',
   'Cannot save account!'        => 'Konto kann nicht gespeichert werden!',
   'Cannot save preferences!'    => 'Benutzereinstellungen können nicht gespeichert werden!',
+  'Cannot set account for more than one of AR, AP or IC' => 'Konto kann nur entweder Forderungen, Verbindlichkeiten oder Warenbestand sein',
   'Character Set'               => 'Zeichensatz',
   'Chart of Accounts'           => 'Kontenübersicht',
   'Close Books up to'           => 'Die Bücher abschließen bis zum',
@@ -96,6 +97,7 @@ $self{texts} = {
   'Weight Unit'                 => 'Gewichtseinh.',
   'Year End'                    => 'Jahresende',
   'Yes'                         => 'Ja',
+  'account cannot be set to any other type of account' => 'kann nicht auf ein zusätzliches Konto aufgesetzt werden',
   'does not exist'              => 'existiert nicht',
 };
 

@@ -1,4 +1,5 @@
 $self{texts} = {
+  'AP Outstanding'              => 'Openstaande Crediteuren',
   'AP Transaction'              => 'Crediteurenboeking',
   'AP Transactions'             => 'Crediteurenboekingen',
   'Account'                     => 'Rekening',

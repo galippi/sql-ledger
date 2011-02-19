@@ -578,7 +578,7 @@ sub dbupdate {
   
   if ($form->{dbupdate}) {
     # read update scripts into memory
-    opendir SQLDIR, "sql/." or $form-error($!);
+    opendir SQLDIR, "sql/." or $form->error($!);
     @upgradescripts = sort script_version grep /$form->{dbdriver}-upgrade-.*?\.sql/, readdir SQLDIR;
     closedir SQLDIR;
   }
@@ -743,8 +743,8 @@ sub save_member {
   }
 
   print CONF qq|[$self->{login}]\n|;
-  
-  if ((($self->{dbpasswd} ne $self->{old_dbpasswd}) || $newmember) && $self->{root}) {
+
+  if ($self->{root}) {
     $self->{dbpasswd} = pack 'u', $self->{dbpasswd};
     chop $self->{dbpasswd};
   }
@@ -752,7 +752,8 @@ sub save_member {
   if ($self->{password} ne $self->{old_password}) {
     $self->{password} = crypt $self->{password}, substr($self->{login}, 0, 2) if $self->{password};
   }
-  
+
+
   if ($self->{'root login'}) {
     @config = ("password");
   } else {
@@ -775,6 +776,8 @@ sub save_member {
   if (! $self->{'root login'}) {
     $self->create_config("$userspath/$self->{login}.conf");
 
+    $self->{dbpasswd} = unpack 'u', $self->{dbpasswd};
+    
     # check if login is in database
     my $dbh = DBI->connect($self->{dbconnect}, $self->{dbuser}, $self->{dbpasswd}) or $self->error($DBI::errstr);
 

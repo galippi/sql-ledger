@@ -397,11 +397,14 @@ sub post {
   $form->isblank("customer", $locale->text('Customer missing!'));
 
   # if oldcustomer ne customer redo form
-  if ($form->{customer} ne $form->{oldcustomer}) {
+  $customer = $form->{customer};
+  $customer =~ s/--.*//g;
+  $customer .= "--$form->{customer_id}";
+  if ($customer ne $form->{oldcustomer}) {
     &update;
     exit;
   }
-  
+ 
   &validate_items;
 
   $form->isblank("exchangerate", $locale->text('Exchangerate missing!')) if ($form->{currency} ne $form->{defaultcurrency});
@@ -547,9 +550,12 @@ sub print {
 
 sub print_form {
   my $old_form = shift;
-  
+
   # if oldcustomer ne customer redo form
-  if ($form->{customer} ne $form->{oldcustomer}) {
+  $customer = $form->{customer};
+  $customer =~ s/--.*//g;
+  $customer .= "--$form->{customer_id}";
+  if ($customer ne $form->{oldcustomer}) {
     &update;
     exit;
   }
@@ -596,6 +602,8 @@ sub print_form {
 	map { $form->{"${_}_$i"} = $form->parse_amount(\%myconfig, $form->{"${_}_$i"}) } qw(paid exchangerate);
       }
       
+      delete $form->{pre};
+
       &display_form;
       exit;
     }

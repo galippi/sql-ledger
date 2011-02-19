@@ -101,10 +101,12 @@ sub create_links {
 
   $taxincluded = $form->{taxincluded};
   $duedate = $form->{duedate};
+  $notes = $form->{notes};
   
   IR->get_vendor(\%myconfig, \%$form);
   
   $form->{duedate} = $duedate;
+  $form->{notes} = $notes;
   $form->{oldvendor} = "$form->{vendor}--$form->{vendor_id}";
   $form->{oldinvdate} = $form->{invdate};
   
@@ -718,9 +720,12 @@ sub yes {
 
 
 sub search {
-  
-  # setup vendor selection
-  $form->all_vc(\%myconfig, "vendor");
+
+  $form->create_links("AP", \%myconfig, "vendor");
+
+  $form->{selectAP} = "<option>\n";
+  map { $form->{selectAP} .= "<option>$_->{accno}--$_->{description}\n" } @{ $form->{AP_links}{AP} };
+
 
   if (@{ $form->{all_vendor} }) {
     map { $vendor .= "<option>$_->{name}--$_->{id}\n" } @{ $form->{all_vendor} };
@@ -728,28 +733,10 @@ sub search {
   } else {
     $vendor = qq|<input name=vendor size=35>|;
   }
-    
-    $form->{title} = $locale->text('AP Transactions');
+  
+  $form->{title} = $locale->text('AP Transactions');
 
-  $form->header;
-
-  print qq|
-<body>
-
-<form method=post action=$form->{script}>
-
-<table width=100%>
-  <tr>
-    <th class=listtop>$form->{title}</th>
-  </tr>
-  <tr height="5"></tr>
-  <tr>
-    <td>
-      <table>
-	<tr>
-	  <th align=right>|.$locale->text('Vendor').qq|</th>
-	  <td colspan=3>$vendor</td>
-	</tr>
+  $invnumber = qq|
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Invoice Number').qq|</th>
 	  <td colspan=3><input name=invnumber size=20></td>
@@ -762,6 +749,51 @@ sub search {
 	  <th align=right nowrap>|.$locale->text('Notes').qq|</th>
 	  <td colspan=3><input name=notes size=40></td>
 	</tr>
+|;
+	
+  $openclosed = qq|
+	      <tr>
+		<td align=right><input name=open class=checkbox type=checkbox value=Y checked></td>
+		<td nowrap>|.$locale->text('Open').qq|</td>
+		<td align=right><input name=closed class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Closed').qq|</td>
+	      </tr>
+|;
+
+  if ($form->{outstanding}) {
+    $form->{title} = $locale->text('AP Outstanding');
+    $invnumber = "";
+    $openclosed = "";
+  }
+
+
+  $form->header;
+
+  print qq|
+<body>
+
+<form method=post action=$form->{script}>
+
+<input type=hidden name=title value="$form->{title}">
+<input type=hidden name=outstanding value=$form->{outstanding}>
+
+<table width=100%>
+  <tr>
+    <th class=listtop>$form->{title}</th>
+  </tr>
+  <tr height="5"></tr>
+  <tr>
+    <td>
+      <table>
+        <tr>
+	  <th align=right>|.$locale->text('Account').qq|</th>
+	  <td colspan=3><select name=AP>$form->{selectAP}</select></td>
+	</tr>
+	<tr>
+	  <th align=right>|.$locale->text('Vendor').qq|</th>
+	  <td colspan=3>$vendor</td>
+	</tr>
+	$invnumber
 	<tr>
 	  <th align=right nowrap>|.$locale->text('From').qq|</th>
 	  <td><input name=transdatefrom size=11 title="$myconfig{dateformat}"></td>
@@ -779,12 +811,7 @@ sub search {
 	  <th align=right nowrap>|.$locale->text('Include in Report').qq|</th>
 	  <td>
 	    <table width=100%>
-	      <tr>
-		<td align=right><input name=open class=checkbox type=checkbox value=Y checked></td>
-		<td nowrap>|.$locale->text('Open').qq|</td>
-		<td align=right><input name=closed class=checkbox type=checkbox value=Y></td>
-		<td nowrap>|.$locale->text('Closed').qq|</td>
-	      </tr>
+	      $openclosed
 	      <tr>
 		<td align=right><input name="l_id" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('ID').qq|</td>
@@ -840,6 +867,7 @@ sub search {
 
 <br>
 <input type=hidden name=nextsub value=$form->{nextsub}>
+
 <input type=hidden name=path value=$form->{path}>
 <input type=hidden name=login value=$form->{login}>
 <input type=hidden name=password value=$form->{password}>
@@ -856,18 +884,30 @@ sub search {
 
 sub ap_transactions {
 
-  $form->{vendor} = $form->unescape($form->{vendor});
-  ($form->{vendor}, $form->{vendor_id}) = split(/--/, $form->{vendor});
+  if ($form->{vendor}) {
+    $form->{vendor} = $form->unescape($form->{vendor});
+    ($form->{vendor}, $form->{vendor_id}) = split(/--/, $form->{vendor});
+  }
 
   AP->ap_transactions(\%myconfig, \%$form);
 
-  $callback = "$form->{script}?action=ap_transactions&path=$form->{path}&login=$form->{login}&password=$form->{password}";
+  $callback = "$form->{script}?action=ap_transactions&outstanding=$form->{outstanding}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
   $href = $callback;
-    
 
+  $callback .= "&title=".$form->escape($form->{title},1);
+  $href .= "&title=".$form->escape($form->{title});
+    
+  if ($form->{AP}) {
+    $callback .= "&AP=".$form->escape($form->{AP},1);
+    $href .= "&AP=".$form->escape($form->{AP});
+    $form->{AP} =~ s/--/ /;
+    $option = $locale->text('Account')." : $form->{AP}";
+  }
+    
   if ($form->{vendor}) {
     $callback .= "&vendor=".$form->escape($form->{vendor},1)."--$form->{vendor_id}";
     $href .= "&vendor=".$form->escape($form->{vendor})."--$form->{vendor_id}";
+    $option .= "\n<br>" if ($option);
     $option .= $locale->text('Vendor')." : $form->{vendor}";
   }
   if ($form->{invnumber}) {
@@ -914,7 +954,7 @@ sub ap_transactions {
     $option .= $locale->text('Closed');
   }
 
-  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid datepaid due duedate notes employee));
+  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid due datepaid duedate notes employee));
 
   foreach $item (@columns) {
     if ($form->{"l_$item"} eq "Y") {
@@ -948,7 +988,7 @@ sub ap_transactions {
   $column_header{employee} = "<th><a class=listheading href=$href&sort=employee>".$locale->text('Employee')."</th>";
 
   
-  $form->{title} = $locale->text('AP Transactions');
+  $form->{title} = ($form->{title}) ? $form->{title} : $locale->text('AP Transactions');
 
   $form->header;
   
@@ -979,13 +1019,13 @@ sub ap_transactions {
   $form->{callback} = "$callback&sort=$form->{sort}";
   $callback = $form->escape($form->{callback});
 
-  if (@{ $form->{AP} }) {
-    $sameitem = $form->{AP}->[0]->{$form->{sort}};
+  if (@{ $form->{transactions} }) {
+    $sameitem = $form->{transactions}->[0]->{$form->{sort}};
   }
   
   # sums and tax on reports by Antonio Gallardo
   #
-  foreach $ap (@{ $form->{AP} }) {
+  foreach $ap (@{ $form->{transactions} }) {
 
     if ($form->{l_subtotal} eq 'Y') {
       if ($sameitem ne $ap->{$form->{sort}}) {

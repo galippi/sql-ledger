@@ -320,8 +320,20 @@ sub ar_transactions {
   # connect to database
   my $dbh = $form->dbconnect($myconfig);
 
+  my $paid = "a.paid";
+  
+  if ($form->{outstanding}) {
+    $paid = qq|SELECT SUM(ac.amount) * -1
+               FROM acc_trans ac
+	       JOIN chart c ON (c.id = ac.chart_id)
+	       WHERE ac.trans_id = a.id
+	       AND (c.link LIKE '%AR_paid%' OR c.link = '')|;
+    $paid .= qq|
+               AND ac.transdate <= '$form->{transdateto}'| if $form->{transdateto};
+  }
+    
   my $query = qq|SELECT a.id, a.invnumber, a.ordnumber, a.transdate,
-                 a.duedate, a.netamount, a.amount, a.paid,
+                 a.duedate, a.netamount, a.amount, ($paid) AS paid,
 		 c.name, a.invoice, a.datepaid, a.terms,
 		 a.notes, a.shippingpoint, a.till, e.name AS employee
 	         FROM ar a
@@ -376,6 +388,7 @@ sub ar_transactions {
     }
   }
 
+
   if ($form->{till}) {
     $query .= " AND a.invoice = '1'
                 AND NOT a.till IS NULL";
@@ -383,14 +396,28 @@ sub ar_transactions {
       $query .= " AND e.login = '$form->{login}'";
     }
   }
+
  
-  $query .= " ORDER by $sortorder";
+  if ($form->{AR}) {
+    my ($accno) = split /--/, $form->{AR};
+    $query .= qq|
+                AND a.id IN (SELECT ac.trans_id
+		             FROM acc_trans ac
+			     JOIN chart c ON (c.id = ac.chart_id)
+			     WHERE a.id = ac.trans_id
+			     AND c.accno = '$accno')
+		|;
+  }
+
   
+  $query .= " ORDER by $sortorder";
+
   my $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);
 
-  while (my $ar = $sth->fetchrow_hashref(NAME_lc)) {
-    push @{ $form->{AR} }, $ar;
+  while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
+    next if $form->{outstanding} && $ref->{amount} == $ref->{paid};
+    push @{ $form->{transactions} }, $ref;
   }
   
   $sth->finish;

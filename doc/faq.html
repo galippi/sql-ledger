@@ -4,12 +4,28 @@ The easiest is to use the setup.pl script as root.
 You don't need to know very much about your system, just login as root,
 run 'perl setup.pl' and follow the prompts.
 <p>setup.pl does not check for missing software packages and it is your
-responsibility to make sure you have the required software
+responsibilite to make sure you have the required software
 installed either from source or from a package supplied with your distro.
 
 <p>Requirements are clearly indicated in the README file and on the
 download page.
 
+
+<p><li><h4>You got to have the latest</h4>
+and tried your luck with the development version and received a
+"cannot create function" error when you logged in.
+So now what?
+<p>
+<ol>
+<li>either run createlang and install the plpgsql language handler or
+set it up yourself. For more information how to do that, visit
+<a href=http://www.postgresql.org/docs/>PostgreSQL</a> and
+read the interactive documentation for procedural languages.
+
+<li>then you load admin.pl
+<li>unlock the system
+<li>and log in again
+</ol>
 
 <p><li><h4>Dataset newer than version</h4>
 You are trying to use an older version with a dataset which was
@@ -22,10 +38,10 @@ Check if you have latex and pdflatex installed.
 
 <p><li><h4>Sub-menus and Apache 2.0</h4>
 Some versions of Apache 2.0 (2.0.44+) don't expand sub-menus and generate
-a 500 error at various points. This is from workaround developed for
+a 500 error at various points. This is from a workaround developed for
 earlier versions of Apache 2.0. It looks like this workaround must now be
 disabled. If you get an error or the sub-menus don't expand edit
-SL/Form.pm and comment lines 80-82.
+SL/Form.pm and comment lines 83-85.
 <pre>
   # for Apache 2 we escape strings twice
 #  if (($ENV{SERVER_SIGNATURE} =~ /Apache\/2/) && !$beenthere) {

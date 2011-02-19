@@ -199,6 +199,16 @@ sub all_transactions {
     $arwhere .= " AND ac.transdate <= '$form->{dateto}'";
     $apwhere .= " AND ac.transdate <= '$form->{dateto}'";
   }
+  if ($form->{amountfrom}) {
+    $glwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
+    $arwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
+    $apwhere .= " AND abs(ac.amount) >= '$form->{amountfrom}'";
+  }
+  if ($form->{amountto}) {
+    $glwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
+    $arwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
+    $apwhere .= " AND abs(ac.amount) <= '$form->{amountto}'";
+  }
   if ($form->{description}) {
     my $description = $form->like(lc $form->{description});
     $glwhere .= " AND lower(g.description) LIKE '$description'";
@@ -229,13 +239,13 @@ sub all_transactions {
 
   if ($form->{accno}) {
     # get category for account
-    $query = qq|SELECT category
+    $query = qq|SELECT category, link
                 FROM chart
 		WHERE accno = '$form->{accno}'|;
     $sth = $dbh->prepare($query); 
 
     $sth->execute || $form->dberror($query); 
-    ($form->{ml}) = $sth->fetchrow_array; 
+    ($form->{ml}, $form->{link}) = $sth->fetchrow_array; 
     $sth->finish; 
     
     if ($form->{datefrom}) {
@@ -255,13 +265,13 @@ sub all_transactions {
   
   if ($form->{gifi_accno}) {
     # get category for account
-    $query = qq|SELECT category
+    $query = qq|SELECT category, link
                 FROM chart
 		WHERE gifi_accno = '$form->{gifi_accno}'|;
     $sth = $dbh->prepare($query); 
 
     $sth->execute || $form->dberror($query); 
-    ($form->{ml}) = $sth->fetchrow_array; 
+    ($form->{ml}, $form->{link}) = $sth->fetchrow_array; 
     $sth->finish; 
    
     if ($form->{datefrom}) {
@@ -281,18 +291,20 @@ sub all_transactions {
 
   my $false = ($myconfig->{dbdriver} =~ /Pg/) ? FALSE : q|'0'|;
 
-  my %ordinal = ( transdate => 6,
+  my %ordinal = ( id => 1,
+                  transdate => 6,
                   reference => 4,
                   source => 7,
+		  accno => 9,
 		  description => 5 );
   
-  my $sortorder = join ',', $form->sort_columns(qw(transdate reference source description accno));
+  my $sortorder = join ',', $form->sort_columns(qw(transdate reference source description accno id));
   map { $sortorder =~ s/$_/$ordinal{$_}/ } keys %ordinal;
   
   my $query = qq|SELECT g.id, 'gl' AS type, $false AS invoice, g.reference,
                  g.description, ac.transdate, ac.source,
 		 ac.amount, c.accno, c.gifi_accno, g.notes,
-		 '' AS till
+		 '' AS till, ac.cleared
                  FROM gl g, acc_trans ac, chart c
                  WHERE $glwhere
 		 AND ac.chart_id = c.id
@@ -301,7 +313,7 @@ sub all_transactions {
 	         SELECT a.id, 'ar' AS type, a.invoice, a.invnumber,
 		 ct.name, ac.transdate, ac.source,
 		 ac.amount, c.accno, c.gifi_accno, a.notes,
-		 a.till
+		 a.till, ac.cleared
 		 FROM ar a, acc_trans ac, chart c, customer ct
 		 WHERE $arwhere
 		 AND ac.chart_id = c.id
@@ -311,7 +323,7 @@ sub all_transactions {
 	         SELECT a.id, 'ap' AS type, a.invoice, a.invnumber,
 		 ct.name, ac.transdate, ac.source,
 		 ac.amount, c.accno, c.gifi_accno, a.notes,
-		 a.till
+		 a.till, ac.cleared
 		 FROM ap a, acc_trans ac, chart c, vendor ct
 		 WHERE $apwhere
 		 AND ac.chart_id = c.id

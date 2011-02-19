@@ -1,9 +1,9 @@
 $self{texts} = {
   'Address'                     => 'Adresa',
   'Continue'                    => 'Pokraèování',
-  'Customer not on file!'       => 'Customer not on file!',
-  'Select from one of the names below' => 'Select from one of the names below',
-  'Vendor not on file!'         => 'Vendor not on file!',
+  'Customer not on file!'       => 'Zákazník není v databázi!',
+  'Select from one of the names below' => 'Zvolte z ní¾e uvedenıch jmen',
+  'Vendor not on file!'         => 'Dodavatel není v databázi!',
 };
 
 $self{subs} = {

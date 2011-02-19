@@ -146,7 +146,7 @@ sub section_menu {
 	
       } else {
 	
-	print qq|<br><b>$label</b>|;
+	print qq|<b>$label</b>|;
 	
 	&section_menu($menu, $item);
 

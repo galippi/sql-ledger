@@ -7,16 +7,21 @@ $self{texts} = {
   'Amount'                      => 'Summa',
   'Apr'                         => 'Apr',
   'April'                       => 'Aprill',
-  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et soovid arve kustutada',
+  'Are you sure you want to delete Invoice Number' => 'Kas oled kindel, et
+soovid
+arve kustutada',
   'Attachment'                  => 'Kaasatud fail',
   'Aug'                         => 'Aug',
   'August'                      => 'August',
   'Bcc'                         => 'Bcc',
   'Bin'                         => 'Kast',
   'Cannot delete invoice!'      => 'Arvet ei saa kustutada',
-  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa arvet lisada',
+  'Cannot post invoice for a closed period!' => 'Suletud perioodi ei saa
+arvet lisada',
   'Cannot post invoice!'        => 'Arvet ei saa salvestada',
-  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa makset lisada',
+  'Cannot post payment for a closed period!' => 'Suletud perioodile ei saa
+makset
+lisada',
   'Cc'                          => 'Cc',
   'Confirm!'                    => 'Kinnita',
   'Contact'                     => 'Kontakt',

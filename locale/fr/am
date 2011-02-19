@@ -21,6 +21,7 @@ $self{texts} = {
   'Cannot delete default account!' => 'Impossible de supprimer le compte par defaut!',
   'Cannot save account!'        => 'Impossible d\'enregistrer le compte!',
   'Cannot save preferences!'    => 'Impossible d\'enregistrer les préférences',
+  'Cannot set account for more than one of AR, AP or IC' => 'Cannot set account for more than one of AR, AP or IC',
   'Character Set'               => 'Encodage des caractères',
   'Chart of Accounts'           => 'Plan Comptable',
   'Close Books up to'           => 'Clôturer l\'exercice jusqu\'au',
@@ -96,6 +97,7 @@ $self{texts} = {
   'Weight Unit'                 => 'Unité de poids',
   'Year End'                    => 'Fin d\'année',
   'Yes'                         => 'Oui',
+  'account cannot be set to any other type of account' => 'account cannot be set to any other type of account',
   'does not exist'              => 'n\'existe pas!',
 };
 

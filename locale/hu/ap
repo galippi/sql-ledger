@@ -1,4 +1,5 @@
 $self{texts} = {
+  'AP Outstanding'              => 'Kifizetetlen szállítószámlák',
   'AP Transaction'              => 'Szállító tranzakció',
   'AP Transactions'             => 'Szállító tranzakciók',
   'Account'                     => 'Számla',
@@ -78,7 +79,7 @@ $self{texts} = {
   'Transaction posted!'         => 'Tranzakció rögzítve!',
   'Update'                      => 'Frissítés',
   'Vendor'                      => 'Szállító',
-  'Vendor Invoice'              => 'Vendor Invoice',
+  'Vendor Invoice'              => 'Beszerzési számla',
   'Vendor missing!'             => 'Szállító hiányzik!',
   'Vendor not on file!'         => 'Szállító nincs az adatbázisban!',
   'Yes'                         => 'Igen',
@@ -118,7 +119,7 @@ $self{subs} = {
   'rögzítés'                    => 'post',
   'rögzítés_új_tranzakcióként'  => 'post_as_new',
   'frissítés'                   => 'update',
-  'vendor_invoice'              => 'vendor_invoice',
+  'beszerzési_számla'           => 'vendor_invoice',
   'igen'                        => 'yes',
 };
 

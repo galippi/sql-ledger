@@ -99,6 +99,8 @@ sub order_links {
   $taxincluded = $form->{taxincluded};
   $form->{shipto} = 1 if $form->{id};
 
+  $notes = $form->{notes};
+  
   # get customer / vendor
   if ($form->{type} eq 'purchase_order') {
     IR->get_vendor(\%myconfig, \%$form);
@@ -107,6 +109,7 @@ sub order_links {
     IS->get_customer(\%myconfig, \%$form);
   }
 
+  $form->{notes} = $notes if $notes;
   ($form->{$form->{vc}}) = split /--/, $form->{$form->{vc}};
   $form->{"old$form->{vc}"} = qq|$form->{$form->{vc}}--$form->{"$form->{vc}_id"}|;
 
@@ -1061,6 +1064,8 @@ sub invoice {
   map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(creditlimit creditremaining);
 
   $currency = $form->{currency};
+  $notes = $form->{notes};
+  
   &invoice_links;
 
   $form->{currency} = $currency;
@@ -1071,6 +1076,8 @@ sub invoice {
   $form->{creditremaining} -= ($form->{oldinvtotal} - $form->{ordtotal});
 
   &prepare_invoice;
+
+  $form->{notes} = $notes;
 
   # format amounts
   for $i (1 .. $form->{rowcount}) {

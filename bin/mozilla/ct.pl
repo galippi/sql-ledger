@@ -383,47 +383,47 @@ sub form_header {
 	<tr height="5"></tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Number').qq|</th>
-	  <td><input name="$form->{db}number" size=35 maxsize=35 value="$form->{"$form->{db}number"}"></td>
+	  <td><input name="$form->{db}number" size=35 maxlength=35 value="$form->{"$form->{db}number"}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Name').qq|</th>
-	  <td><input name=name size=35 maxsize=35 value="$form->{name}"></td>
-	  <td><input name=shiptoname size=35 maxsize=35 value="$form->{shiptoname}"></td>
+	  <td><input name=name size=35 maxlength=35 value="$form->{name}"></td>
+	  <td><input name=shiptoname size=35 maxlength=35 value="$form->{shiptoname}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Address').qq|</th>
-	  <td><input name=addr1 size=35 maxsize=35 value="$form->{addr1}"></td>
-	  <td><input name=shiptoaddr1 size=35 maxsize=35 value="$form->{shiptoaddr1}"></td>
+	  <td><input name=addr1 size=35 maxlength=35 value="$form->{addr1}"></td>
+	  <td><input name=shiptoaddr1 size=35 maxlength=35 value="$form->{shiptoaddr1}"></td>
 	</tr>
 	<tr>
 	  <th></th>
-	  <td><input name=addr2 size=35 maxsize=35 value="$form->{addr2}"></td>
-	  <td><input name=shiptoaddr2 size=35 maxsize=35 value="$form->{shiptoaddr2}"></td>
+	  <td><input name=addr2 size=35 maxlength=35 value="$form->{addr2}"></td>
+	  <td><input name=shiptoaddr2 size=35 maxlength=35 value="$form->{shiptoaddr2}"></td>
 	</tr>
 	<tr>
 	  <th></th>
-	  <td><input name=addr3 size=35 maxsize=35 value="$form->{addr3}"></td>
-	  <td><input name=shiptoaddr3 size=35 maxsize=35 value="$form->{shiptoaddr3}"></td>
+	  <td><input name=addr3 size=35 maxlength=35 value="$form->{addr3}"></td>
+	  <td><input name=shiptoaddr3 size=35 maxlength=35 value="$form->{shiptoaddr3}"></td>
 	</tr>
 	<tr>
 	  <th></th>
-	  <td><input name=addr4 size=35 maxsize=35 value="$form->{addr4}"></td>
-	  <td><input name=shiptoaddr4 size=35 maxsize=35 value="$form->{shiptoaddr4}"></td>
+	  <td><input name=addr4 size=35 maxlength=35 value="$form->{addr4}"></td>
+	  <td><input name=shiptoaddr4 size=35 maxlength=35 value="$form->{shiptoaddr4}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Contact').qq|</th>
-	  <td><input name=contact size=35 maxsize=35 value="$form->{contact}"></td>
-	  <td><input name=shiptocontact size=35 maxsize=35 value="$form->{shiptocontact}"></td>
+	  <td><input name=contact size=35 maxlength=35 value="$form->{contact}"></td>
+	  <td><input name=shiptocontact size=35 maxlength=35 value="$form->{shiptocontact}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Phone').qq|</th>
-	  <td><input name=phone size=20 maxsize=20 value="$form->{phone}"></td>
-	  <td><input name=shiptophone size=20 maxsize=20 value="$form->{shiptophone}"></td>
+	  <td><input name=phone size=20 maxlength=20 value="$form->{phone}"></td>
+	  <td><input name=shiptophone size=20 maxlength=20 value="$form->{shiptophone}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Fax').qq|</th>
-	  <td><input name=fax size=20 maxsize=20 value="$form->{fax}"></td>
-	  <td><input name=shiptofax size=20 maxsize=20 value="$form->{shiptofax}"></td>
+	  <td><input name=fax size=20 maxlength=20 value="$form->{fax}"></td>
+	  <td><input name=shiptofax size=20 maxlength=20 value="$form->{shiptofax}"></td>
 	</tr>
 	<tr>
 	  <th align=right nowrap>|.$locale->text('E-mail').qq|</th>

@@ -456,7 +456,8 @@ sub retrieve_assemblies {
 		    AND a.id = p.id) AS inventory
                  FROM parts p
  		 WHERE $where
-		 AND assembly = '1'|;
+		 AND assembly = '1'
+		 ORDER BY partnumber|;
 
   my $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);
@@ -596,8 +597,7 @@ sub assembly_item {
     $where .= " AND lower(p.description) LIKE '$var'";
   }
   if ($form->{"partsgroup_$i"}) {
-    $var = $form->like(lc $form->{"partsgroup_$i"});
-    $where .= " AND lower(pg.partsgroup) LIKE '$var'";
+    $where .= qq| AND pg.partsgroup = '$form->{"partsgroup_$i"}'|;
   }
   
   if ($form->{id}) {
@@ -706,9 +706,7 @@ sub all_parts {
                            FROM makemodel m WHERE lower(m.name) LIKE '$var')";
   }
   if ($form->{partsgroup}) {
-    $var = $form->like(lc $form->{partsgroup});
-    $where .= " AND lower(pg.partsgroup) LIKE '$var'";
-    
+    $where .= qq| AND pg.partsgroup = '$form->{partsgroup}'|;
   }
 
   # connect to database

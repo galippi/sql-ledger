@@ -136,7 +136,7 @@ sub report {
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Decimalplaces').qq|</th>
-	  <td><input name=decimalplaces size=3 maxsize=1></td>
+	  <td><input name=decimalplaces size=3 maxlength=1></td>
 	</tr>
       </table>
     </td>
@@ -164,7 +164,7 @@ sub report {
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('Decimalplaces').qq|</th>
-	  <td><input name=decimalplaces size=3 maxsize=1></td>
+	  <td><input name=decimalplaces size=3 maxlength=1></td>
 	</tr>
       </table>
     </td>

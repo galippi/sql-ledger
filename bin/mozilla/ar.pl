@@ -97,12 +97,14 @@ sub create_links {
 
   $form->create_links("AR", \%myconfig, "customer");
   $duedate = $form->{duedate};
+  $notes = $form->{notes};
   
   $taxincluded = $form->{taxincluded};
   
   IS->get_customer(\%myconfig, \%$form);
 
   $form->{duedate} = $duedate;
+  $form->{notes} = $notes if $form->{id};
   $form->{oldcustomer} = "$form->{customer}--$form->{customer_id}";
   $form->{oldinvdate} = $form->{invdate};
 
@@ -752,8 +754,11 @@ sub yes {
 
 sub search {
 
-  # setup customer selection
-  $form->all_vc(\%myconfig, "customer");
+  $form->create_links("AR", \%myconfig, "customer");
+  
+  $form->{selectAR} = "<option>\n";
+  map { $form->{selectAR} .= "<option>$_->{accno}--$_->{description}\n" } @{ $form->{AR_links}{AR} };
+
 
   if (@{ $form->{all_customer} }) { 
     map { $customer .= "<option>$_->{name}--$_->{id}\n" } @{ $form->{all_customer} };
@@ -761,26 +766,11 @@ sub search {
   } else {
     $customer = qq|<input name=customer size=35>|;
   }
-    
+
+
   $form->{title} = $locale->text('AR Transactions');
-    
-  $form->header;
-  
-  print qq|
-<body>
-
-<form method=post action=$form->{script}>
-
-<table width=100%>
-  <tr><th class=listtop>$form->{title}</th></tr>
-  <tr height="5"></tr>
-  <tr>
-    <td>
-      <table>
-	<tr>
-	  <th align=right>|.$locale->text('Customer').qq|</th>
-	  <td colspan=3>$customer</td>
-	</tr>
+   
+  $invnumber = qq|
 	<tr>
 	  <th align=right nowrap>|.$locale->text('Invoice Number').qq|</th>
 	  <td colspan=3><input name=invnumber size=20></td>
@@ -793,6 +783,49 @@ sub search {
 	  <th align=right nowrap>|.$locale->text('Notes').qq|</th>
 	  <td colspan=3><input name=notes size=40></td>
 	</tr>
+|;
+
+  $openclosed = qq|
+	      <tr>
+		<td align=right><input name=open class=checkbox type=checkbox value=Y checked></td>
+		<td nowrap>|.$locale->text('Open').qq|</td>
+		<td align=right><input name=closed class=checkbox type=checkbox value=Y></td>
+		<td nowrap>|.$locale->text('Closed').qq|</td>
+	      </tr>
+|;
+
+  if ($form->{outstanding}) {
+    $form->{title} = $locale->text('AR Outstanding');
+    $invnumber = "";
+    $openclosed = "";
+  }
+  
+
+  $form->header;
+  
+  print qq|
+<body>
+
+<form method=post action=$form->{script}>
+
+<input type=hidden name=title value="$form->{title}">
+<input type=hidden name=outstanding value=$form->{outstanding}>
+
+<table width=100%>
+  <tr><th class=listtop>$form->{title}</th></tr>
+  <tr height="5"></tr>
+  <tr>
+    <td>
+      <table>
+        <tr>
+	  <th align=right>|.$locale->text('Account').qq|</th>
+	  <td colspan=3><select name=AR>$form->{selectAR}</select></td>
+	</tr>
+	<tr>
+	  <th align=right>|.$locale->text('Customer').qq|</th>
+	  <td colspan=3>$customer</td>
+	</tr>
+	$invnumber
 	<tr>
 	  <th align=right nowrap>|.$locale->text('From').qq|</th>
 	  <td><input name=transdatefrom size=11 title="$myconfig{dateformat}"></td>
@@ -810,12 +843,7 @@ sub search {
 	  <th align=right nowrap>|.$locale->text('Include in Report').qq|</th>
 	  <td>
 	    <table width=100%>
-	      <tr>
-		<td align=right><input name=open class=checkbox type=checkbox value=Y checked></td>
-		<td nowrap>|.$locale->text('Open').qq|</td>
-		<td align=right><input name=closed class=checkbox type=checkbox value=Y></td>
-		<td nowrap>|.$locale->text('Closed').qq|</td>
-	      </tr>
+	      $openclosed
 	      <tr>
 		<td align=right><input name="l_id" class=checkbox type=checkbox value=Y></td>
 		<td nowrap>|.$locale->text('ID').qq|</td>
@@ -891,21 +919,31 @@ sub search {
 
 sub ar_transactions {
 
-  $form->{customer} = $form->unescape($form->{customer});
-  ($form->{customer}, $form->{customer_id}) = split(/--/, $form->{customer});
+  if ($form->{customer}) {
+    $form->{customer} = $form->unescape($form->{customer});
+    ($form->{customer}, $form->{customer_id}) = split /--/, $form->{customer};
+  }
 
   AR->ar_transactions(\%myconfig, \%$form);
 
-  $callback = "$form->{script}?action=ar_transactions&till=$form->{till}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
+  $callback = "$form->{script}?action=ar_transactions&till=$form->{till}&outstanding=$form->{outstanding}&path=$form->{path}&login=$form->{login}&password=$form->{password}";
   $href = $callback;
 
   $callback .= "&title=".$form->escape($form->{title},1);
   $href .= "&title=".$form->escape($form->{title});
 
+  if ($form->{AR}) {
+    $callback .= "&AR=".$form->escape($form->{AR},1);
+    $href .= "&AR=".$form->escape($form->{AR});
+    $form->{AR} =~ s/--/ /;
+    $option = $locale->text('Account')." : $form->{AR}";
+  }
+
   if ($form->{customer}) {
     $callback .= "&customer=".$form->escape($form->{customer},1)."--$form->{customer_id}";
     $href .= "&customer=".$form->escape($form->{customer})."--$form->{customer_id}";
-    $option = $locale->text('Customer')." : $form->{customer}";
+    $option .= "\n<br>" if ($option);
+    $option .= $locale->text('Customer')." : $form->{customer}";
   }
   if ($form->{invnumber}) {
     $callback .= "&invnumber=".$form->escape($form->{invnumber},1);
@@ -951,7 +989,7 @@ sub ar_transactions {
     $option .= $locale->text('Closed');
   }
 
-  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid datepaid due duedate notes till employee shippingpoint));
+  @columns = $form->sort_columns(qw(transdate id invnumber ordnumber name netamount tax amount paid due datepaid duedate notes till employee shippingpoint));
   
   foreach $item (@columns) {
     if ($form->{"l_$item"} eq "Y") {
@@ -1022,13 +1060,13 @@ sub ar_transactions {
   # escape callback for href
   $callback = $form->escape($callback);
   
-  if (@{ $form->{AR} }) {
-    $sameitem = $form->{AR}->[0]->{$form->{sort}};
+  if (@{ $form->{transactions} }) {
+    $sameitem = $form->{transactions}->[0]->{$form->{sort}};
   }
   
   # sums and tax on reports by Antonio Gallardo
   #
-  foreach $ar (@{ $form->{AR} }) {
+  foreach $ar (@{ $form->{transactions} }) {
 
     if ($form->{l_subtotal} eq 'Y') {
       if ($sameitem ne $ar->{$form->{sort}}) {
