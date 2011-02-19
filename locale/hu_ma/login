@@ -1,0 +1,35 @@
+$self{texts} = {
+  'About'                       => ' ',
+  'Accounting from anywhere'    => 'Ügyvitel bárhonnan',
+  'Continue'                    => 'Folytatás',
+  'Database Host'               => 'Adatbázis helye',
+  'Dataset'                     => 'Cégadatbázis',
+  'Dataset is newer than version!' => 'A Cégadatbázis verziója újabb, mint a programé!',
+  'Dynamic pages'               => 'Dinamikus oldalak',
+  'Incorrect Dataset version!'  => 'Érvénytelen adatbázisverzió!',
+  'Incorrect Password!'         => 'Érvénytelen jelszó!',
+  'Licensed to'                 => 'Cég:',
+  'Login'                       => 'Belépés',
+  'Name'                        => 'Név',
+  'Open source accounting software' => 'Szabad ügyviteli szoftver',
+  'Password'                    => 'Jelszó',
+  'Session expired!'            => 'A munkamenet ideje lejárt!',
+  'Upgrading to Version'        => 'Adatbázis frissítése',
+  'User'                        => 'Felhasználó',
+  'Version'                     => 'Verzió',
+  'You are logged out!'         => 'Be kell megint jelentkezni!',
+  'You did not enter a name!'   => 'Nem írt be nevet!',
+  'done'                        => 'elvégezve',
+  'is not a member!'            => 'nem tag!',
+  'localhost'                   => 'localhost',
+};
+
+$self{subs} = {
+  'company_logo'                => 'company_logo',
+  'login'                       => 'login',
+  'login_screen'                => 'login_screen',
+  'logout'                      => 'logout',
+  'belépés'                     => 'login',
+};
+
+1;

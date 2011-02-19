@@ -1,3 +1,25 @@
+#=====================================================================
+# SQL-Ledger Accounting
+# Copyright (c) 2003
+#
+#  Author: Dieter Simader
+#   Email: dsimader@sql-ledger.org
+#     Web: http://www.sql-ledger.org
+#  Modified by Tavugyvitel Kft. (info@tavugyvitel.hu)
+#
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #======================================================================
 #
 # Account reconciliation module
@@ -6,7 +28,7 @@
 
 
 use SL::RC;
-
+use SL::RP;
 
 1;
 # end of main
@@ -14,7 +36,7 @@ use SL::RC;
 
 sub reconciliation {
   
-  RC->paymentaccounts(\%myconfig, \%$form);
+  RP->paymentaccounts2(\%myconfig, \%$form);
 
   $selection = "";
   map { $selection .= "<option>$_->{accno}--$_->{description}\n" } @{ $form->{PR} };
@@ -24,7 +46,19 @@ sub reconciliation {
   $form->header;
 
   print qq|
-<body>
+<body>|;
+  if ($myconfig{js}) {
+   print qq|
+   <script src="js/prototype.js" type="text/javascript"></script>
+   <script src="js/validation.js" type="text/javascript"></script>
+   <script src="js/custom.js" type="text/javascript"></script>
+   |;
+  }else {
+   print qq|
+    <script> function checkform () { return true; }</script>
+    |;
+  }
+print qq|
 
 <form method=post action=$form->{script}>
 
@@ -43,13 +77,13 @@ sub reconciliation {
 	</tr>
 	<tr>
 	  <th align=right>|.$locale->text('From').qq|</th>
-	  <td><input name=fromdate size=11 title="$myconfig{dateformat}"></td>
+	  <td><input name=fromdate size=11 title="$myconfig{dateformat}" id=fromdate OnBlur="return dattrans('fromdate');"></td>
 	  <th align=right>|.$locale->text('To').qq|</th>
-	  <td><input name=todate size=11 title="$myconfig{dateformat}"></td>
+	  <td><input name=todate size=11 title="$myconfig{dateformat}" id=todate OnBlur="return dattrans('todate');"></td>
 	</tr>
 	<tr>
 	  <td align=right><input type=checkbox style=checkbox name=fx_transaction value=1 checked></td>
-	  <th align=left colspan=3>|.$locale->text('Include Exchangerate Difference').qq|</td>
+	  <td colspan=3>|.$locale->text('Include Exchangerate Difference').qq|</td>
 	</tr>
       </table>
     </td>
@@ -64,7 +98,7 @@ sub reconciliation {
 
 <input type=hidden name=path value=$form->{path}>
 <input type=hidden name=login value=$form->{login}>
-<input type=hidden name=password value=$form->{password}>
+<input type=hidden name=sessionid value=$form->{sessionid}>
 
 <input type=submit class=submit name=action value="|.$locale->text('Continue').qq|">
 
@@ -151,15 +185,14 @@ sub display_form {
   $ml = ($form->{category} eq 'A') ? -1 : 1;
   $form->{beginningbalance} *= $ml;
   $form->{fx_balance} *= $ml;
-
+  
   if (! $form->{fx_transaction}) {
     $form->{beginningbalance} -= $form->{fx_balance};
   }
   $balance = $form->{beginningbalance};
   
+  
   $i = 0;
-  $id = 0;
-
   $j = 0;
   
   map { $column_data{$_} = "<td>&nbsp;</td>" } qw(cleared transdate source debit credit);
@@ -176,16 +209,15 @@ sub display_form {
 	</tr>
 |;
 
-  
+
   foreach $ref (@{ $form->{PR} }) {
 
     $column_data{name} = "<td>$ref->{name}&nbsp;</td>";
     $column_data{source} = qq|<td>$ref->{source}&nbsp;</td>|;
-    $column_data{transdate} = "<td>$ref->{transdate}&nbsp;</td>";
     
     $column_data{debit} = "<td>&nbsp;</td>";
     $column_data{credit} = "<td>&nbsp;</td>";
-    
+
     if ($form->{fx_transaction}) {
       $balance += $ref->{amount} * $ml;
     } else {
@@ -195,9 +227,9 @@ sub display_form {
     }
 
     $cleared += $ref->{amount} * $ml if $ref->{cleared};
-      
-    if ($ref->{amount} < 0) {
 
+    if ($ref->{amount} < 0) {
+      
       if ($form->{fx_transaction}) {
 	$totaldebits += $ref->{amount} * -1;
       } else {
@@ -205,10 +237,10 @@ sub display_form {
 	  $totaldebits += $ref->{amount} * -1;
 	}
       }
-      
+	  
       $column_data{debit} = "<td align=right>".$form->format_amount(\%myconfig, $ref->{amount} * -1, 2, "&nbsp;")."</td>";
     } else {
-
+      
       if ($form->{fx_transaction}) {
 	$totalcredits += $ref->{amount};
       } else {
@@ -216,33 +248,29 @@ sub display_form {
 	  $totalcredits += $ref->{amount};
 	}
       }
-      
+
       $column_data{credit} = "<td align=right>".$form->format_amount(\%myconfig, $ref->{amount}, 2, "&nbsp;")."</td>";
     }
     
     $column_data{balance} = "<td align=right>".$form->format_amount(\%myconfig, $balance, 2, 0)."</td>";
 
     if ($ref->{fx_transaction}) {
-      $i++ unless $id == $ref->{id};
-      $fx_transaction = 1;
 
-      $fx{$ref->{id}} = $ref->{amount};
-      
-      if ($form->{fx_transaction}) {
-	$column_data{cleared} = qq|<td>&nbsp;<input type=hidden name="fxoid_$i" value=$ref->{oid}></td>|;
-      } else {
-	print qq|<input type=hidden name="fxoid_$i" value=$ref->{oid}>|;
-	$id = $ref->{id};
-	next;
-      }
+      $fx{$ref->{source}} = $ref->{amount};
+      $column_data{cleared} = qq|<td>&nbsp;</td>|;
+
+      next unless $form->{fx_transaction};
       
     } else {
-      $i++ unless ($fx_transaction && $id == $ref->{id});
-      $fx_transaction = 0;
+      
+      $i++;
+
       $column_data{cleared} = qq|<td><input name="cleared_$i" type=checkbox class=checkbox value=1 $ref->{cleared}>
-      <input type=hidden name="oid_$i" value=$ref->{oid}></td>|;
+      <input type=hidden name="source_$i" value="$ref->{source}"></td>|;
+      
+      $column_data{transdate} = qq|<td>$ref->{transdate}&nbsp;</td>
+      <input type=hidden name="transdate_$i" value=$ref->{transdate}>|;
     }
-    $id = $ref->{id};
 
     $j++; $j %= 2;
     print qq|
@@ -261,7 +289,7 @@ sub display_form {
   
   # figure out exchangerate difference to add
   if ($form->{fx_transaction}) {
-    map { $fx += $fx{$_->{id}} * $ml if $_->{cleared} } @{ $form->{PR} };
+    map { $fx += $fx{$_->{source}} * $ml if $_->{cleared} } @{ $form->{PR} };
   }
 
   # print totals
@@ -317,7 +345,7 @@ sub display_form {
 <input type=hidden name=fx_transaction value=$form->{fx_transaction}>
 
 <input type=hidden name=rowcount value=$form->{rowcount}>
-<input type=hidden name=accno value=$form->{accno}>
+<input type=hidden name=accno value="$form->{accno}">
 <input type=hidden name=account value="$form->{account}">
 
 <input type=hidden name=fromdate value=$form->{fromdate}>
@@ -325,7 +353,7 @@ sub display_form {
 
 <input type=hidden name=path value=$form->{path}>
 <input type=hidden name=login value=$form->{login}>
-<input type=hidden name=password value=$form->{password}>
+<input type=hidden name=sessionid value=$form->{sessionid}>
 
 <br>
 <input type=submit class=submit name=action value="|.$locale->text('Update').qq|">
@@ -376,7 +404,7 @@ sub select_all {
 
 sub done {
 
-  $form->{callback} = "$form->{script}?path=$form->{path}&action=reconciliation&login=$form->{login}&password=$form->{password}";
+  $form->{callback} = "$form->{script}?path=$form->{path}&action=reconciliation&login=$form->{login}&sessionid=$form->{sessionid}";
 
   $form->error($locale->text('Out of balance!')) if ($form->{difference} *= 1);
 

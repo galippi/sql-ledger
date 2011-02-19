@@ -1,12 +1,12 @@
 #=====================================================================
 # SQL-Ledger Accounting
-# Copyright (C) 2001
+# Copyright (C) 2002
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
 #
-#  Contributors:
+#  Modified by Tavugyvitel Kft. (info@tavugyvitel.hu)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ sub num2text {
   my @textnumber = ();
 
   # split amount into chunks of 3
-  my @num = reverse split //, $amount;
+  my @num = reverse split //, abs($amount);
   my @numblock = ();
   my @a;
   my $i;

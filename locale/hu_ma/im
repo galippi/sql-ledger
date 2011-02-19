@@ -1,0 +1,46 @@
+$self{texts} = {
+  'Account'                     => 'Számla',
+  'City'                        => 'Város',
+  'Company'                     => 'Társaság',
+  'Continue'                    => 'Folytatás',
+  'Curr'                        => 'Dev',
+  'Currency'                    => 'Deviza',
+  'Customer'                    => 'Vevõ',
+  'Customer Number'             => 'Vevõszám',
+  'Date Paid'                   => 'Fizetés napja',
+  'Delimiter'                   => 'Elhatároló',
+  'Description'                 => 'Szöveges leírás',
+  'Due Date'                    => 'Esedékesség',
+  'Exch'                        => 'Árf',
+  'Import Orders'		=> 'Rendelések betöltése',
+  'Invoice'                     => 'Számla',
+  'Invoice Date'                => 'Teljesítés dátuma',
+  'Invoice Number'              => 'Számlaszám',
+  'No'                          => 'Nem',
+  'Order Number'                => 'Rendelés száma',
+  'Paid'                        => 'Fizetve',
+  'Password'                    => 'Jelszó',
+  'Posting failed!'             => 'A rögzítés nem sikerült!',
+  'Qty'                         => 'Menny.',
+  'Salesperson'                 => 'Ügynök',
+  'Session expired!'            => 'A munkamenet ideje lejárt!',
+  'Tab delimited file'          => 'Tab-bal határolt file',
+  'The following parts could not be found:' => 'A következõ cikkek nem találhatóak az adatbázisban:',
+  'Total'                       => 'Végösszeg',
+  'Type of File'                => 'File típusa',
+  'Unit'                        => 'Egység',
+  'Yes'                         => 'Igen',
+  'ok'                          => 'rendben',
+};
+
+$self{subs} = {
+  'continue'                    => 'continue',
+  'import'                      => 'import',
+  'import_orders'		=> 'import_orders',
+  'rendelések_betöltése'	=> 'import_orders',
+  'xrefhdr'                     => 'xrefhdr',
+  'folytatás'                   => 'continue',
+};
+
+1;
+

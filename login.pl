@@ -31,18 +31,19 @@
 #######################################################################
 
 
-# setup defaults, these are overidden by sql-ledger.conf
-# DO NOT CHANGE
+# setup defaults, DO NOT CHANGE
 $userspath = "users";
 $templates = "templates";
 $memberfile = "users/members";
 $sendmail = "| /usr/sbin/sendmail -t";
+%printer = ( lpr => 'Default' );
 ########## end ###########################################
 
 
 $| = 1;
 
 eval { require "sql-ledger.conf"; };
+eval { require "functions.conf"; };
 
 if ($ENV{CONTENT_LENGTH}) {
   read(STDIN, $_, $ENV{CONTENT_LENGTH});
@@ -59,7 +60,7 @@ if ($ARGV[0]) {
 
 %form = split /[&=]/;
 
-# fix for apache 2.0
+# fix for apache 2.0 bug
 map { $form{$_} =~ s/\\$// } keys %form;
 
 # name of this script
@@ -68,15 +69,15 @@ $pos = rindex $0, '/';
 $script = substr($0, $pos + 1);
 
 
-if (-f "$userspath/nologin" && $script ne 'admin.pl') {
+if (-e "$userspath/nologin" && $script ne 'admin.pl') {
   print "Content-Type: text/html\n\n" if $ENV{HTTP_USER_AGENT};
-  print "\nLogin disabled!\n";
-  exit 1;
+  print "\nRendszer zárolva!\n";
+  exit;
 }
 
-  
+
 if ($form{path}) {
-  $form{path} =~ s/%2[fF]/\//g;
+  $form{path} =~ s/%2f/\//gi;
   $form{path} =~ s/\.\.\///g;
 
   if ($form{path} !~ /^bin\//) {
@@ -121,7 +122,7 @@ if ($form{path}) {
   } else {
 
     print "Content-Type: text/html\n\n" if $ENV{HTTP_USER_AGENT};
-    print qq"\nUnknown terminal\n";
+    print qq|\nUnknown terminal\n|;
   }
 
 }

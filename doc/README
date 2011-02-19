@@ -1,5 +1,5 @@
                 SQL-Ledger Accounting
-                     Version 2.2
+                     Version 2.3
 
 
 DESCRIPTION:
@@ -137,7 +137,7 @@ SET PERMISSION:
 ---------------
 change directory to /usr/local/sql-ledger
 
-# chown nobody:nogroup users templates
+# chown nobody:nogroup users templates spool
 
 replace nobody:nogroup with the web server
 user of your system. Some systems use
@@ -158,8 +158,8 @@ PREPARE YOUR SQL SERVER:
   if you use passwords to access postgres use this command
   $ createuser -d -P sql-ledger
 
-  Answer 'n' to the following question.
-  Shall the new user be allowed to create more new users? (y/n) n
+  Shall the new user be allowed to create new databases? (y/n) y
+  Shall the new user be allowed to create more new users? (y/n) y
 
   You can add more database users to keep datasets
   separated. Each dataset belongs to one company.
@@ -307,5 +307,5 @@ http://www.sql-ledger.com/misc/support.html
 
 
 =====================================================================
-December 14, 2003
+February 15, 2004
 

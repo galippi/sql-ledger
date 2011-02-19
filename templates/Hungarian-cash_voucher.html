@@ -1,0 +1,101 @@
+<BODY>
+
+<H1 ALIGN="center">
+<%if receipt%>
+Bevételi
+<%end if receipt%>
+<%if check%>
+Kiadási
+<%end if check%>
+pénztárbizonylat</H1>
+
+<TABLE WIDTH="100%"><TR>
+  <TD ALIGN="left">
+    <H2><%company%><BR>
+    <%address%></H2>
+    </TD>
+  <TD ALIGN="right">
+    <TT><%source%></TT>
+    </TD>
+  </TR></TABLE>
+
+<P>A pénztár
+<%if receipt%>
+bevételezett
+<%end if receipt%>
+<%if check%>
+kifizetett
+<%end if check%>
+<B><%datepaid%></B> napon
+<%if partner%>
+<B><%partner%></B>
+<%if receipt%>
+befizetõtõl
+<%end if receipt%>
+<%if check%>
+felvevõnek
+<%end if check%>
+<%end if partner%>
+<%if memo%>
+<B><%memo%></B> címén
+<%end if memo%>
+<B>
+<%if receipt%>
+<%receipt%>
+<%end if receipt%>
+<%if check%>
+<%check%>
+<%end if check%>
+<%currency%></B>,	<!-- this fix name of the currency is a bad hack! -->
+azaz <B><%amount_text%>
+<%currency%></B> összeget
+<%if receipt%>
+.
+<%end if receipt%>
+<%if check%>
+.
+<!-- a következõ részletezésben:
+<br>
+<%foreach number%>
+  <%vmemo%> 
+  &nbsp;&nbsp; <%vamount%>
+<br>
+<%end foreach number%>
+-->
+<%end if check%>
+</P>
+
+<TABLE WIDTH="100%">
+        <TR>
+  <TD ALIGN="left" WIDTH="25%">
+    kiállító: <%employee%>
+    </TD>
+  <TD ALIGN="center" WIDTH="25%">
+    pénztáros: 
+    </TD>
+  </TR>
+       <TR>
+  <TD ALIGN="left" WIDTH="25%">
+    utalványozó: 
+    </TD>
+  <TD ALIGN="center" WIDTH="25%">
+    melléklet: 
+    </TD>
+  </TR>
+<TR>
+  <TD ALIGN="left" WIDTH="50%" COLSPAN="2">
+    </TD>
+  <TD ALIGN="center" WIDTH="50%">
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .<BR>
+    Az összeg
+    <%if receipt%>
+befizetõjének
+<%end if receipt%>
+<%if check%>
+kifizetõjének
+<%end if check%>
+    aláírása, személyi igazolvány száma
+    </TD>
+  </TR></TABLE>
+
+</BODY>

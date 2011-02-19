@@ -1,10 +1,11 @@
 ######################################################################
 # SQL-Ledger Accounting
-# Copyright (c) 1998-2002
+# Copyright (c) 2001
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
+#  Modified by Tavugyvitel Kft. (info@tavugyvitel.hu)
 #
 #  Contributors: Christopher Browne
 #
@@ -24,11 +25,11 @@
 #
 # two frame layout with refractured menu
 #
-# CHANGE LOG:
-#   DS. 2002-03-25  Created
 #######################################################################
 
 $menufile = "menu.ini";
+
+
 use SL::Menu;
 
 
@@ -38,16 +39,17 @@ use SL::Menu;
 
 sub display {
 
-  $framesize = ($ENV{HTTP_USER_AGENT} =~ /links/i) ? "240" : "135";
+  $menuwidth = ($ENV{HTTP_USER_AGENT} =~ /links/i) ? "240" : "155";
+  $menuwidth = $myconfig{menuwidth} if $myconfig{menuwidth};
 
-  $form->header;
+  $form->header(!$form->{duplicate});
 
   print qq|
 
-<FRAMESET COLS="$framesize,*" BORDER="1">
+<FRAMESET COLS="$menuwidth,*" BORDER="1">
 
-  <FRAME NAME="acc_menu" SRC="$form->{script}?login=$form->{login}&password=$form->{password}&action=acc_menu&path=$form->{path}">
-  <FRAME NAME="main_window" SRC="login.pl?login=$form->{login}&password=$form->{password}&action=company_logo&path=$form->{path}">
+  <FRAME NAME="acc_menu" SRC="$form->{script}?login=$form->{login}&sessionid=$form->{sessionid}&action=acc_menu&path=$form->{path}&js=$form->{js}">
+  <FRAME NAME="main_window" SRC="am.pl?login=$form->{login}&sessionid=$form->{sessionid}&action=company_logo&path=$form->{path}">
 
 </FRAMESET>
 
@@ -61,20 +63,56 @@ sub display {
 
 sub acc_menu {
 
-  my $menu = new Menu "$menufile";
-  $menu = new Menu "custom_$menufile" if (-f "custom_$menufile");
-  $menu = new Menu "$form->{login}_$menufile" if (-f "$form->{login}_$menufile");
-  
+#kabai BUG
+#  my $menu = new Menu "$menufile";
+ # $menu = new Menu "custom_$menufile" if (-f "custom_$menufile");
+ # $menu = new Menu "$form->{login}_$menufile" if (-f "$form->{login}_$menufile");
+    if (-f "custom_$menufile"){
+	$menu = new Menu "custom_$menufile";
+    }elsif  (-f "$form->{login}_$menufile"){
+        $menu = new Menu "$form->{login}_$menufile";
+    }else{
+        $menu = new Menu "$menufile";	
+    }
+#kabai
   $form->{title} = $locale->text('Accounting Menu');
   
   $form->header;
-
   print qq|
-<body class=menu>
+<script type="text/javascript">
+function SwitchMenu(obj, obj2) {
+if (document.getElementById) {
+    var el = document.getElementById(obj);
+    var ar = document.getElementById("cont").getElementsByTagName("DIV");
+    var cs = document.getElementById(obj2);
 
+    if (el.style.display == "none") {
+      el.style.display = "block"; //display the block of info
+      cs.className = 'menuOut2';
+    		        
+    } else {
+      el.style.display = "none";
+     cs.className = 'menuOut';
+}
+  }
+}
+
+function ChangeClass(menu, newClass) {
+if(document.getElementById(menu).className=="menuOut2"){newClass=newClass+"2";};  
+if(document.getElementById(menu).className=="menuOver2"){newClass=newClass+"2";};  
+if (document.getElementById) {
+    document.getElementById(menu).className = newClass;
+  }
+}
+document.onselectstart = new Function("return false");
+</script>
+ <body class=menu>
 |;
-
-  &section_menu($menu);
+  if ($form->{js}) {
+    &js_menu($menu);
+  } else {
+    &section_menu($menu);
+  }
 
   print qq|
 </body>
@@ -104,13 +142,18 @@ sub section_menu {
     $menu->{$item}{target} = "main_window" unless $menu->{$item}{target};
     
     if ($menu->{$item}{submenu}) {
+
       $menu->{$item}{$item} = !$form->{$item};
 
-      if ($form->{level} && $item =~ /^$form->{level}/) {
+      if ($form->{level} && $item =~ $form->{level}) {
 
         # expand menu
-	print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level).qq|$label</a>|;
+#kabai
+	$label = "<img border=0 src=icons/down.gif align=right><span class=menuopen>$label</span>";
 
+#kabai
+#kabai +1
+	print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level, $label).qq|$label</a>|;
 	# remove same level items
 	map { shift @menuorder } grep /^$item/, @menuorder;
 	
@@ -119,42 +162,120 @@ sub section_menu {
 	print qq|<br>\n|;
 
       } else {
-	
-	print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level).qq|$label&nbsp;...</a>|;
+#kabai +1
+	print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level, $label).qq|$label&nbsp;...</a>|;
 
         # remove same level items
 	map { shift @menuorder } grep /^$item/, @menuorder;
 
       }
-
       
     } else {
     
       if ($menu->{$item}{module}) {
-	if ($form->{$item} && $form->{level} eq $item) {
-	  $menu->{$item}{$item} = !$form->{$item};
-	  print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level).qq|$label</a>|;
-	  
-	  # remove same level items
-	  map { shift @menuorder } grep /^$item/, @menuorder;
-	  
-	  &section_menu($menu, $item);
-
-	} else {
-	  print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level).qq|$label</a>|;
-	}
+#kabai +1
+	print qq|<br>\n$spacer|.$menu->menuitem(\%myconfig, \%$form, $item, $level, $label).qq|$label</a>|;
 	
       } else {
 	
-	print qq|<br><b>$label</b>|;
+	print qq|<p><b>$label</b>|;
 	
 	&section_menu($menu, $item);
 
 	print qq|<br>\n|;
-	
+
       }
     }
   }
+}
+
+sub js_menu {
+  my ($menu, $level) = @_;
+
+ print qq|
+	<div id="cont">
+	|;
+
+  # build tiered menus
+  my @menuorder = $menu->access_control(\%myconfig, $level);
+
+  while (@menuorder){
+    $i++;
+    $item = shift @menuorder;
+    $label = $item;
+    $label =~ s/.*--//g;
+    $label = $locale->text($label);
+
+    $menu->{$item}{target} = "main_window" unless $menu->{$item}{target};
+
+    if ($menu->{$item}{submenu}) {
+      
+	$display = "display: none;" unless $level eq ' ';
+
+	print qq|
+<div id="menu$i" class="menuOut" onclick="SwitchMenu('sub$i', 'menu$i')" onmouseover="ChangeClass('menu$i','menuOver')" onmouseout="ChangeClass('menu$i','menuOut')">$label</div>
+	<div class="submenu" id="sub$i" style="$display">|;
+	
+	# remove same level items
+	map { shift @menuorder } grep /^$item/, @menuorder;
+
+	&js_menu($menu, $item);
+	
+	print qq|
+
+		</div>
+		|;
+
+    } else {
+
+      if ($menu->{$item}{module}) {
+	if ($level eq "") {
+	  print qq|<div id="menu$i" class="menuOut3" onmouseover="ChangeClass('menu$i','menuOver3')" onmouseout="ChangeClass('menu$i','menuOut3')"> |. 
+	  $menu->menuitem(\%myconfig, \%$form, $item, $level, $label).qq|$label</a></div>|;
+
+	  # remove same level items
+	  map { shift @menuorder } grep /^$item/, @menuorder;
+
+          &js_menu($menu, $item);
+
+	} else {
+	
+	  print qq|<div class="submenu"> |.
+          $menu->menuitem(\%myconfig, \%$form, $item, $level, $label).qq|$label</a></div>|;
+	}
+
+      } else {
+
+	$display = "display: none;" unless $item eq ' ';
+
+	print qq|
+<div id="menu$i" class="menuOut" onclick="SwitchMenu('sub$i', 'menu$i')" onmouseover="ChangeClass('menu$i','menuOver')" onmouseout="ChangeClass('menu$i','menuOut')">$label</div>
+	<div class="submenu" id="sub$i" style="$display">|;
+	
+	&js_menu($menu, $item);
+	
+	print qq|
+
+		</div>
+		|;
+
+      }
+
+    }
+
+  }
+
+  print qq|
+	</div>
+	|;
+}
+
+
+
+sub menubar {
+
+  1;
+
 }
 
 

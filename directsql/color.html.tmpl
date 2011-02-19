@@ -1,0 +1,29 @@
+<head>
+<style>
+  .string { color: #800000; }
+  .num { color: #000080; }
+  .date { color: #008000; }
+</style>
+</head>
+<body>
+
+<table style="border: 1px solid #000; border-collapse: collapse;" align="center">
+<tr style="background: #000; color: #fff;">
+  <TMPL_LOOP NAME="result_cols">
+  <th>
+    <TMPL_VAR NAME="name">
+  </th>
+  </TMPL_LOOP>
+</tr>
+<TMPL_LOOP NAME="result_data">
+<tr style="background: #ddd; color: #000;">
+  <TMPL_LOOP NAME="columns">
+  <TMPL_IF NAME='STRING'><td class="string" style="border: 1px solid #000;">&nbsp;<TMPL_VAR NAME="value">&nbsp;</td></TMPL_IF>
+  <TMPL_IF NAME='DATE'><td class="date" style="border: 1px solid #000;">&nbsp;<TMPL_VAR NAME="value">&nbsp;</td></TMPL_IF>
+  <TMPL_IF NAME='NUM'><td class="num" style="border: 1px solid #000;">&nbsp;<TMPL_VAR NAME="value">&nbsp;</td></TMPL_IF>
+  </TMPL_LOOP>
+</tr>
+</TMPL_LOOP>
+</table>
+</body>
+</html>

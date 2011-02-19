@@ -1,0 +1,151 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage{tabularx}
+\usepackage[latin2]{inputenc}
+\usepackage{t1enc}
+\usepackage{calc}
+
+
+\pagestyle{empty}
+\setlength{\hoffset}{-1in}
+\setlength{\voffset}{-1in}
+\setlength{\topmargin}{0mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+\newlength{\margin}
+\setlength{\margin}{10mm}
+\setlength{\fboxsep}{\margin}
+\setlength{\fboxrule}{0.1mm}
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-2\fboxsep}
+\addtolength{\textwidth}{-2\fboxrule}
+\setlength{\textheight}{\paperheight}
+\newlength{\boxheight}
+\setlength{\boxheight}{\textheight / <%copies%>}
+\addtolength{\boxheight}{-2\fboxsep}
+\addtolength{\boxheight}{-2\fboxrule}
+
+\newsavebox{\voucher}
+\sbox{\voucher}{\fbox{\begin{minipage}[t][\boxheight]{\textwidth}
+
+\begin{center}\LARGE\mbox{
+<%if receipt%>
+Bevételi
+<%end if receipt%>
+<%if check%>
+Kiadási
+<%end if check%>
+pénztárbizonylat
+}\end{center}
+
+\bigskip
+
+\newlength{\referencewidth}
+\settowidth{\referencewidth}{<%source%>}
+\newlength{\companywidth}
+\setlength{\companywidth}{\textwidth - \referencewidth -\margin}
+\begin{minipage}[t]{\companywidth}
+{<%company%>}\\
+<%address%>
+\end{minipage}\hfill
+\begin{minipage}[t]{\referencewidth}
+\texttt{<%source%>}
+\end{minipage}
+
+\bigskip
+\vfill
+
+A pénztár
+<%if receipt%>
+bevételezett
+<%end if receipt%>
+<%if check%>
+kifizetett
+<%end if check%>
+\textbf{<%datepaid%>} napon
+<%if partner%>
+\textbf{<%partner%>}
+<%if receipt%>
+befizetõtõl
+<%end if receipt%>
+<%if check%>
+felvevõnek
+<%end if check%>
+<%end if partner%>
+<%if memo%>
+\textbf{<%memo%>} címén
+<%end if memo%>
+<%if receipt%>
+\mbox{\textbf{<%receipt%>
+<%end if receipt%>
+<%if check%>
+\mbox{\textbf{<%check%>
+<%end if check%>
+<%currency%>}},	
+ azaz \mbox{\textbf{<%amount_text%>
+<%currency%>}} 
+ összeget
+<%if receipt%>
+.
+<%end if receipt%>
+<%if check%>
+.
+% a következõ részletezésben:
+%\\ \\
+%\begin{tabularx}{10cm}{>{\hsize=6cm\raggedright}X@{\ }
+%                             >{\hsize=4cm\raggedleft}X@{\ }}
+%   \textbf{Fizetési jogcím} & \textbf{Összeg}
+%    \cr
+%<%foreach number%>
+%  <%vmemo%> 
+%  & <%vamount%>
+%\cr
+%<%end foreach number%>
+%\end{tabularx}
+<%end if check%>
+\bigskip
+\vfill
+
+\newlength{\signwidth}
+\setlength{\signwidth}{\textwidth / 4}
+\begin{minipage}[t]{\signwidth}
+\raggedright kiállító: <%employee%>
+<%if check%>
+\\utalványozó: 
+<%end if check%>
+\end{minipage}\hspace{0mm}
+\begin{minipage}[t]{\signwidth}
+\raggedright pénztáros: \hspace{20mm}
+melléklet:
+\end{minipage}
+
+\bigskip
+
+\newlength{\signaturewidth}
+\setlength{\signaturewidth}{\textwidth / 2}
+\newlength{\noteswidth}
+\setlength{\noteswidth}{\textwidth - \signaturewidth}
+\setlength{\signaturewidth}{\signaturewidth - 2\margin}
+\begin{minipage}[t]{\noteswidth}
+\hfill
+\end{minipage}\hspace{\margin}
+\begin{minipage}[t]{\signaturewidth}
+\dotfill\\
+\centering Az összeg
+<%if receipt%>
+befizetõjének
+<%end if receipt%>
+<%if check%>
+kifizetõjének
+<%end if check%>
+aláírása, személyi igazolvány száma
+\end{minipage}
+
+\end{minipage}}}
+
+\begin{document}
+\noindent
+<%foreach copy%>
+\usebox{\voucher}\\[-0.5mm]     % this fix amount of vspace is a bad hack!
+<%end foreach copy%>
+\end{document}

@@ -1,0 +1,137 @@
+/* stylesheet for ledger printing*/
+
+/* general stuff */
+A:link { color: blue; text-decoration: none; }
+A:visited { color: blue; text-decoration: none; }
+A:hover { color: white;
+          background-color: rgb(187,187,187);
+	  text-decoration: none;
+}
+A:active { color: blue; text-decoration: underline; }
+
+body {
+  background-color: white;
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 8pt;
+  color: black;
+}
+
+td,th {
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 6pt;
+}
+
+select {
+/*  background-color: rgb(187,187,187);*/
+  color: black;
+  border-width: 1px;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-color: black;
+}
+input {
+/*  background-color: rgb(187,187,187);*/
+  color: black;
+  border-width: 1px;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-color: black;
+}
+
+  /* login and admin */
+.login {
+  font-family: Verdana, Arial, Helvetica;
+}
+body.login {
+  background: #000080;
+  color: black;
+}
+h1.login {
+  font-size: 10pt;
+}
+table.login {
+  background-color: #FBFFE7;
+  padding: 20px;
+}
+td.login {
+  text-align: center;
+}
+th.login {
+  text-align: right;
+}
+
+body.admin {
+  background-color: #FBFFE7;
+  color: black;
+}
+
+body.menu {
+  background-color: white;
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 8pt;
+  color: black;
+}
+
+
+.listtop { background-color: black; color: white; font-size: 6pt}
+.listheading { background-color: white; color: black;font-size: 6pt }
+.menuopen { background-color: blue; color: white; }
+A.listheading:link, A.listheading:active, A.listheading:visited {
+  color: black;
+  text-decoration: none;  font-size: 6pt;
+}
+.listrow1 { background-color: white; color: black; vertical-align: top; font-size: 6pt;
+ }
+.listrow0 { background-color: white; color: black; vertical-align: top; font-size: 6pt;
+ }
+.listsubtotal { background-color: black; color: white;  font-size: 6pt;
+}
+.listtotal { background-color: black; color: white;  font-size: 6pt;
+}
+
+.submit {
+  font-size: 8pt
+  font-family: Verdana, Arial, Helvetica;
+  color: #000080;
+}
+
+.plus0 {    /* font color for negative numbers */
+  color: red;
+}
+
+.plus1 {
+  color: green;
+}
+
+h2.confirm {
+  color: blue;
+  font-size: 14pt;
+}
+
+h2.error {
+  color: red;
+  font-size: 14pt;
+}
+
+.error{ background:#FF8080;}
+/* media stuff */
+
+@media screen {
+  .noscreen {   /* items with this class won't display */
+    display: none;
+  }
+}
+
+@media print {
+  .noprint {   /* items with this class won't print */
+    display: none;
+  }
+}
+
+#hidden {
+    display: none;
+}

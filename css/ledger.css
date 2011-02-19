@@ -1,0 +1,392 @@
+/* stylesheet for ledger, colours based on ProForm by Gyuris Gellért */
+
+/* general stuff */
+A:link {
+	color: rgb(139, 69, 19);
+	text-decoration: none;
+}
+A:visited {
+	color: rgb(139, 69, 19);
+	text-decoration: none;
+}
+A:active, A:hover {
+	color: rgb(255, 165, 0);
+}
+A:active { color: blue; text-decoration: underline; }
+
+body {
+  background-color: rgb(247, 247, 246);
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 7.5pt;
+  color: black;
+}
+
+table{
+ border-collapse:collapse;
+}
+table.nowrap {
+ white-space: nowrap;
+}
+td,th {
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 7.5pt;
+}
+
+fieldset.login {
+	margin-left: 35%;
+	margin-right: 35%;
+	margin-top: 15%;
+	width: 30%;
+}
+
+input, textarea, select {
+	font: Arial, Helvetica, sans-serif;
+	border: 1px solid #999999;
+	background-color: #CCCCCC;
+	margin-top: 1px;
+	color: black;
+	padding: 0 2px;
+	font-size: 7.5pt;
+}
+input:focus, textarea:focus, select:focus {
+	background-color: #CCCCCC;
+	border: 1px solid rgb(0, 80, 154);
+	color: black;
+}	
+input:hover, textarea:hover, select:hover {
+	background-color: #CCCCCC;
+	border: 1px solid rgb(0, 80, 154);
+	color: black;
+}
+input.required, textarea.required, select.required {
+	font: Arial, Helvetica, sans-serif;
+	border: 1px solid rgb(56, 189, 250);
+	background-color: rgb(139, 215, 250);
+	margin-top: 1px;
+	color: black;
+	padding: 0 2px;
+}
+input.required:focus, textarea.required:focus, select.required {
+	background-color: rgb(139, 215, 250);
+	border: 1px solid rgb(0, 80, 154);
+	color: black;
+}	
+input.required:hover, textarea.required:hover, select.required {
+	background-color: rgb(139, 215, 250);
+	border: 1px solid rgb(0, 80, 154);
+	color: black;
+}
+input.validation-failed, textarea.validation-failed, select.validation-failed {
+	background-color: rgb(139, 215, 250);
+	border: 1px solid rgb(0, 80, 154);
+	color: black;
+}
+input.validation-passed, textarea.validation-passed, select.validation-passed {
+	border: 1px solid #999999;
+	background-color: #CCCCCC;
+	color: black;
+}
+select.shrink {
+ width:250px;
+}	
+.checkbox, .radio{
+background-color: transparent;
+border: none;
+}
+
+div.submit {
+	border-top: 2px solid rgb(212, 208, 200);
+	background: rgb(247, 247, 246);
+	padding: 10px 10px 20px 10px;
+	margin: 9px 0;
+	position: relative;
+	clear: both;
+}
+div.submit input{
+	color: rgb(0, 80, 154);
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 7.5pt;
+	cursor: pointer;
+}
+
+.validation-advice {
+	margin: 5px 0;
+	padding: 5px;
+/*	background-color: rgb(139, 215, 250);*/
+        background-color: red;
+	color : white;
+	font-weight: bold;
+}
+
+.menuOut {
+  cursor: pointer;
+  background-color: rgb(247, 247, 246);
+  font-size: 10px;
+  color: #000084;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 17px;
+  background-image: url(../icons/folder.gif);
+  background-repeat: no-repeat;
+}
+
+.menuOut2 {
+  cursor: pointer;
+  background-color: rgb(247, 247, 246);
+  font-size: 10px;
+  color: #000084;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 17px;
+  background-image: url(../icons/folder_go.gif);
+  background-repeat: no-repeat;
+}
+.menuOut3 {
+  cursor: pointer;
+  background-color: rgb(247, 247, 246);
+  font-size: 10px;
+  color: #000084;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 15px;
+  background-image: url(../icons/bullet_green.gif);
+  background-repeat: no-repeat;
+}
+.menuOver {
+  cursor: pointer;
+  background-color: #5a7d9b;
+  font-size: 10px;
+  color: #ffffff;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 17px;
+  background-image: url(../icons/folder.gif);
+  background-repeat: no-repeat;
+}
+
+.menuOver2 {
+  cursor: pointer;
+  background-color: #5a7d9b;
+  font-size: 10px;
+  color: #ffffff;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 17px;
+  background-image: url(../icons/folder_go.gif);
+  background-repeat: no-repeat;
+}
+.menuOver3 {
+  cursor: pointer;
+  background-color: #5a7d9b;
+  font-size: 10px;
+  color: #ffffff;
+  border: 1px solid rgb(247, 247, 246);
+  padding: 2px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 15px;
+  background-image: url(../icons/bullet_green.gif);
+  background-repeat: no-repeat;
+}
+.submenu {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  padding-left: 5px;
+ }
+.submenu a {
+  padding-left: 15px;
+  background-image: url(../icons/bullet_green.gif);
+  background-repeat: no-repeat;
+}	
+
+.menuOut a {
+  cursor: pointer;
+  margin: 0px;
+  background-color: rgb(247, 247, 246);
+  font-size: 10px;
+  color: #000084;
+  border: 0px solid #000000;
+  padding: 0px;
+  text-align: left;
+  font-weight: bold;
+}
+.menuOut3 a {
+  cursor: pointer;
+  margin: 0px;
+  background-color: rgb(247, 247, 246);
+  font-size: 10px;
+  color: #000084;
+  border: 0px solid #000000;
+  padding: 0px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.menuOver3 a {
+  cursor: pointer;
+  margin: 0px;
+  background-color: #5a7d9b;
+  font-size: 10px;
+  color: #ffffff;
+  border: 0px solid #000000;
+  padding: 0px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.menuOver a {
+  cursor: pointer;
+  margin: 0px;
+  background-color: #5a7d9b;
+  font-size: 10px;
+  color: #ffffff;
+  border: 0px solid #000000;
+  padding: 0px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.submenu a {
+  color: rgb(139, 69, 19);
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  color: rgb(255, 165, 0);
+  text-decoration: none;
+}
+
+  /* login and admin */
+.login {
+  font-family: Verdana, Arial, Helvetica;
+  background-color: white;
+}
+
+
+table.login {
+  background-color: #FBFFE7;
+  padding: 20px;
+}
+td.login {
+  text-align: center;
+}
+th.login {
+  text-align: right;
+}
+
+body.admin {
+  background-color: #FBFFE7;
+  color: black;
+}
+
+body.menu {
+  background-color: rgb(247, 247, 246);
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 7.5pt;
+  color: black;
+}
+
+
+.listheading, .listtop {
+	/*font: bold 11px Verdana, Geneva, Arial, Helvetica, sans-serif;*/
+	color: white;
+	padding: 0 0.5em;
+	vertical-align: top;
+	background-color: rgb(79, 76, 76);
+}
+.menuopen { background-color: blue; color: white; }
+
+label.info
+{
+	color: #E68800;
+	/*font-size: smaller;*/
+  	font-weight: bold;
+	/*vertical-align: super;*/
+	text-decoration: none;
+}
+
+label.info.super
+{
+	vertical-align: super;
+}
+A.listheading:link, A.listheading:active, A.listheading:visited {
+  color: white;
+  text-decoration: none;  font-size: 7.5pt;
+}
+A.listheading:link:hover {
+  color: rgb(255, 165, 0);
+  text-decoration: none;  font-size: 7.5pt;
+}
+.listrow1 td {
+background-color: rgb(240,242,240);
+color: black;
+vertical-align: top;
+font-size: 7.5pt;
+border: 1px solid rgb(230,230,230);
+}
+.listrow0 td{
+border: 1px solid rgb(230,230,230);	
+ }
+.listsubtotal { background-color: rgb(219,224,225); color: black;  font-size: 7.5pt;
+}
+.listtotal { background-color: black; color: white;  font-size: 7.5pt;
+}
+
+.submit {
+  font-size: 8pt
+  font-family: Verdana, Arial, Helvetica;
+  color: #000080;
+}
+
+.plus0 {    /* font color for negative numbers */
+  color: red;
+}
+
+.plus1 {
+  color: green;
+}
+
+h2.confirm {
+  color: blue;
+  font-size: 14pt;
+}
+
+h2.error {
+  color: red;
+  font-size: 14pt;
+}
+
+.error{ background:#FF8080;}
+/* media stuff */
+
+
+@media screen {
+  .noscreen {   /* items with this class won't display */
+    display: none;
+  }
+}
+
+@media print {
+  .noprint {   /* items with this class won't print */
+    display: none;
+  }
+}
+
+.pb {
+	page-break-after : always ;
+}
+ 
+#hidden {
+    display: none;
+}

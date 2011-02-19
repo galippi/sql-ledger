@@ -1,0 +1,26 @@
+$self{texts} = {
+  'Account is missing!' => 'Számla hiányzik!',
+  'Continue' => 'Folytatás',
+  'COGS' => 'Költségszámla',
+  'Go' => 'Mehet',
+  'Income'  => 'Árbevételszámla',
+  'Inventory' => 'Készletszámla',
+  'Processing' => 'Forrás feldolgozása:',
+  'Tax'       => 'Adó:',
+  'Taxable'           => 'Adó:',
+  'Tax Included'      => 'Bruttó adótartalom',
+  'customer' => 'vevõk',
+  'vendor' => 'szállítók',
+  'parts' => 'cikkek',
+  'records uploaded.' => 'tétel feltöltve.'
+};
+
+$self{subs} = {
+  'continue' => 'continue',
+  'ld' => 'ld',
+  'go' => 'go',
+  'folytatás' => 'continue',
+  'mehet' => 'go'
+};
+
+1;

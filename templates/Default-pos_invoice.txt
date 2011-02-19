@@ -2,7 +2,8 @@
 <%address align=center width=40%>
 
  Till: <%till align=left width=3%>        Phone#: <%tel%>
-Clerk: <%employee%>
+Clerk: <%username%>
+Sales: <%employee%>
 
 <%invtime%><%invnumber align=right width=16%>
 
@@ -15,7 +16,7 @@ Clerk: <%employee%>
 Number of items: <%rowcount%>
 <%if taxincluded%>
                          ---------------
-                        Total: <%invtotal align=right width=9%>
+                   Amount Due: <%invtotal align=right width=9%>
 <%end taxincluded%>
 <%if not taxincluded%>
                             ------------
@@ -24,7 +25,7 @@ Number of items: <%rowcount%>
 <%foreach tax%>
 <%taxdescription align=right width=23%> @ <%taxrate align=right width=2%>%: <%tax align=right width=9%>
 <%end tax%>
-                        Total: <%invtotal align=right width=9%>
+                   Amount Due: <%invtotal align=right width=9%>
 <%foreach payment%>
 <%paymentaccount align=right width=29%>: <%payment align=right width=9%> <%currency%>
 <%end payment%>
@@ -44,5 +45,7 @@ Number of items: <%rowcount%>
 <%if taxincluded%>
 Taxes are included in price.
 <%end taxincluded%>
+
+
 
 

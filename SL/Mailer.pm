@@ -1,12 +1,12 @@
 #=====================================================================
 # SQL-Ledger Accounting
-# Copyright (C) 2001
+# Copyright (C) 2002
 #
 #  Author: Dieter Simader
 #   Email: dsimader@sql-ledger.org
 #     Web: http://www.sql-ledger.org
 #
-# Contributors: 
+# Modified by Tavugyvitel Kft. (info@tavugyvitel.hu)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#======================================================================
+#
+# mailer package
+#
 #======================================================================
 
 package Mailer;
@@ -40,9 +44,25 @@ sub send {
   my $domain = $self->{from};
   $domain =~ s/(.*?\@|>)//g;
   my $msgid = "$boundary\@$domain";
-  
+
   $self->{charset} = "ISO-8859-1" unless $self->{charset};
-  
+#kabai windows xp/2000/2003 only, with blat installed
+  if ($self->{windows}){
+	foreach my $attachment (@{ $self->{attachments} }) {
+			$astr.= $self->{tmpdir}."\\".$attachment.",";
+	}
+
+  my $cc = qq|-cc "$self->{cc}"| if $self->{cc};
+  my $bcc = qq|-bcc "$self->{bcc}"| if $self->{bcc};
+  my $attach = $self->{format} eq 'html' && $self->{sendmode} eq 'inline'? qq|-attachi "$astr"| : qq|-attach "$astr"|;
+  my $blatcommand = qq |blat -f "$self->{from}" -to "$self->{to}" $cc $bcc -subject "$self->{subject}" -body "$self->{message}" -server "$self->{smtpserver}" $attach -q|;
+
+  system($blatcommand);
+  return "blat:$!" if ($?); 
+  return "";
+  }
+#kabai
+
   if ($out) {
     open(OUT, $out) or return "$out : $!";
   } else {
@@ -54,12 +74,19 @@ sub send {
   my ($cc, $bcc);
   $cc = "Cc: $self->{cc}\n" if $self->{cc};
   $bcc = "Bcc: $self->{bcc}\n" if $self->{bcc};
-  
+
+  foreach my $item (qw(to cc bcc)) {
+    $self->{$item} =~ s/\&lt;/</g;
+    $self->{$item} =~ s/\$<\$/</g;
+    $self->{$item} =~ s/\&gt;/>/g;
+    $self->{$item} =~ s/\$>\$/>/g;
+  }
+
   print OUT qq|From: $self->{from}
 To: $self->{to}
 ${cc}${bcc}Subject: $self->{subject}
 Message-ID: <$msgid>
-X-Mailer: SQL-Ledger $self->{version}
+X-Mailer: Ledger $self->{version}
 MIME-Version: 1.0
 |;
 
@@ -67,12 +94,15 @@ MIME-Version: 1.0
   if ($self->{attachments}) {
     print OUT qq|Content-Type: multipart/mixed; boundary="$boundary"
 
---${boundary}
+|;
+    if ($self->{message}) {
+      print OUT qq|--${boundary}
 Content-Type: $self->{contenttype}; charset="$self->{charset}"
 
 $self->{message}
 
 |;
+    }
 
     foreach my $attachment (@{ $self->{attachments} }) {
       

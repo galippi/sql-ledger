@@ -1,0 +1,218 @@
+\documentclass[10pt,A4paper,oneside,onecolumn]{scrartcl}
+\usepackage[frame]{xy}
+\usepackage{tabularx}
+\usepackage[latin2]{inputenc}
+\usepackage[dvipdfm]{graphicx}
+\usepackage{fancyhdr,lastpage}
+\setlength{\voffset}{-1.3cm}
+\setlength{\hoffset}{-1.9cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0.5cm}
+\setlength{\headsep}{1cm}
+\setlength{\topskip}{0pt}
+\setlength{\oddsidemargin}{0.1cm}
+\setlength{\evensidemargin}{1.0cm}
+\setlength{\textwidth}{19.2cm}
+\setlength{\textheight}{24.7cm}
+\setlength{\footskip}{1cm}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1}
+
+\begin{document}
+
+\pagestyle{myheadings}
+\pagestyle{empty}
+
+\fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
+\newsavebox{\ftr}
+<%foreach copy%>
+\sbox{\ftr}{
+  \parbox{\textwidth}{
+  \tiny
+%  \rule[1.5em]{\textwidth}{0.5pt}
+
+  }
+}
+
+\vspace*{-1.3cm}
+
+\parbox{\textwidth}{%
+  \parbox[b]{.42\textwidth}{
+    \textbf{Eladó / Vendor}\\
+    <%company%> \\
+    <%address%>
+  }
+  \parbox[b]{.2\textwidth}{
+    \includegraphics{logo.jpg}
+  }\hfill
+  \begin{tabular}[b]{rr@{}}
+  Telefon & <%tel%>\\
+  Fax & <%fax%>
+  \end{tabular}
+
+  \rule[1.5em]{\textwidth}{0.5pt}
+}
+
+
+<%pagebreak 31 18 47%>
+\end{tabularx}
+
+  \rule{\textwidth}{2pt}
+  
+  \hfill
+  \begin{tabularx}{7cm}{Xr@{}}
+  \textbf{Részösszeg / Subtotal} & \textbf{<%sumcarriedforward%>} \\
+  \end{tabularx}
+
+\newpage
+
+\markright{}{<%company%> <%invnumber%> számla / inv. number \hfill <%page%>. oldal / page}
+
+
+
+\begin{tabularx}{\textwidth}{@{}lXrllrrr@{}}
+    \textbf{Szám} & \textbf{Megnevezés} & \textbf{Menny.} & \textbf{egys.} &
+    \textbf{SZJ/VTSZ} & \textbf{Eng. \%} & \textbf{Nettó ár} & \textbf{Nettó összeg} \\
+    \textbf{Number} & \textbf{Description} & \textbf{Qt'y} & \textbf{unit} &
+    \textbf{} & \textbf{Disc. \%} & \textbf{Price} & \textbf{Amount} \\ [0.5em]
+  & áthozat a <%lastpage%>. oldalról / from <%lastpage%>. page & & & & & & <%sumcarriedforward%> \\ [0.5em]
+<%end pagebreak 31 18 47%>
+
+
+\vspace*{0.5cm}
+
+\parbox[t]{1cm}{\hfill}
+\parbox[t]{.6\textwidth}{
+\textbf{Vevõ / Customer}\\
+<%name%>\\
+<%zipcode%> <%city%>\\
+<%address1%>\\
+<%if address2%>
+<%address2%>\\
+<%end if address2%>
+<%if country%>
+<%country%>\\
+<%end if country%>
+<%if ctaxnumber%>
+Adószám / Taxnumber: <%ctaxnumber%>
+<%end if ctaxnumber%>
+}
+\parbox[t]{.4\textwidth}{
+<%if shiptoname%>
+<%shiptoname%>\\
+<%end if shiptoname%>
+<%if shiptocontact%>
+<%shiptocontact%>\\
+<%end if shiptocontact%>
+<%if shiptocity%>
+<%shiptocity%>\\
+<%end if shiptocity%>
+<%if shiptoaddress1%>
+<%shiptoaddress1%>\\
+<%end if shiptoaddress1%>
+<%if shiptoaddress2%>
+<%shiptoaddress2%>\\
+<%end if shiptoaddress2%>
+<%if shiptocountry%>
+<%shiptocountry%>
+<%end if shiptocountry%>
+<%if shiptozipcode%>
+<%shiptozipcode%>
+<%end if shiptozipcode%>
+}
+\hfill
+
+\vspace{1cm}
+
+<%if szeta%>
+     {\large\bfseries SZÁMLÁVAL EGY TEKINTET ALÁ ESÕ OKIRAT / INVOICE-LIKE DOCUMENT} 
+<%end if szeta%>
+<%unless szeta%>
+     {\large\bfseries SZÁMLA / INVOICE} 
+<%end unless szeta%>
+<%if print_preview%>
+   {\large\bfseries Elõzetes kép / Preview}
+<%end if print_preview%>
+\hfill
+
+<%unless printed%>
+   \mbox{}\hfill A számla <%copies%> példányban készült\\
+   \mbox{}\hfill <%copy[copy]%>. <%orig_text%> példány / original
+<%end unless printed%>
+<%if printed%>
+   \mbox{}\hfill Az eredetivel megegyezõ példány / copy
+<%end if printed%>
+
+\vspace{1cm}
+
+\begin{tabularx}{\textwidth}{*{7}{|X}|} \hline
+  \textbf{Számlaszám} & \textbf{Teljesítés} & \textbf{Számla kelte} & \textbf{Esedékesség} & \textbf{Rendelésszám}
+  & \textbf{Telj. helye} &  \textbf{Fizetés módja} \\
+  \textbf{Invoice \#} & \textbf{Fulfilment} & \textbf{Date} & \textbf{Due date} & \textbf{Order \#}
+  & \textbf{Shipping point} &  \textbf{Payment} \\ [0.5em] 
+  \hline
+  <%invnumber%> & <%invdate%> & <%crdate%> & <%duedate%> & <%ordnumber%>
+  & <%shippingpoint%> & <%shipvia%> \\
+  \hline
+\end{tabularx}
+
+\vspace{1cm}
+
+\begin{tabularx}{\textwidth}{@{}lXrllrrr@{}}
+   \textbf{Szám} & \textbf{Megnevezés} & \textbf{Menny.} & \textbf{egys.} &
+    \textbf{SZJ/VTSZ} & \textbf{Eng. \%} & \textbf{Nettó ár} & \textbf{Nettó összeg} \\
+    \textbf{Number} & \textbf{Description} & \textbf{Qt'y} & \textbf{unit} &
+    \textbf{} & \textbf{Disc. \%} & \textbf{Price} & \textbf{Amount} \\ [0.5em]
+<%foreach number%>
+ <%number[number]%> & <%description%> & <%qty%> & <%unit%>
+  & <%bin%> & <%discountrate%> & <%netprice_hu%> & <%nettotal_hu%> \\
+<%end foreach number%>
+\end{tabularx}
+
+
+\parbox{\textwidth}{
+\rule{\textwidth}{2pt}
+
+\vspace{0.2cm}
+
+\hfill
+\begin{tabularx}{9cm}{Xr@{}}
+  Nettó összesen / Subtotal & <%subtotal%> \\
+<%foreach tax%>
+\textbf{Alap/Taxbase:} <%taxbase%> {\scriptsize\textbf{ÁFA/Tax:}} <%taxrate%>\% & <%tax[tax]%> \cr
+<%end foreach tax%>
+  \textbf{Számla végösszege / Total} & \textbf{<%invtotal_hu%>}
+\end{tabularx}
+
+\vspace{0.3cm}
+
+azaz <%text_amount%> <%currency%>.
+\hfill
+Az árak \textbf{<%currency%>}-ban értendõek / All prices in \textbf{<%currency%>}.
+
+\vspace{12pt}
+
+<%if notes%>
+  <%notes%>
+<%end if notes%>
+
+}
+
+\vfill
+\vspace{0.1cm}
+
+<%if footer%>
+{\scriptsize <%footer%>}\\
+<%end if footer%>
+{\scriptsize \texttt{Ledger, szabad integrált ügyviteli rendszer --
+    http://www.tavugyvitel.hu/}}\\
+{\scriptsize
+<%b%>
+}
+
+\newpage
+
+<%end foreach copy%>
+
+\end{document}
+

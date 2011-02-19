@@ -1,15 +1,43 @@
 <ul>
+<p><li><h4>characterset problems</h4>
+If you have problems displaying the correct characterset try adding
+<br>AddDefaultCharset On
+<br>in your httpd.conf file.
+
 <p><li><h4>About installation</h4>
 The easiest is to use the setup.pl script as root.
 You don't need to know very much about your system, just login as root,
 run 'perl setup.pl' and follow the prompts.
 <p>setup.pl does not check for missing software packages and it is your
-responsibility to make sure you have the required software
+responsibilite to make sure you have the required software
 installed either from source or from a package supplied with your distro.
 
 <p>Requirements are clearly indicated in the README file and on the
 download page.
 
+
+<p><li><h4>index named "projectnumber_key" already exists</h4>
+
+Not sure where this came from but to fix this drop the index.
+<br>psql -U dba -c "drop index projectnumber_key;" dbname
+<br>load admin.pl click on "Unlock System" and login again
+
+
+<p><li><h4>cannot create function error</h4>
+You tried your luck with the development version and received a
+"cannot create function" error when you logged in.
+So now what?
+<p>
+<ol>
+<li>either run createlang and install the plpgsql language handler or
+set it up yourself. For more information how to do that, visit
+<a href=http://www.postgresql.org/docs/>PostgreSQL</a> and
+read the interactive documentation for procedural languages.
+
+<li>load admin.pl
+<li>unlock the system
+<li>login
+</ol>
 
 <p><li><h4>Dataset newer than version</h4>
 You are trying to use an older version with a dataset which was
@@ -20,19 +48,25 @@ created with a newer version.
 Check if you have latex and pdflatex installed.
 
 
-<p><li><h4>Sub-menus and Apache 2.0</h4>
-Some versions of Apache 2.0 (2.0.44+) don't expand sub-menus and generate
-a 500 error at various points. This is from workaround developed for
-earlier versions of Apache 2.0. It looks like this workaround must now be
-disabled. If you get an error or the sub-menus don't expand edit
-SL/Form.pm and comment lines 80-82.
+<p><li><h4>Apache 2.0 "error 500"</h4>
+Some of the early versions of Apache 2.0 (< patchlevel 44) had a rewrite engine
+which decoded escaped strings. This created a lot of problems and I worked
+around it by escaping strings twice. As far as I know all versions with
+a patchlevel lower than 44 behaved this way and newer versions work properly
+again. If you get server 500 errors, such as 'filename too long' or the menus
+don't expand you may have to adjusted the following code in
+SL/Form.pm and change the number (44) on line 84.
 <pre>
   # for Apache 2 we escape strings twice
-#  if (($ENV{SERVER_SIGNATURE} =~ /Apache\/2/) && !$beenthere) {
-#    $str = $self->escape($str, 1);
-#  }
+  if (($ENV{SERVER_SIGNATURE} =~ /Apache\/2\.(\d+)\.(\d+)/) && !$beenthere) {
+    $str = $self->escape($str, 1) if $2 < 44;
+  }
 </pre>
+<p><b>NOTE:</b> the above applies only to the stable 2.2 version.
 
+<p>SL 2.3.2 does not have the same patchlevel check and you either change
+Form.pm to match the above code or disable
+the workaround depending on the patchlevel of Apache 2.0
 
 <p><li><h4>IDENT Authentication failed for user "postgres"</h4>
 
@@ -89,12 +123,12 @@ Edit sql-ledger.conf and set $latex = 1;
 <br>sql-ledger.conf is perl code, check if it compiles, if it does not,
 the internal defaults are used which set $latex to 0, hence no PDF option.
 
-<p><li><h4>SQL-Ledger on Mac Os X 10.1.5</h4>
-Jaume Teixi put together
-<a href=http://www.rocacorbit.com/techdocs/sql_ledger_os_x.html>
+<p><li><h4>SQL-Ledger installation Mac Os X 10.3 (Panther)</h4>
+Paul J. Teeter put together
+<a href="http://paulteeter.net/writing/technical/howto-sql-ledger-osx.htm">
 installation instructions</a> to run SL on a Mac.
-<br>The instructions are for 1.8.5 however they still apply to any of the
-newer versions.
+<br>The instructions are for SL 2.2 but the will work for any of the later
+releases too.
 
 <p><li><h4>Installation on Windows (WIN32)</h4>
 <ul>
@@ -319,7 +353,7 @@ not packaged follow this recipe to get it working.
    
 <p>> createuser &lt;db-user&gt; (&lt;db-user&gt; should match an existing Linux user)
 <br>Shall the new user be allowed to create databases? (y/n) y
-<br>Shall the new user be allowed to create more new users? (y/n) n
+<br>Shall the new user be allowed to create more new users? (y/n) y
 
 <p>Unless a problem with DBD::Pg (perl interface), postgres is ready to go.
 

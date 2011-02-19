@@ -1,0 +1,120 @@
+\documentclass[twoside]{article}
+\usepackage[frame]{xy}
+\usepackage{tabularx}
+\usepackage[latin2]{inputenc}
+\setlength{\voffset}{0.5cm}
+\setlength{\hoffset}{-2.0cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0.5cm}
+\setlength{\headsep}{1cm}
+\setlength{\topskip}{0pt}
+\setlength{\oddsidemargin}{1.0cm}
+\setlength{\evensidemargin}{1.0cm}
+\setlength{\textwidth}{19.2cm}
+\setlength{\textheight}{24.5cm}
+\setlength{\footskip}{1cm}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1}
+\begin{document}
+
+\newlength{\descrwidth}\setlength{\descrwidth}{10cm}
+
+\newsavebox{\hdr}
+\sbox{\hdr}{
+  \fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
+
+  \parbox{\textwidth}{
+    \parbox[b]{12cm}{
+      <%company%>
+      
+      <%address%>}\hfill
+    \begin{tabular}[b]{rr@{}}
+    Telefon & <%tel%>\\
+    Fax & <%fax%>
+    \end{tabular}
+
+    \rule[1.5ex]{\textwidth}{0.5pt}
+  }
+}
+    
+\fontfamily{cmss}\fontshape{n}\selectfont
+
+\markboth{<%company%>\hfill <%invnumber%>}{\usebox{\hdr}}
+
+\pagestyle{myheadings}
+%\thispagestyle{empty}     use this with letterhead paper
+
+<%pagebreak 50 20 50%>
+\end{tabular*}
+
+\newpage
+
+\markright{<%company%>\hfill <%invnumber%>}
+
+\vspace*{-12pt}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rll@{}}
+  \textbf{Szám} & \textbf{Szöveges leírás} & \textbf{Menny.} &
+    \textbf{egys.} \\
+<%end pagebreak%>
+
+
+\fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
+
+\vspace*{2cm}
+
+
+\vspace{3.5cm}
+
+\textbf{T R A N SZ F E R  \parbox{0.3cm}{\hfill}  S Z Á L L I T Ó L E V É L}
+
+\vspace{3.5cm}
+
+\hbox to\hsize{
+\begin{minipage}[t]{9.4cm}
+\sloppy
+\begin{quote}
+Raktár (honnan) : <%warehousefrom%>\\
+Raktár (hová)   : <%warehouse%>\\
+
+\end{quote}
+\end{minipage}
+
+
+\hfill \
+
+\begin{minipage}[t]{9.4cm}
+\begin{quote}
+Száll.lev. dátum:  <%transdate%> \\
+Szállítási dátum:  <%shippingdate%> \\
+Szállítólevél szám:  \textbf{<%szlnumber%>}
+\end{quote}
+\end{minipage}
+
+}
+
+
+\vspace{1cm}
+\begin{tabular*}{\textwidth}{@{}lp{\descrwidth}@{\extracolsep\fill}rrl@{}}
+  \textbf{Szám} & \textbf{Szöveges leírás} & \textbf{Menny.} & 
+    \textbf{egys.} \\
+<%foreach number%>
+  <%number%> & <%description%> & <%ship%> & 
+  <%unit%> \\
+<%end number%>
+\end{tabular*}
+
+
+\parbox{\textwidth}{
+\rule{\textwidth}{1pt}
+
+\vspace{3.5cm}
+
+<%if intnotes%>
+  <%intnotes%>
+<%end if%>
+
+}
+
+\vfill
+
+\end{document}

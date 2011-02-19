@@ -1,0 +1,279 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                                           %%%
+%%      Szamla - LaTeX sablon v. 1.01        %%%
+%%%  Kovacs Laszlo -- lakovacs@inf.unideb.hu  %%%
+%%%                                           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% 2003.10.31.
+%%% modified by mEGYA,  Kabai, Jozsef 2006
+%%%
+
+
+\documentclass[]{article}
+\usepackage{tabularx}
+\usepackage[dvipdfm]{graphicx}
+\usepackage[latin2]{inputenc}
+\setlength{\voffset}{-0.5cm}
+\setlength{\hoffset}{-2.8cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0.5cm}
+\setlength{\headsep}{1cm}
+\setlength{\topskip}{0pt}
+\setlength{\oddsidemargin}{1.0cm}
+\setlength{\evensidemargin}{1.0cm}
+\setlength{\textwidth}{19.2cm}
+\setlength{\textheight}{25.5cm}
+\setlength{\footskip}{1cm}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1}
+
+
+\newcommand{\PAR}[1]{\texttt{\upshape <\%#1\%>}\typeout{#1}}
+
+
+\begin{document}
+\newlength{\descrwidth}\setlength{\descrwidth}{10cm}
+
+
+\newsavebox{\headright}
+\newsavebox{\headleft}
+<%foreach copy%>
+\sbox{\headright}{
+  \fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
+  \parbox{\textwidth}{
+   \begin{center}
+     \includegraphics{logo.jpg} \\[.3cm]
+<%if szeta%>
+     {\large\bfseries SZÁMLÁVAL EGY TEKINTET ALÁ ESÕ OKIRAT / INVOICE-LIKE DOCUMENT} \\
+<%end if szeta%>
+<%unless szeta%>
+     {\large\bfseries SZÁMLA / INVOICE} \\
+<%end unless szeta%>
+<%if print_preview%>
+   {\large\bfseries Elõzetes kép / preview}
+<%end if print_preview%>
+   \end{center}
+
+<%unless printed%>
+   \mbox{}\hfill A számla <%copies%> példányban készült\\
+   \mbox{}\hfill <%copy[copy]%>. <%orig_text%> példány / original
+<%end unless printed%>
+<%if printed%>
+   \mbox{}\hfill Az eredetivel megegyezõ példány / copy
+<%end if printed%>
+  }
+}
+
+\sbox{\headleft}{
+  \fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
+  \parbox{\textwidth}{
+%     \includegraphics[scale=0.4]{logo.eps} \\[.3cm]
+  \hfill <%invnumber%>\\[-3mm]
+  \rule{\textwidth}{.5pt}
+  }
+}
+
+
+
+\markright{\usebox{\headright}}
+
+\pagestyle{myheadings}
+
+\fontfamily{cmss}\fontsize{10pt}{12pt}\fontshape{n}\selectfont
+
+
+<%pagebreak 70 27 44%>
+\end{tabularx}
+}
+
+\rule{\textwidth}{1.5pt}
+  
+  \hfill
+  \begin{tabularx}{7cm}{X@{ }r@{}}
+  \textbf{Részösszeg / Subtotal} & <%sumcarriedforward%> \cr
+  \end{tabularx}
+
+\newpage
+
+\markright{\usebox{\headleft}}
+
+\mbox{}\vspace{.5cm}
+
+\rule{\textwidth}{1.5pt}
+
+\vspace{.6cm}
+
+{\scriptsize
+\begin{tabularx}{\textwidth}{
+	    >{\hsize=0.4cm\centering}X@{\ }
+            >{\hsize=2.5cm\raggedright}X@{\ }
+            >{\hsize=8.6cm\raggedright}X@{\ }
+            >{\hsize=1.9cm\centering}X@{\ }
+            >{\hsize=0.9cm\centering}X@{\ }
+            >{\hsize=0.5cm\centering}X@{\ }
+            >{\hsize=1.6cm\raggedleft}X@{\ }
+            >{\hsize=2.0cm\raggedleft}X@{\ }
+           }
+  &  \textbf{Szám} & \centering\textbf{Megnevezés} &
+  \textbf{SZJ/VTSZ} & \textbf{Menny.} & \textbf{egys.} & 
+  \textbf{Nettó ár} & \textbf{Nettó összeg} 
+  \cr
+  &  \textbf{Number} & \centering\textbf{Description} &
+  \textbf{} & \textbf{Qt'y} & \textbf{unit} & 
+  \textbf{Price} & \textbf{Amount} 
+  \cr
+
+  & & \textbf{elõzõ oldalról / from previous page} &
+  & & & & 
+  <%sumcarriedforward%>
+  \cr
+<%end pagebreak 70 27 44%>
+
+\mbox{}\vspace{3.5cm}
+
+\rule{\textwidth}{1.5pt}
+
+\vspace{3mm}
+
+\hbox to\hsize{
+\begin{minipage}[t]{9.5cm}
+\textbf{Eladó / Vendor:} \\
+<%company%>\\
+<%address%>\\
+%Adószám: <%businessnumber%>\\
+tel: <%tel%>\\
+fax: <%fax%>
+\end{minipage}
+\hfill \
+\begin{minipage}[t]{9.5cm}
+\textbf{Vevõ / Customer:} \\
+<%name%>\\
+<%address1%>\\
+<%if address2%>
+<%address2%>\\
+<%end if address2%>
+<%city%> <%zipcode%>\\
+<%if country%>
+<%country%>
+<%end if country%>
+<%if ctaxnumber%>
+Adószám / Taxnumber: <%ctaxnumber%>
+<%end if ctaxnumber%>
+\end{minipage}
+}
+
+
+\vspace{5mm}
+
+\rule{\textwidth}{1.5pt}
+
+\vspace{3mm}
+
+\hspace{-3mm}
+\begin{tabularx}{\textwidth}{>{\hsize=2.1cm\centering}X@{\ }
+                             >{\hsize=2.8cm\centering}X@{\ }
+                             >{\hsize=2.8cm\centering}X@{\ }
+                             >{\hsize=2.8cm\centering}X@{\ }
+                             >{\hsize=2.8cm\centering}X@{\ }
+                             >{\hsize=2.5cm\centering}X@{\ }
+                             >{\hsize=2.6cm\raggedleft}X@{}}
+  \textbf{Fizetési mód} & \textbf{Telj.~dátuma} & \textbf{Számla kelte} &
+  \textbf{Esedékesség} & \textbf{Megrendelés} & \textbf{Kiállította} & \textbf{Sorszám} 
+  \cr
+  \textbf{Payment} & \textbf{Fullfilment date} & \textbf{Date} &
+  \textbf{Due date} & \textbf{Order \#} & \textbf{Salesperson} & \textbf{Invoice \#} 
+  \cr
+
+  <%shipvia%> & <%invdate%> & <%crdate%> &
+  <%duedate%> & <%ordnumber%> & <%employee%> & <%invnumber%>
+\end{tabularx}
+
+
+\vspace{5mm}
+
+\rule{\textwidth}{1.5pt}
+
+\vspace{3mm}
+
+\hspace{-3mm}
+{\scriptsize
+\begin{tabularx}{\textwidth}{
+	    >{\hsize=0.4cm\centering}X@{\ }
+            >{\hsize=2.5cm\raggedright}X@{\ }
+            >{\hsize=8.6cm\raggedright}X@{\ }
+            >{\hsize=1.9cm\centering}X@{\ }
+            >{\hsize=0.9cm\centering}X@{\ }
+            >{\hsize=0.5cm\centering}X@{\ }
+            >{\hsize=1.6cm\raggedleft}X@{\ }
+            >{\hsize=2.2cm\raggedleft}X@{\ }
+           }
+  &  \textbf{Szám} & \centering\textbf{Megnevezés} &
+  \textbf{SZJ/VTSZ} & \textbf{Menny.} & \textbf{egys.} & 
+  \textbf{Nettó ár} & \textbf{Nettó összeg} 
+  \cr
+  &  \textbf{Number} & \centering\textbf{Description} &
+  \textbf{} & \textbf{Qt'y} & \textbf{unit} & 
+  \textbf{Price} & \textbf{Amount} 
+  \cr
+
+<%foreach number%>
+  <%runningnumber%> 
+  & <%number[number]%> & <%description%> &
+  <%bin%> & <%qty%> & <%unit%> &
+  <%netprice_hu%> & <%nettotal_hu%> 
+  \cr
+<%end foreach number%>
+\end{tabularx}
+}
+
+\rule{\textwidth}{1.5pt}
+
+\hbox to\hsize{
+\hspace{8.4cm}
+\begin{minipage}[t]{11cm}
+
+\rule{10.6cm}{1.5pt}
+
+\vspace{.2cm}
+
+\begin{tabularx}{10cm}{>{\hsize=7cm\raggedleft}X>{\hsize=3cm\raggedleft}X}
+%\textbf{Total} & <%invtotal%> \cr
+\textbf{Nettó összesen / Subtotal} & <%subtotal%> \cr
+<%foreach tax%>
+\textbf{Alap / Taxbase:} <%taxbase%> {\scriptsize\textbf{ÁFA / Tax:}} <%taxrate%>\% & <%tax[tax]%> \cr
+<%end foreach tax%>
+\end{tabularx}
+
+\rule{10.6cm}{1.5pt}
+\begin{tabularx}{10cm}{>{\hsize=7cm\raggedleft}X>{\hsize=3cm\raggedleft}X}
+\textbf{A számla végösszege / Total} & <%invtotal%> \textbf{<%currency%>}
+\end{tabularx}
+
+\end{minipage}
+}
+
+
+\vfill
+\vspace{.3cm}
+<%if notes%>
+\textbf{Megjegyzés / Notes:} <%notes%>
+\vspace{0.4cm}
+<%end if notes%>
+
+\vspace{0.1cm}
+<%if footer%>
+{\scriptsize <%footer%>}\\
+<%end if footer%>
+{\scriptsize Ledger, szabad integrált ügyviteli rendszer --
+\texttt{http://www.tavugyvitel.hu/}}\\
+{\scriptsize <%b%>
+}
+\newpage
+\pagenumbering{arabic}
+<%end foreach copy%>
+
+\end{document}
+
+
+

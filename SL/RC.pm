@@ -1,3 +1,25 @@
+#=====================================================================
+# SQL-Ledger Accounting
+# Copyright (C) 2002
+#
+#  Author: Dieter Simader
+#   Email: dsimader@sql-ledger.org
+#     Web: http://www.sql-ledger.org
+#
+#  Modified by Tavugyvitel Kft. (info@tavugyvitel.hu)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #======================================================================
 #
 # Account reconciliation routines
@@ -36,8 +58,8 @@ sub payment_transactions {
   # connect to database, turn AutoCommit off
   my $dbh = $form->dbconnect_noauto($myconfig);
 
-  my ($query, $sth);
-  
+  my $query;
+  my $sth;
  
   # get cleared balance
   if ($form->{fromdate}) {
@@ -95,69 +117,63 @@ sub payment_transactions {
 
   $sth->finish;
 
-
-  my %oid = ( 'Pg'	=> 'ac.oid',
-              'PgPP'	=> 'ac.oid',
-              'Oracle'	=> 'ac.rowid',
-	      'DB2'	=> 'ac.trans_id || ac.chart_id || ac.transdate'
-	    );
-  
-  $query = qq|SELECT c.name, ac.source, ac.transdate, ac.cleared,
-	      ac.fx_transaction, ac.amount, a.id,
-	      $oid{$myconfig->{dbdriver}} AS oid
-	      FROM customer c, acc_trans ac, ar a, chart ch
-	      WHERE c.id = a.customer_id
-	      AND ac.cleared = '0'
-	      AND ac.trans_id = a.id
-	      AND ac.chart_id = ch.id
+  $query = qq|SELECT c.name, ac.source, ac.transdate,
+	      ac.fx_transaction, sum(ac.amount) AS amount
+	      FROM acc_trans ac
+	      JOIN ar a ON (ac.trans_id = a.id)
+	      JOIN chart ch ON (ac.chart_id = ch.id)
+	      JOIN customer c ON (c.id = a.customer_id)
+	      WHERE ac.cleared = '0'
 	      AND ch.accno = '$form->{accno}'
 	      |;
 	      
   $query .= " AND ac.transdate >= '$form->{fromdate}'" if $form->{fromdate};
   $query .= " AND ac.transdate <= '$form->{todate}'" if $form->{todate};
-
+  $query .= " GROUP BY c.name, ac.source, ac.transdate,
+              ac.fx_transaction";
 
   $query .= qq|
   
       UNION
-              SELECT v.name, ac.source, ac.transdate, ac.cleared,
-	      ac.fx_transaction, ac.amount, a.id,
-	      $oid{$myconfig->{dbdriver}} AS oid 
-	      FROM vendor v, acc_trans ac, ap a, chart ch
-	      WHERE v.id = a.vendor_id
-	      AND ac.cleared = '0'
-	      AND ac.trans_id = a.id
-	      AND ac.chart_id = ch.id
+              SELECT v.name, ac.source, ac.transdate,
+	      ac.fx_transaction, sum(ac.amount) AS amount
+	      FROM acc_trans ac
+	      JOIN ap a ON (ac.trans_id = a.id)
+	      JOIN chart ch ON (ac.chart_id = ch.id)
+	      JOIN vendor v ON (v.id = a.vendor_id)
+	      WHERE ac.cleared = '0'
 	      AND ch.accno = '$form->{accno}'
-	     |;
+	      |;
 	      
   $query .= " AND ac.transdate >= '$form->{fromdate}'" if $form->{fromdate};
   $query .= " AND ac.transdate <= '$form->{todate}'" if $form->{todate};
+  $query .= " GROUP BY v.name, ac.source, ac.transdate,
+              ac.fx_transaction";
 
   $query .= qq|
   
       UNION
-	      SELECT g.description, ac.source, ac.transdate, ac.cleared,
-	      ac.fx_transaction, ac.amount, g.id,
-	      $oid{$myconfig->{dbdriver}} AS oid 
-	      FROM gl g, acc_trans ac, chart ch
-	      WHERE g.id = ac.trans_id
-	      AND ac.cleared = '0'
-	      AND ac.trans_id = g.id
-	      AND ac.chart_id = ch.id
+	      SELECT g.description, ac.source, ac.transdate,
+	      ac.fx_transaction, sum(ac.amount) AS amount
+	      FROM acc_trans ac
+	      JOIN gl g ON (ac.trans_id = g.id)
+	      JOIN chart ch ON (ac.chart_id = ch.id)
+	      WHERE ac.cleared = '0'
 	      AND ch.accno = '$form->{accno}'
 	      |;
 
   $query .= " AND ac.transdate >= '$form->{fromdate}'" if $form->{fromdate};
   $query .= " AND ac.transdate <= '$form->{todate}'" if $form->{todate};
+  $query .= " GROUP BY g.description, ac.source, ac.transdate,
+              ac.fx_transaction";
 
-  $query .= " ORDER BY 3,7,8";
+  $query .= " ORDER BY 3,1,4";
 
   $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);
 
-  while (my $pr = $sth->fetchrow_hashref(NAME_lc)) {
-    push @{ $form->{PR} }, $pr;
+  while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
+    push @{ $form->{PR} }, $ref;
   }
   $sth->finish;
 
@@ -172,26 +188,36 @@ sub reconcile {
   # connect to database
   my $dbh = $form->dbconnect($myconfig);
 
-  my ($query, $i);
-  my %oid = ( 'Pg'	=> 'oid',
-              'PgPP'	=> 'oid',
-              'Oracle'	=> 'rowid',
-	      'DB2'	=> 'trans_id || chart_id || transdate'
-	    );
+  my $query = qq|SELECT id FROM chart
+                 WHERE accno = '$form->{accno}'|;
+  my ($chart_id) = $dbh->selectrow_array($query);
+  $chart_id *= 1;
+  
+  $query = qq|SELECT trans_id FROM acc_trans
+              WHERE source = ?
+	      AND transdate = ?
+	      AND cleared = '0'|;
+  my $sth = $dbh->prepare($query) || $form->dberror($query);
+    
+  my $i;
+  my $trans_id;
+
+  $query = qq|UPDATE acc_trans SET cleared = '1'
+              WHERE cleared = '0'
+	      AND trans_id = ? 
+	      AND transdate = ?
+	      AND chart_id = $chart_id|;
+  my $tth = $dbh->prepare($query) || $form->dberror($query);
   
   # clear flags
   for $i (1 .. $form->{rowcount}) {
     if ($form->{"cleared_$i"}) {
-      $query = qq|UPDATE acc_trans SET cleared = '1'
-		  WHERE $oid{$myconfig->{dbdriver}} = $form->{"oid_$i"}|;
-      $dbh->do($query) || $form->dberror($query);
-
-      # clear fx_transaction
-      if ($form->{"fxoid_$i"}) {
-	$query = qq|UPDATE acc_trans SET cleared = '1'
-		    WHERE $oid{$myconfig->{dbdriver}} = $form->{"fxoid_$i"}|;
-	$dbh->do($query) || $form->dberror($query);
+      $sth->execute($form->{"source_$i"}, $form->{"transdate_$i"}) || $form->dberror;
+      while (($trans_id) = $sth->fetchrow_array) {
+	$tth->execute($trans_id, $form->{"transdate_$i"}) || $form->dberror;
+	$tth->finish;
       }
+      $sth->finish;
     }
   }
 

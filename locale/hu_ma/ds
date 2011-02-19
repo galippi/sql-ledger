@@ -1,0 +1,38 @@
+$self{texts} = {
+  'SQL Reports'                 => 'SQL Lekérdezések',
+  'Report name'                 => 'Lekérdezés neve',
+  'SQL query'                   => 'Lekérdezés',
+  'Query'                       => 'Lekérdez',
+  'Database can not be modified!' => 'Az adatbázist nem lehet módosítani!',
+  'Edit'                        => 'Szerkeszt',
+  'Back'                        => 'Vissza',
+  'Result type'			=> 'Sablon',
+  'Run'                         => 'Futtat',
+  'New'                         => 'Új',
+  'Save'                        => 'Ment',
+  'Session expired!'		=> 'Munkamenet ideje lejárt!',
+  'Delete'                      => 'Töröl',
+  'ReallyDelete'                => 'Igen, törölni szeretném',
+};
+
+$self{subs} = {
+  'list'                        => 'list',
+  'query'                       => 'list',
+  'lekérdez'                    => 'list',
+  'edit'                        => 'edit',
+  'szerkeszt'                   => 'edit',
+  'vissza'                      => 'list',
+  'back'                        => 'list',
+  'run'                         => 'run',
+  'futtat'                      => 'run',
+  'Új'                          => 'edit',
+  'new'                         => 'edit',
+  'save'                        => 'save',
+  'ment'                        => 'save',
+  'igen__törölni_szeretném'     => 'realdel',
+  'reallydelete'                => 'realdel',
+  'töröl'                       => 'del',
+  'delete'                      => 'del',
+};
+
+1;
