@@ -96,6 +96,7 @@ $self{texts} = {
   'Subject'                     => 'Objet',
   'Subtotal'                    => 'Sous total',
   'To'                          => 'à',
+  'Translation not on file!'    => 'Pas de traduction dans le fichier',
   'Unit'                        => 'Unité',
   'Vendor Number'               => 'Numéro de fournisseur',
   'What type of item is this?'  => 'De quel type est cet objet?',

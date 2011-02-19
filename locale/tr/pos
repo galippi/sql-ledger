@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Hesap',
   'Continue'                    => 'Devam',
   'Credit Limit'                => 'Kredi Limiti',
   'Currency'                    => 'Para Birimi',
@@ -13,6 +14,7 @@ $self{texts} = {
   'Price'                       => 'Fiyat',
   'Qty'                         => 'Adet',
   'Record in'                   => 'Kaydet',
+  'Source'                      => 'Kaynak',
   'Subtotal'                    => 'Aratoplam',
   'To'                          => 'Bitiþ',
   'Total'                       => 'Toplam',

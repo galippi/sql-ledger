@@ -1,13 +1,13 @@
 $self{texts} = {
-  'Accounting Menu'             => '·|­p¿ï³æ',
-  'All'                         => '¥ş³¡',
-  'Continue'                    => 'Ä~Äò',
-  'Delete'                      => '§R°£',
-  'Description'                 => '»¡©ú',
-  'Language'                    => '»y¨t',
-  'Number'                      => '½s¸¹',
-  'Orphaned'                    => 'µL¥D',
-  'Save'                        => 'Àx¦s',
+  'Accounting Menu'             => 'æœƒè¨ˆé¸å–®',
+  'All'                         => 'å…¨éƒ¨',
+  'Continue'                    => 'ç¹¼çºŒ',
+  'Delete'                      => 'åˆªé™¤',
+  'Description'                 => 'èªªæ˜',
+  'Language'                    => 'èªç³»',
+  'Number'                      => 'ç·¨è™Ÿ',
+  'Orphaned'                    => 'ç„¡ä¸»',
+  'Save'                        => 'å„²å­˜',
 };
 
 $self{subs} = {
@@ -42,9 +42,9 @@ $self{subs} = {
   'add_group'                   => 'add_group',
   'add_pricegroup'              => 'add_pricegroup',
   'add_project'                 => 'add_project',
-  'Ä~Äò'                        => 'continue',
-  '§r°£'                        => 'delete',
-  'Àx¦s'                        => 'save',
+  'ç¹¼çºŒ'                      => 'continue',
+  'åˆªé™¤'                      => 'delete',
+  'å„²å­˜'                      => 'save',
   'update'                      => 'update',
 };
 

@@ -40,6 +40,7 @@ $self{texts} = {
   'Payment'                     => 'Betaling',
   'R'                           => 'R',
   'Reconciliation'              => 'Bankoppgjør',
+  'Reconciliation Report'       => 'Bankoppgjørsrapport',
   'Select all'                  => 'Velg alt',
   'Sep'                         => 'sep',
   'September'                   => 'september',

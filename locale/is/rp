@@ -63,6 +63,7 @@ $self{texts} = {
   'Number'                      => 'Númer',
   'Oct'                         => 'ókt',
   'October'                     => 'óktóber',
+  'Order'                       => 'Pöntun',
   'PDF'                         => 'PDF',
   'Payments'                    => 'Greiðslur',
   'Postscript'                  => 'Postscript',
@@ -95,7 +96,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'Byrgir ekki til í gagnagrunni!',
   'as at'                       => 'líkt og með',
   'for Period'                  => 'fyrir tímabilið',
-  'to'                          => 'til',
 };
 
 $self{subs} = {

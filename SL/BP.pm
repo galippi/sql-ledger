@@ -35,49 +35,66 @@ sub get_vc {
   # connect to database
   my $dbh = $form->dbconnect($myconfig);
   
-  my %arap = ( invoice => 'ar',
-               packing_list => 'oe',
-	       sales_order => 'oe',
-	       work_order => 'oe',
-	       pick_list => 'oe',
-	       purchase_order => 'oe',
-	       bin_list => 'oe',
-	       sales_quotation => 'oe',
-	       request_quotation => 'oe',
-	       check => 'ap',
-	       receipt => 'ar'
+  my %arap = ( invoice => ['ar'],
+               packing_list => ['oe', 'ar'],
+	       sales_order => ['oe'],
+	       work_order => ['oe'],
+	       pick_list => ['oe', 'ar'],
+	       purchase_order => ['oe'],
+	       bin_list => ['oe'],
+	       sales_quotation => ['oe'],
+	       request_quotation => ['oe'],
+	       check => ['ap'],
+	       receipt => ['ar']
 	     );
   
-  $query = qq|SELECT count(*)
+  my $query = "";
+  my $sth;
+  my $n;
+  my $count;
+  my $item;
+  
+  foreach $item (@{ $arap{$form->{type}} }) {
+    $query = qq|
+              SELECT count(*)
 	      FROM (SELECT DISTINCT vc.id
-		    FROM $form->{vc} vc, $arap{$form->{type}} a, status s
+		    FROM $form->{vc} vc, $item a, status s
 		    WHERE a.$form->{vc}_id = vc.id
 		    AND s.trans_id = a.id
 		    AND s.formname = '$form->{type}'
 		    AND s.spoolfile IS NOT NULL) AS total|;
+    ($n) = $dbh->selectrow_array($query);
+    $count += $n;
+  }
 
-  my $sth = $dbh->prepare($query);
-  $sth->execute || $form->dberror($query);
-  my ($count) = $sth->fetchrow_array;
-  $sth->finish;
 
   # build selection list
+  my $union = "";
+  $query = "";
   if ($count < $myconfig->{vclimit}) {
-    $query = qq|SELECT DISTINCT vc.id, vc.name
-                FROM $form->{vc} vc, $arap{$form->{type}} a, status s
-		WHERE a.$form->{vc}_id = vc.id
-		AND s.trans_id = a.id
-		AND s.formname = '$form->{type}'
-		AND s.spoolfile IS NOT NULL|;
-  }
-  $sth = $dbh->prepare($query);
-  $sth->execute || $form->dberror($query);
+    foreach $item (@{ $arap{$form->{type}} }) {
+      $query .= qq|
+                  $union
+		  SELECT DISTINCT vc.id, vc.name
+		  FROM $form->{vc} vc, $item a, status s
+		  WHERE a.$form->{vc}_id = vc.id
+		  AND s.trans_id = a.id
+		  AND s.formname = '$form->{type}'
+		  AND s.spoolfile IS NOT NULL|;
+      $union = "UNION";
+    }
+    
+    $sth = $dbh->prepare($query);
+    $sth->execute || $form->dberror($query);
 
-  while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
-    push @{ $form->{"all_$form->{vc}"} }, $ref;
+    while (my $ref = $sth->fetchrow_hashref(NAME_lc)) {
+      push @{ $form->{"all_$form->{vc}"} }, $ref;
+    }
+    $sth->finish;
   }
-  
-  $sth->finish;
+
+  $form->all_years($dbh, $myconfig);
+
   $dbh->disconnect;
  
 }
@@ -114,31 +131,31 @@ sub get_spoolfiles {
   my $dbh = $form->dbconnect($myconfig);
 
   my $query;
-  my $var;
+  my $invnumber = "invnumber";
+  my $item;
   
-  my %arap = ( invoice => 'ar',
-               packing_list => 'oe',
-	       sales_order => 'oe',
-	       work_order => 'oe',
-	       pick_list => 'oe',
-	       purchase_order => 'oe',
-	       bin_list => 'oe',
-	       sales_quotation => 'oe',
-	       request_quotation => 'oe',
-	       check => 'ap',
-	       receipt => 'ar'
+  my %arap = ( invoice => ['ar'],
+               packing_list => ['oe', 'ar'],
+	       sales_order => ['oe'],
+	       work_order => ['oe'],
+	       pick_list => ['oe', 'ar'],
+	       purchase_order => ['oe'],
+	       bin_list => ['oe'],
+	       sales_quotation => ['oe'],
+	       request_quotation => ['oe'],
+	       check => ['ap'],
+	       receipt => ['ar']
 	     );
   
-  my $invnumber = "invnumber";
 
   if ($form->{type} eq 'check' || $form->{type} eq 'receipt') {
     
     my ($accno) = split /--/, $form->{account};
     
     $query = qq|SELECT a.id, vc.name, a.invnumber, ac.transdate, s.spoolfile,
-                a.invoice, '$arap{$form->{type}}' AS module
+                a.invoice, '$arap{$form->{type}}[0]' AS module
                 FROM status s, chart c, $form->{vc} vc,
-		$arap{$form->{type}} a, acc_trans ac
+		$arap{$form->{type}}[0] a, acc_trans ac
 		WHERE s.formname = '$form->{type}'
 		AND s.chart_id = c.id
 		AND c.accno = '$accno'
@@ -147,25 +164,84 @@ sub get_spoolfiles {
 		AND ac.trans_id = s.trans_id
 		AND ac.chart_id = c.id
 		AND NOT ac.fx_transaction|;
+
+      if ($form->{"$form->{vc}_id"}) {
+	$query .= qq| AND a.$form->{vc}_id = $form->{"$form->{vc}_id"}|;
+      } else {
+	if ($form->{$form->{vc}}) {
+	  $item = $form->like(lc $form->{$form->{vc}});
+	  $query .= " AND lower(vc.name) LIKE '$item'";
+	}
+      }
+      if ($form->{invnumber}) {
+	$item = $form->like(lc $form->{invnumber});
+	$query .= " AND lower(a.invnumber) LIKE '$item'";
+      }
+      if ($form->{ordnumber}) {
+	$item = $form->like(lc $form->{ordnumber});
+	$query .= " AND lower(a.ordnumber) LIKE '$item'";
+      }
+      if ($form->{quonumber}) {
+	$item = $form->like(lc $form->{quonumber});
+	$query .= " AND lower(a.quonumber) LIKE '$item'";
+      }
+
+      $query .= " AND a.transdate >= '$form->{transdatefrom}'" if $form->{transdatefrom};
+      $query .= " AND a.transdate <= '$form->{transdateto}'" if $form->{transdateto};
+
+
   } else {
- 
-    $invoice = "a.invoice";
     
-    if ($form->{type} !~ /invoice/) {
-      $invnumber = "ordnumber";
-      $invoice = '0';
-    }
+    foreach $item (@{ $arap{$form->{type}} }) {
       
-    $query = qq|SELECT a.id, vc.name, a.$invnumber AS invnumber, a.transdate,
+      $invoice = "a.invoice";
+      $invnumber = "invnumber";
+      
+      if ($item eq 'oe') {
+	$invnumber = "ordnumber";
+	$invoice = "'0'"; 
+      }
+      
+      $query .= qq|
+                $union
+		SELECT a.id, vc.name, a.$invnumber AS invnumber, a.transdate,
                 a.ordnumber, a.quonumber, $invoice AS invoice,
-		'$arap{$form->{type}}' AS module, s.spoolfile
-		FROM $arap{$form->{type}} a, $form->{vc} vc, status s
+		'$item' AS module, s.spoolfile
+		FROM $item a, $form->{vc} vc, status s
 		WHERE s.trans_id = a.id
 		AND s.spoolfile IS NOT NULL
 		AND s.formname = '$form->{type}'
 		AND a.$form->{vc}_id = vc.id|;
+
+      if ($form->{"$form->{vc}_id"}) {
+	$query .= qq| AND a.$form->{vc}_id = $form->{"$form->{vc}_id"}|;
+      } else {
+	if ($form->{$form->{vc}}) {
+	  $item = $form->like(lc $form->{$form->{vc}});
+	  $query .= " AND lower(vc.name) LIKE '$item'";
+	}
+      }
+      if ($form->{invnumber}) {
+	$item = $form->like(lc $form->{invnumber});
+	$query .= " AND lower(a.invnumber) LIKE '$item'";
+      }
+      if ($form->{ordnumber}) {
+	$item = $form->like(lc $form->{ordnumber});
+	$query .= " AND lower(a.ordnumber) LIKE '$item'";
+      }
+      if ($form->{quonumber}) {
+	$item = $form->like(lc $form->{quonumber});
+	$query .= " AND lower(a.quonumber) LIKE '$item'";
+      }
+
+      $query .= " AND a.transdate >= '$form->{transdatefrom}'" if $form->{transdatefrom};
+      $query .= " AND a.transdate <= '$form->{transdateto}'" if $form->{transdateto};
+
+      $union = "UNION";
+
+    }
   }
-  
+
   my %ordinal = ( 'name' => 2,
                   'invnumber' => 3,
                   'transdate' => 4,
@@ -174,33 +250,8 @@ sub get_spoolfiles {
 		);
   my @a = (transdate, $invnumber, name);
   my $sortorder = $form->sort_order(\@a, \%ordinal);
-  
-  if ($form->{"$form->{vc}_id"}) {
-    $query .= qq| AND a.$form->{vc}_id = $form->{"$form->{vc}_id"}|;
-  } else {
-    if ($form->{$form->{vc}}) {
-      $var = $form->like(lc $form->{$form->{vc}});
-      $query .= " AND lower(vc.name) LIKE '$var'";
-    }
-  }
-  if ($form->{invnumber}) {
-    $var = $form->like(lc $form->{invnumber});
-    $query .= " AND lower(a.invnumber) LIKE '$var'";
-  }
-  if ($form->{ordnumber}) {
-    $var = $form->like(lc $form->{ordnumber});
-    $query .= " AND lower(a.ordnumber) LIKE '$var'";
-  }
-  if ($form->{quonumber}) {
-    $var = $form->like(lc $form->{quonumber});
-    $query .= " AND lower(a.quonumber) LIKE '$var'";
-  }
-
-  $query .= " AND a.transdate >= '$form->{transdatefrom}'" if $form->{transdatefrom};
-  $query .= " AND a.transdate <= '$form->{transdateto}'" if $form->{transdateto};
-  
+ 
   $query .= " ORDER by $sortorder";
-
 
   my $sth = $dbh->prepare($query);
   $sth->execute || $form->dberror($query);

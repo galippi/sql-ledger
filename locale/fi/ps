@@ -177,7 +177,6 @@ $self{texts} = {
   'as at'                       => 'päivänä ',
   'ea'                          => 'kpl',
   'for Period'                  => 'jaksolta',
-  'to'                          => 'Kenelle',
 };
 
 $self{subs} = {
@@ -228,6 +227,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -261,6 +261,7 @@ $self{subs} = {
   'kirjaa'                      => 'post',
   'kirjaa_uutena'               => 'post_as_new',
   'tulosta'                     => 'print',
+  'print_and_post'              => 'print_and_post',
   'myyntilasku'                 => 'sales_invoice',
   'tilausvahvistus'             => 'sales_order',
   'valitse_kaikki'              => 'select_all',

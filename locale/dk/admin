@@ -45,7 +45,6 @@ $self{texts} = {
   'Login'                       => 'Log på',
   'Login name missing!'         => 'Login name missing!',
   'Manager'                     => 'Leder',
-  'Menu width'                  => 'Menubredde',
   'Multibyte Encoding'          => 'Multibyte Encoding',
   'Name'                        => 'Navn',
   'New Templates'               => 'Nye skabeloner',

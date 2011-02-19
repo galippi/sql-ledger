@@ -50,6 +50,7 @@ $self{texts} = {
   'Number'                      => 'Número',
   'Oct'                         => 'Oct',
   'October'                     => 'Octubre',
+  'Order'                       => 'Ordre',
   'Payments'                    => 'Pagaments',
   'Report for'                  => 'Registrar per',
   'Screen'                      => 'Pantalla',

@@ -158,10 +158,13 @@ sub display_row {
 
     if (($form->{"qty_$i"} != $form->{"oldqty_$i"}) || ($form->{currency} ne $form->{oldcurrency})) {
       # check for a pricematrix
-      foreach $item (split / /, $form->{"pricematrix_$i"}) {
-	($q, $p) = split /:/, $item;
-	if ($p && $form->{"qty_$i"} > $q) {
-	  $form->{"sellprice_$i"} = $form->round_amount($p / $exchangerate, $decimalplaces);
+      @a = split / /, $form->{"pricematrix_$i"};
+      if ((scalar @a) > 2 || $form->{currency} ne $form->{oldcurrency}) {
+	foreach $item (@a) {
+	  ($q, $p) = split /:/, $item;
+	  if ($p != 0 && $form->{"qty_$i"} > $q) {
+	    $form->{"sellprice_$i"} = $form->round_amount($p / $exchangerate, $decimalplaces);
+	  }
 	}
       }
     }
@@ -315,7 +318,8 @@ sub select_item {
   $column_data{sellprice} = qq|<th class=listheading>|.$locale->text('Price').qq|</th>|;
   $column_data{onhand} = qq|<th class=listheading>|.$locale->text('Qty').qq|</th>|;
   
- 
+  $exchangerate = ($form->{exchangerate}) ? $form->{exchangerate} : 1;
+
   # list items with radio button on a form
   $form->header;
 
@@ -358,7 +362,7 @@ sub select_item {
     $column_data{sku} = qq|<td>$ref->{sku}</td>|;
     $column_data{description} = qq|<td>$ref->{description}</td>|;
     $column_data{partsgroup} = qq|<td>$ref->{partsgroup}</td>|;
-    $column_data{sellprice} = qq|<td align=right>|.$form->format_amount(\%myconfig, $ref->{sellprice}, 2, "&nbsp;").qq|</td>|;
+    $column_data{sellprice} = qq|<td align=right>|.$form->format_amount(\%myconfig, $ref->{sellprice} / $exchangerate, 2, "&nbsp;").qq|</td>|;
     $column_data{onhand} = qq|<td align=right>|.$form->format_amount(\%myconfig, $ref->{onhand}, '', "&nbsp;").qq|</td>|;
     
     $j++; $j %= 2;
@@ -890,6 +894,7 @@ sub create_form {
 
 sub e_mail {
 
+  $bcc = qq|<input type=hidden name=bcc value="$form->{bcc}">|;
   if ($myconfig{role} =~ /(admin|manager)/) {
     $bcc = qq|
  	  <th align=right nowrap=true>|.$locale->text('Bcc').qq|</th>
@@ -1034,7 +1039,9 @@ sub print_options {
   
   if ($form->{type} eq 'invoice') {
     $type = qq|<td><select name=formname>
-	    <option value=invoice $form->{PD}{invoice}>|.$locale->text('Invoice').qq|</select></td>|;
+	    <option value=invoice $form->{PD}{invoice}>|.$locale->text('Invoice').qq|
+	    <option value=pick_list $form->{PD}{pick_list}>|.$locale->text('Pick List').qq|
+	    <option value=packing_list $form->{PD}{packing_list}>|.$locale->text('Packing List').qq|</select></td>|;
   }
   
   if ($form->{type} eq 'ship_order') {
@@ -1168,14 +1175,9 @@ sub print_form {
   if ($form->{formname} eq "invoice") {
     $form->{label} = $locale->text('Invoice');
   }
-  if ($form->{formname} eq "packing_list") {
-    # this is from an invoice
-    $form->{label} = $locale->text('Packing List');
-  }
   if ($form->{formname} eq 'sales_order') {
     $inv = "ord";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Sales Order');
     $numberfld = "sonumber";
     $order = 1;
@@ -1183,26 +1185,26 @@ sub print_form {
   if ($form->{formname} eq 'work_order') {
     $inv = "ord";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Work Order');
     $numberfld = "sonumber";
     $order = 1;
   }
-  if ($form->{formname} eq 'packing_list' && $form->{type} ne 'invoice') {
+  if ($form->{formname} eq 'packing_list') {
     # we use the same packing list as from an invoice
-    $inv = "ord";
-    $due = "req";
-    $form->{invdate} = $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Packing List');
-    $numberfld = "sonumber";
-    $order = 1;
+
+    if ($form->{type} ne 'invoice') {
+      $inv = "ord";
+      $due = "req";
+      $numberfld = "sonumber";
+      $order = 1;
+    }
   }
   if ($form->{formname} eq 'pick_list') {
-    $inv = "ord";
-    $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Pick List');
     if ($form->{type} ne 'invoice') {
+      $inv = "ord";
+      $due = "req";
       $order = 1;
       $numberfld = "sonumber";
     }
@@ -1210,7 +1212,6 @@ sub print_form {
   if ($form->{formname} eq 'purchase_order') {
     $inv = "ord";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Purchase Order');
     $numberfld = "ponumber";
     $order = 1;
@@ -1218,14 +1219,12 @@ sub print_form {
   if ($form->{formname} eq 'bin_list') {
     $inv = "ord";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Bin List');
     $order = 1;
   }
   if ($form->{formname} eq 'sales_quotation') {
     $inv = "quo";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Quotation');
     $numberfld = "sqnumber";
     $order = 1;
@@ -1233,7 +1232,6 @@ sub print_form {
   if ($form->{formname} eq 'request_quotation') {
     $inv = "quo";
     $due = "req";
-    $form->{"${inv}date"} = $form->{transdate};
     $form->{label} = $locale->text('Quotation');
     $numberfld = "rfqnumber";
     $order = 1;
@@ -1278,7 +1276,10 @@ sub print_form {
   
   # format payment dates
   for $i (1 .. $form->{paidaccounts} - 1) {
-    $form->{"datepaid_$i"} = $locale->date(\%myconfig, $form->{"datepaid_$i"});
+    if (exists $form->{longformat}) {
+      $form->{"datepaid_$i"} = $locale->date(\%myconfig, $form->{"datepaid_$i"}, $form->{longformat});
+    }
+    
     push @a, "${ARAP}_paid_$i", "source_$i", "memo_$i";
   }
   
@@ -1289,6 +1290,7 @@ sub print_form {
   
   # this is a label for the subtotals
   $form->{groupsubtotaldescription} = $locale->text('Subtotal') if not exists $form->{groupsubtotaldescription};
+  delete $form->{groupsubtotaldescription} if $form->{deletegroupsubtotal};
 
   # create the form variables
   if ($order) {
@@ -1297,7 +1299,9 @@ sub print_form {
     IS->invoice_details(\%myconfig, \%$form);
   }
 
-  map { $form->{$_} = $locale->date(\%myconfig, $form->{$_}, 1) } ("${inv}date", "${due}date", "shippingdate");
+  if (exists $form->{longformat}) {
+    map { $form->{$_} = $locale->date(\%myconfig, $form->{$_}, $form->{longformat}) } ("${inv}date", "${due}date", "shippingdate", "transdate");
+  }
   
   @a = qw(name address1 address2 city state zipcode country);
  

@@ -1,5 +1,4 @@
 $self{texts} = {
-  ' To'                         => 'Até',
   'Add Purchase Order'          => 'Adicionar Pedido de Compra',
   'Add Quotation'               => 'Adicionar Cotação',
   'Add Request for Quotation'   => 'Adicionar Requisição para Cotação',

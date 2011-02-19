@@ -1,11 +1,13 @@
 $self{texts} = {
   'Address'                     => 'Adresse',
   'Continue'                    => 'Fortsett',
-  'Customer not on file!'       => 'Kunde ikke i database!',
+  'Customer not on file!'       => 'Kunde mangler i databasen!',
   'Description'                 => 'Beskrivelse',
   'Number'                      => 'Nummer',
+  'Project not on file!'        => 'Prosjektet mangler i databasen!',
   'Select from one of the names below' => 'Velg fra et av navnene under',
-  'Vendor not on file!'         => 'Leverandør er ikke i database!',
+  'Select from one of the projects below' => 'Velg fra ett av prosjektene under',
+  'Vendor not on file!'         => 'Leverandør mangler i database!',
 };
 
 $self{subs} = {

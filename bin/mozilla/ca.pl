@@ -27,7 +27,6 @@
 # 
 #======================================================================
 
-
 use SL::CA;
 
 1;
@@ -165,7 +164,7 @@ sub list {
   if (@{ $form->{all_departments} }) {
     $form->{selectdepartment} = "<option>\n";
 
-    map { $form->{selectdepartment} .= "<option>$_->{description}--$_->{id}\n" } (@{ $form->{all_departments} });
+    map { $form->{selectdepartment} .= qq|<option value="$_->{description}--$_->{id}">$_->{description}\n| } (@{ $form->{all_departments} });
   }
 
   $department = qq|
@@ -174,6 +173,25 @@ sub list {
 	  <td colspan=3><select name=department>$form->{selectdepartment}</select></td>
 	</tr>
 | if $form->{selectdepartment};
+
+  # accounting years
+  $form->{selectaccountingyear} = "<option>\n";
+  map { $form->{selectaccountingyear} .= qq|<option>$_\n| } @{ $form->{all_years} };
+  $form->{selectaccountingmonth} = "<option>\n";
+  map { $form->{selectaccountingmonth} .= qq|<option value=$_>|.$locale->text($form->{all_month}{$_}).qq|\n| } sort keys %{ $form->{all_month} };
+
+  $selectfrom = qq|
+        <tr>
+	<th align=right>|.$locale->text('Period').qq|</th>
+	<td colspan=3>
+	<select name=month>$form->{selectaccountingmonth}</select>
+	<select name=year>$form->{selectaccountingyear}</select>
+	<input name=interval class=radio type=radio value=1 checked>|.$locale->text('Month').qq|
+	<input name=interval class=radio type=radio value=3>|.$locale->text('Quarter').qq|
+	<input name=interval class=radio type=radio value=12>|.$locale->text('Year').qq|
+	</td>
+      </tr>
+|;
 
 
   $form->header;
@@ -206,6 +224,7 @@ sub list {
 	  <th align=right>|.$locale->text('To').qq|</th>
 	  <td><input name=todate size=11 title="$myconfig{dateformat}"></td>
 	</tr>
+	$selectfrom
 	<tr>
 	  <th align=right>|.$locale->text('Include in Report').qq|</th>
 	  <td colspan=3>

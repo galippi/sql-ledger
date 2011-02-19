@@ -1,6 +1,7 @@
 $self{texts} = {
   'A'                           => 'A',
   'Accounting Menu'             => 'Menu Ksiêgowo¶ci',
+  'Accrual'                     => 'Memoria³owa',
   'Active'                      => 'Aktywne',
   'Add'                         => 'Dodaj',
   'Add Assembly'                => 'Dodaj Zestaw',
@@ -31,6 +32,7 @@ $self{texts} = {
   'COGS'                        => 'Koszta Sprzeda¿y',
   'Cannot delete item!'         => 'Nie mo¿esz usun±æ pozycji!',
   'Cannot stock assemblies!'    => 'Nie mo¿na wstawiæ z³o¿enia',
+  'Cash'                        => 'Kasowa',
   'Cc'                          => 'Cc',
   'Check Inventory'             => 'Kontrola Inwentarza',
   'City'                        => 'Miasto',

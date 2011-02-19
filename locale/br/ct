@@ -38,7 +38,6 @@ $self{texts} = {
   'Edit Vendor'                 => 'Editar Fornecedor',
   'Employee'                    => 'Empregado',
   'Fax'                         => 'Fax',
-  'Foreign Price'               => 'Preço Estrangeiro',
   'From'                        => 'De',
   'GIFI'                        => 'CFOP - Código Fiscal da Operação',
   'ID'                          => 'ID',

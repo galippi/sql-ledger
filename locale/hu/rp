@@ -65,6 +65,7 @@ $self{texts} = {
   'Number'                      => 'Szám',
   'Oct'                         => 'Okt.',
   'October'                     => 'Október',
+  'Order'                       => 'Rendelés',
   'PDF'                         => 'PDF',
   'Payments'                    => 'Kifizetések',
   'Postscript'                  => 'Postscript',
@@ -98,7 +99,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'Szállító nincs az adatbázisban!',
   'as at'                       => 'Fordulónap:',
   'for Period'                  => 'Idõszak:',
-  'to'                          => 'Meddig:',
 };
 
 $self{subs} = {

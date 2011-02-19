@@ -28,6 +28,7 @@ $self{texts} = {
   'Backup'                      => 'Respaldo',
   'Balance Sheet'               => 'Balance general',
   'Batch Printing'              => 'Impresión por lotes',
+  'Bin List'                    => 'Lista de ubicaciones',
   'Cash'                        => 'Bancos',
   'Chart of Accounts'           => 'Catálogo de cuentas',
   'Check'                       => 'Cheque',

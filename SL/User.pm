@@ -737,6 +737,7 @@ sub create_config {
 |;
 
   foreach $key (sort @config) {
+    $self->{$key} =~ s/\\/\\\\/g;
     $self->{$key} =~ s/'/\\'/g;
     print CONF qq|  $key => '$self->{$key}',\n|;
   }
@@ -818,6 +819,8 @@ sub save_member {
   if (! $self->{'root login'}) {
     $self->create_config("$userspath/$self->{login}.conf");
 
+    $self->{dbpasswd} =~ s/\\'/'/g;
+    $self->{dbpasswd} =~ s/\\\\/\\/g;
     $self->{dbpasswd} = unpack 'u', $self->{dbpasswd};
     
     # check if login is in database

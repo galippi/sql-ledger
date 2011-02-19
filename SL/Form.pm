@@ -59,7 +59,7 @@ sub new {
     $self->{action} =~ s/(( |-|,|#)|\.$)/_/g;
   }
 
-  $self->{version} = "2.4.0";
+  $self->{version} = "2.4.1";
   $self->{dbversion} = "2.3.9";
 
   bless $self, $type;
@@ -1263,6 +1263,8 @@ sub all_vc {
   }
   $sth->finish;
 
+  $self->all_years($dbh, $myconfig);
+
   $dbh->disconnect;
 
 }
@@ -1314,9 +1316,50 @@ sub all_departments {
     push @{ $self->{all_departments} }, $ref;
   }
   $sth->finish;
-
+  
+  $self->all_years($dbh, $myconfig);
+  
   $dbh->disconnect;
 
+}
+
+
+sub all_years {
+  my ($self, $dbh, $myconfig) = @_;
+  
+  # get years
+  my $query = qq|SELECT (SELECT MIN(transdate) FROM acc_trans),
+                     (SELECT MAX(transdate) FROM acc_trans)
+              FROM defaults|;
+  my ($startdate, $enddate) = $dbh->selectrow_array($query);
+
+  if ($myconfig->{dateformat} =~ /^yy/) {
+    ($startdate) = split /\W/, $startdate;
+    ($enddate) = split /\W/, $enddate;
+  } else { 
+    (@_) = split /\W/, $startdate;
+    $startdate = @_[2];
+    (@_) = split /\W/, $enddate;
+    $enddate = @_[2]; 
+  }
+
+  while ($enddate >= $startdate) {
+    push @{ $self->{all_years} }, $enddate--;
+  }
+
+  %{ $self->{all_month} } = ( '01' => 'January',
+			  '02' => 'February',
+			  '03' => 'March',
+			  '04' => 'April',
+			  '05' => 'May ',
+			  '06' => 'June',
+			  '07' => 'July',
+			  '08' => 'August',
+			  '09' => 'September',
+			  '10' => 'October',
+			  '11' => 'November',
+			  '12' => 'December' );
+  
 }
 
 
@@ -1953,6 +1996,47 @@ sub split_date {
 }
     
 
+sub from_to {
+  my ($self, $yy, $mm, $interval) = @_;
+
+  use Time::Local;
+  
+  my @t;
+  my $dd = 1;
+  my $fromdate = "$yy${mm}01";
+  
+  if (defined $interval) {
+    if ($interval == 12) {
+      $yy++;
+    } else {
+      if (($mm += $interval) > 12) {
+	$mm -= 12;
+	$yy++;
+      }
+      if ($interval == 0) {
+	@t = localtime(time);
+	$dd = $t[3] + 1;
+	$mm = $t[4] + 1;
+      }
+    }
+  } else {
+    if ($mm++ > 12) {
+      $mm -= 12;
+      $yy++;
+    }
+  }
+
+  $mm--;
+  @t = localtime(timelocal(0,0,0,$dd,$mm,$yy) - 1);
+  
+  $t[4]++;
+  $t[4] = substr("0$t[4]",-2);
+  $t[3] = substr("0$t[3]",-2);
+  
+  ($fromdate, "$yy$t[4]$t[3]");
+  
+}
+
 
 sub audittrail {
   my ($self, $dbh, $myconfig, $audittrail) = @_;
@@ -2091,7 +2175,8 @@ sub date {
 
   my $longdate = "";
   my $longmonth = ($longformat) ? 'LONG_MONTH' : 'SHORT_MONTH';
-  
+
+
   if ($date) {
     # get separator
     $spc = $myconfig->{dateformat};
@@ -2119,33 +2204,33 @@ sub date {
     $yy = ($yy >= 70 && $yy <= 99) ? $yy + 1900 : $yy;
 
     if ($myconfig->{dateformat} =~ /^dd/) {
-      if (defined $longformat && $longformat == 0) {
-	$mm++;
-	$dd = "0$dd" if ($dd < 10);
-	$mm = "0$mm" if ($mm < 10);
-	$longdate = "$dd$spc$mm$spc$yy";
-      } else {
+      $mm++;
+      $dd = "0$dd" if ($dd < 10);
+      $mm = "0$mm" if ($mm < 10);
+      $longdate = "$dd$spc$mm$spc$yy";
+
+      if (defined $longformat) {
 	$longdate = "$dd";
 	$longdate .= ($spc eq '.') ? ". " : " ";
-	$longdate .= &text($self, $self->{$longmonth}[$mm])." $yy";
+	$longdate .= &text($self, $self->{$longmonth}[--$mm])." $yy";
       }
     } elsif ($myconfig->{dateformat} =~ /^yy/) {
-      if (defined $longformat && $longformat == 0) {
-	$mm++;
-	$dd = "0$dd" if ($dd < 10);
-	$mm = "0$mm" if ($mm < 10);
-	$longdate = "$yy$spc$mm$spc$dd"; 
-      } else { 
-	$longdate = &text($self, $self->{$longmonth}[$mm])." $dd $yy";
+      $mm++;
+      $dd = "0$dd" if ($dd < 10);
+      $mm = "0$mm" if ($mm < 10);
+      $longdate = "$yy$spc$mm$spc$dd"; 
+
+      if (defined $longformat) {
+	$longdate = &text($self, $self->{$longmonth}[--$mm])." $dd $yy";
       }
     } else {
-      if (defined $longformat && $longformat == 0) {
 	$mm++;
 	$dd = "0$dd" if ($dd < 10);
 	$mm = "0$mm" if ($mm < 10);
 	$longdate = "$mm$spc$dd$spc$yy"; 
-      } else { 
-	$longdate = &text($self, $self->{$longmonth}[$mm])." $dd $yy";
+
+      if (defined $longformat) {
+	$longdate = &text($self, $self->{$longmonth}[--$mm])." $dd $yy";
       }
     }
 

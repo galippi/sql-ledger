@@ -109,12 +109,10 @@ sub form_header {
     
   $form->{exchangerate} = $form->format_amount(\%myconfig, $form->{exchangerate});
 
-  $form->{creditlimit} = $form->format_amount(\%myconfig, $form->{creditlimit}, 0, "0");
-
   if ($form->{oldtotalpaid} > $form->{oldinvtotal}) {
     $adj = $form->{oldtotalpaid} - $form->{oldinvtotal};
   }
-  $form->{creditremaining} = $form->format_amount(\%myconfig, $form->{creditremaining} - $adj + $form->{oldchange}, 0, "0");
+  $form->{creditremaining} = $form->{creditremaining} - $adj + $form->{oldchange};
   
   $exchangerate = "";
   if ($form->{currency} ne $form->{defaultcurrency}) {
@@ -146,7 +144,7 @@ sub form_header {
 	      </tr>
 | if $form->{selectdepartment};
 	
-  $n = ($form->{creditremaining} =~ /-/) ? "0" : "1";
+  $n = ($form->{creditremaining} < 0) ? "0" : "1";
 
   if ($form->{selectlanguage}) {
     if ($form->{language_code} ne $form->{oldlanguage_code}) {
@@ -226,7 +224,7 @@ sub form_header {
 		      <th nowrap>|.$locale->text('Credit Limit').qq|</th>
 		      <td>$form->{creditlimit}</td>
 		      <th nowrap>|.$locale->text('Remaining').qq|</th>
-		      <td class="plus$n">$form->{creditremaining}</font></td>
+		      <td class="plus$n">|.$form->format_amount(\%myconfig, $form->{creditremaining}, 0, "0").qq|</font></td>
 		    </tr>
 		  </table>
 		</td>
@@ -528,8 +526,8 @@ sub display_row {
         </tr>
 |;
 
-  $form->{exchangerate} = 1 if $form->{currency} eq $form->{defaultcurrency};
-  $form->{exchangerate} = ($form->{exchangerate}) ? $form->{exchangerate} : 1;
+  $exchangerate = $form->parse_amount(\%myconfig, $form->{exchangerate});
+  $exchangerate = ($exchangerate) ? $exchangerate : 1;
   
   for $i (1 .. $numrows) {
     # undo formatting
@@ -544,7 +542,7 @@ sub display_row {
       foreach $item (split / /, $form->{"pricematrix_$i"}) {
 	($q, $p) = split /:/, $item;
 	if ($p && $form->{"qty_$i"} > $q) {
-	  $form->{"sellprice_$i"} = $form->round_amount($p / $form->{exchangerate}, $decimalplaces);
+	  $form->{"sellprice_$i"} = $form->round_amount($p / $exchangerate, $decimalplaces);
 	}
       }
     }
@@ -701,7 +699,7 @@ sub print_form {
   if ($form->{media} !~ /screen/) {
     # restore and display form
     map { $form->{$_} = $old_form->{$_} } keys %$old_form;
-    map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate creditlimit creditremaining);
+    map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate);
 
     $form->{rowcount}--;
     for $i (1 .. $form->{paidaccounts}) {
@@ -796,6 +794,25 @@ sub receipts {
 
   $form->{till} = ($myconfig{role} ne 'user') ? '0' : '1';
 
+  # accounting years
+  $form->{selectaccountingyear} = "<option>\n";
+  map { $form->{selectaccountingyear} .= qq|<option>$_\n| } @{ $form->{all_years} };
+  $form->{selectaccountingmonth} = "<option>\n";
+  map { $form->{selectaccountingmonth} .= qq|<option value=$_>|.$locale->text($form->{all_month}{$_}).qq|\n| } sort keys %{ $form->{all_month} };
+
+  $selectfrom = qq|
+        <tr>
+	<th align=right>|.$locale->text('Period').qq|</th>
+	<td colspan=3>
+	<select name=month>$form->{selectaccountingmonth}</select>
+	<select name=year>$form->{selectaccountingyear}</select>
+	<input name=interval class=radio type=radio value=1 checked>|.$locale->text('Month').qq|
+	<input name=interval class=radio type=radio value=3>|.$locale->text('Quarter').qq|
+	<input name=interval class=radio type=radio value=12>|.$locale->text('Year').qq|
+	</td>
+      </tr>
+|;
+
   $form->header;
   
   print qq|
@@ -826,6 +843,7 @@ sub receipts {
 	  <th align=right>|.$locale->text('To').qq|</th>
 	  <td><input name=todate size=11 title="$myconfig{dateformat}"></td>
 	</tr>
+	$selectfrom
 	  <input type=hidden name=sort value=transdate>
 	  <input type=hidden name=db value=$form->{db}>
       </table>

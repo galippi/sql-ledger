@@ -279,9 +279,6 @@ sub form_header {
   # format amounts
   $form->{exchangerate} = $form->format_amount(\%myconfig, $form->{exchangerate});
   
-  $form->{creditlimit} = $form->format_amount(\%myconfig, $form->{creditlimit}, 0, "0");
-  $form->{creditremaining} = $form->format_amount(\%myconfig, $form->{creditremaining}, 0, "0");
-
   $exchangerate = qq|
 <input type=hidden name=forex value=$form->{forex}>
 |;
@@ -325,7 +322,7 @@ sub form_header {
 | if $form->{selectdepartment};
 
  
-  $n = ($form->{creditremaining} =~ /-/) ? "0" : "1";
+  $n = ($form->{creditremaining} < 0) ? "0" : "1";
 
   $customer = ($form->{selectcustomer}) ? qq|<select name=customer>$form->{selectcustomer}</select>| : qq|<input name=customer value="$form->{customer}" size=35>|;
 
@@ -383,7 +380,7 @@ sub form_header {
 		      <th align=left nowrap>|.$locale->text('Credit Limit').qq|</th>
 		      <td>$form->{creditlimit}</td>
 		      <th align=left nowrap>|.$locale->text('Remaining').qq|</th>
-		      <td class="plus$n">$form->{creditremaining}</td>
+		      <td class="plus$n">|.$form->format_amount(\%myconfig, $form->{creditremaining}, 0, "0").qq|</td>
 		      <input type=hidden name=creditlimit value=$form->{creditlimit}>
 		      <input type=hidden name=creditremaining value=$form->{creditremaining}>
 		    </tr>
@@ -664,7 +661,7 @@ sub update {
 
   $form->{invtotal} = 0;
   
-  map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate creditlimit creditremaining);
+  map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate);
 
   @flds = qw(amount AR_amount projectnumber);
   $count = 0;
@@ -933,6 +930,26 @@ sub search {
     $openclosed = "";
   }
 
+  # accounting years
+  $form->{selectaccountingyear} = "<option>\n";
+  map { $form->{selectaccountingyear} .= qq|<option>$_\n| } @{ $form->{all_years} };
+  $form->{selectaccountingmonth} = "<option>\n";
+  map { $form->{selectaccountingmonth} .= qq|<option value=$_>|.$locale->text($form->{all_month}{$_}).qq|\n| } sort keys %{ $form->{all_month} };
+
+  $selectfrom = qq|
+        <tr>
+	<th align=right>|.$locale->text('Period').qq|</th>
+	<td colspan=3>
+	<select name=month>$form->{selectaccountingmonth}</select>
+	<select name=year>$form->{selectaccountingyear}</select>
+	<input name=interval class=radio type=radio value=0 checked>|.$locale->text('Current').qq|
+	<input name=interval class=radio type=radio value=1>|.$locale->text('Month').qq|
+	<input name=interval class=radio type=radio value=3>|.$locale->text('Quarter').qq|
+	<input name=interval class=radio type=radio value=12>|.$locale->text('Year').qq|
+	</td>
+      </tr>
+|;
+
     
   $form->header;
   
@@ -967,6 +984,7 @@ sub search {
 	  <td><input name=transdateto size=11 title="$myconfig{dateformat}"></td>
 	</tr>
 	<input type=hidden name=sort value=transdate>
+	$selectfrom
       </table>
     </td>
   </tr>

@@ -47,6 +47,9 @@ sub paymentaccounts {
     push @{ $form->{PR} }, $ref;
   }
   $sth->finish;
+
+  $form->all_years($dbh, $myconfig);
+
   $dbh->disconnect;
 
 }
@@ -66,6 +69,9 @@ sub payment_transactions {
   ($form->{category}) = $dbh->selectrow_array($query);
   
   my $cleared;
+
+  ($form->{fromdate}, $form->{todate}) = $form->from_to($form->{year}, $form->{month}, $form->{interval}) if $form->{year} && $form->{month};
+
   my $transdate = qq| AND ac.transdate < date '$form->{fromdate}'|;
 
   if (! $form->{fromdate}) {

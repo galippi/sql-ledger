@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Sàskaita',
   'Cannot post transaction!'    => 'Neámanoma patvirtinti operacijos!',
   'Continue'                    => 'Tæsti',
   'Credit Limit'                => 'Kredito riba',
@@ -23,6 +24,7 @@ $self{texts} = {
   'Record in'                   => 'Áraðyti á',
   'Remaining'                   => 'Likutis',
   'Screen'                      => 'Ekranas',
+  'Source'                      => 'Dokumentas',
   'Subtotal'                    => 'Viso',
   'To'                          => 'iki',
   'Total'                       => 'Ið viso',

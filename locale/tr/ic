@@ -17,6 +17,7 @@ $self{texts} = {
   'COGS'                        => 'SMM',
   'Contact'                     => 'Kontak',
   'Continue'                    => 'Devam',
+  'Currency'                    => 'Para Birimi',
   'Customer'                    => 'Alýcý',
   'Date'                        => 'Tarih',
   'Dec'                         => 'Ara',

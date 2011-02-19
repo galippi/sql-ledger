@@ -271,15 +271,21 @@ sub invoice_details {
 	  if ($sortlist[$j]->[1] ne $sameitem) {
 	    map { push(@{ $form->{$_} }, "") } qw(runningnumber number sku serialnumber bin qty unit deliverydate projectnumber sellprice listprice netprice discount discountrate);
 	    push(@{ $form->{description} }, $form->{groupsubtotaldescription});
-	    push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+	    if (exists $form->{groupsubtotaldescription}) {
+	      push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+	    } else {
+	      push(@{ $form->{linetotal} }, "");
+	    }
 	    $subtotal = 0;
 	  }
 	} else {
-	  map { push(@{ $form->{$_} }, "") } qw(runningnumber number sku serialnumber bin qty unit deliverydate projectnumber sellprice listprice netprice discount discountrate);
+
 	  # got last item
-	  push(@{ $form->{description} }, $form->{groupsubtotaldescription});
-	  push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
-	  $subtotal = 0;
+	  if (exists $form->{groupsubtotaldescription}) {
+	    map { push(@{ $form->{$_} }, "") } qw(runningnumber number sku serialnumber bin qty unit deliverydate projectnumber sellprice listprice netprice discount discountrate);
+	    push(@{ $form->{description} }, $form->{groupsubtotaldescription});
+	    push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+	  }
 	}
       }
     }
@@ -1566,6 +1572,10 @@ sub price_matrix {
     if (! $customerprice && ! $pricegroup) {
       $ref->{sellprice} = $sellprice unless $mref->{pricebreak};
       $ref->{pricematrix} .= "$mref->{pricebreak}:$sellprice ";
+    }
+
+    if ($form->{tradediscount}) {
+      $ref->{sellprice} = $form->round_amount($ref->{sellprice} / (1 - $form->{tradediscount}), $decimalplaces);
     }
     
   }

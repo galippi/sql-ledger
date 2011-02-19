@@ -11,6 +11,7 @@ $self{texts} = {
   'Login'                       => 'Login',
   'Name'                        => 'Navn',
   'Password'                    => 'Passord',
+  'Upgrading to Version'        => 'Oppgrader til version',
   'User'                        => 'Bruker',
   'Version'                     => 'Versjon',
   'You are logged out!'         => 'Du er logget av!',

@@ -1,8 +1,8 @@
 $self{texts} = {
-  'Address'                     => '¦a§}',
-  'Continue'                    => 'Ä~Äò',
-  'Description'                 => '»¡©ú',
-  'Number'                      => '½s¸¹',
+  'Address'                     => 'åœ°å€',
+  'Continue'                    => 'ç¹¼çºŒ',
+  'Description'                 => 'èªªæ˜Ž',
+  'Number'                      => 'ç·¨è™Ÿ',
 };
 
 $self{subs} = {
@@ -19,7 +19,7 @@ $self{subs} = {
   'select_name'                 => 'select_name',
   'select_project'              => 'select_project',
   'vendor_invoice_'             => 'vendor_invoice_',
-  'Ä~Äò'                        => 'continue',
+  'ç¹¼çºŒ'                      => 'continue',
 };
 
 1;

@@ -38,12 +38,12 @@
 	  <td><%name%>
 	  <br><%address1%>
 	  <%if address2%>
-<br><%address2%>
-<%end address2%>
+	  <br><%address2%>
+	  <%end address2%>
 	  <br><%city%> <%state%> <%zipcode%>
 	  <%if country%>
-<%country%>
-<%end country%>
+	  <br><%country%>
+	  <%end country%>
 	  <br>
 <%if customerphone%>
 	  <br>Tel: <%customerphone%>
@@ -66,8 +66,10 @@
       <table width=100%>
         <tr>
 	  <th align=left>Invoice #</th>
-	  <th width=15%>Date</th>
-	  <th width=15%>Due</th>
+ <th align=left>Order#</th>
+<th align=left>Notes</th>
+	  <th width=10%>Date</th>
+	  <th width=10%>Due</th>
 	  <th width=10%>Current</th>
 	  <th width=10%>30</th>
 	  <th width=10%>60</th>
@@ -76,6 +78,8 @@
 <%foreach invnumber%>
 	<tr>
 	  <td><%invnumber%></td>
+<td><%ordnumber%></td>
+<td><%notes%></td>
 	  <td><%invdate%></td>
 	  <td><%duedate%></td>
 	  <td align=right><%c0%></td>
@@ -85,9 +89,11 @@
 	</tr>
 <%end invnumber%>
         <tr>
-	  <td colspan=7><hr size=1></td>
+	  <td colspan=9><hr size=1></td>
 	</tr>
 	<tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
 	  <td>&nbsp;</td>
 	  <td>&nbsp;</td>
 	  <td>&nbsp;</td>
@@ -120,6 +126,9 @@
     <td>Please make check payable to <b><%company%></b>.
     </td>
   </tr>
-  <tr height=20></tr>
+
 </table>
+
+</body>
+</html>
 

@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Tili',
   'Cannot post transaction!'    => 'Vientiä ei voi kirjata',
   'Continue'                    => 'Jatka',
   'Credit Limit'                => 'Luottoraja',
@@ -23,6 +24,7 @@ $self{texts} = {
   'Record in'                   => 'Talleta tilille',
   'Remaining'                   => 'Jäljellä',
   'Screen'                      => 'Näyttö',
+  'Source'                      => 'Lähde',
   'Subtotal'                    => 'Välisumma',
   'To'                          => 'Hetkeen',
   'Total'                       => 'Yhteensä',

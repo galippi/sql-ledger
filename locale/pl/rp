@@ -74,6 +74,7 @@ $self{texts} = {
   'Number'                      => 'Numer Katalogu',
   'Oct'                         => 'Pa¿dziernik',
   'October'                     => 'Pa¿dziernik',
+  'Order'                       => 'Zlecenie',
   'PDF'                         => 'PDF',
   'Payments'                    => 'Wyp³aty',
   'Postscript'                  => 'Postscript',

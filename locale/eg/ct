@@ -39,7 +39,6 @@ $self{texts} = {
   'Edit Vendor'                 => 'تعديل مورد',
   'Employee'                    => 'الموظف',
   'Fax'                         => 'الفاكس',
-  'Foreign Price'               => 'سعربالعملة الاخرى',
   'From'                        => 'من',
   'ID'                          => 'البطاقة الشخصية',
   'Include in Report'           => 'ارفق في التقرير ------',

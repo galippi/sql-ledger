@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Compta',
   'Continue'                    => 'Continuar',
   'Credit Limit'                => 'Límit de Crèdit',
   'Currency'                    => 'Moneda',
@@ -16,6 +17,7 @@ $self{texts} = {
   'Record in'                   => 'Registar en',
   'Remaining'                   => 'Remanent',
   'Screen'                      => 'Pantalla',
+  'Source'                      => 'Font',
   'Subtotal'                    => 'Subtotal',
   'To'                          => 'Fins',
   'Total'                       => 'Total',

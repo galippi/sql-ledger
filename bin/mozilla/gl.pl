@@ -176,6 +176,28 @@ sub search {
 	</tr>
 |;
   }
+
+
+  # accounting years
+  $form->{selectaccountingyear} = "<option>\n";
+  map { $form->{selectaccountingyear} .= qq|<option>$_\n| } @{ $form->{all_years} };
+  $form->{selectaccountingmonth} = "<option>\n";
+  map { $form->{selectaccountingmonth} .= qq|<option value=$_>|.$locale->text($form->{all_month}{$_}).qq|\n| } sort keys %{ $form->{all_month} };
+
+  $selectfrom = qq|
+        <tr>
+	<th align=right>|.$locale->text('Period').qq|</th>
+	<td colspan=3>
+	<select name=month>$form->{selectaccountingmonth}</select>
+	<select name=year>$form->{selectaccountingyear}</select>
+	<input name=interval class=radio type=radio value=0 checked>|.$locale->text('Current').qq|
+	<input name=interval class=radio type=radio value=1>|.$locale->text('Month').qq|
+	<input name=interval class=radio type=radio value=3>|.$locale->text('Quarter').qq|
+	<input name=interval class=radio type=radio value=12>|.$locale->text('Year').qq|
+	</td>
+      </tr>
+|;
+
   
   $form->header;
 
@@ -215,6 +237,7 @@ sub search {
 	  <th align=right>|.$locale->text('To').qq|</th>
 	  <td><input name=dateto size=11 title="$myconfig{dateformat}"></td>
 	</tr>
+	$selectfrom
 	<tr>
 	  <th align=right>|.$locale->text('Amount').qq| >=</th>
 	  <td><input name=amountfrom size=11></td>

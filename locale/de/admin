@@ -45,7 +45,6 @@ $self{texts} = {
   'Login'                       => 'Anmelden',
   'Login name missing!'         => 'Login name missing!',
   'Manager'                     => 'Geschäftsführer',
-  'Menu width'                  => 'Menuebreite',
   'Multibyte Encoding'          => 'Multibyte Encoding',
   'Name'                        => 'Name',
   'New Templates'               => 'Neue Vorlagen',

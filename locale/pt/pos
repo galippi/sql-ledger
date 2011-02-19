@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Conta',
   'Cannot post transaction!'    => 'Não é possivel lançar transacção',
   'Continue'                    => 'Continuar',
   'Credit Limit'                => 'Limite de Crédito',
@@ -22,6 +23,7 @@ $self{texts} = {
   'Record in'                   => 'Registar em',
   'Remaining'                   => 'Sobram',
   'Screen'                      => 'Ecran',
+  'Source'                      => 'Origem',
   'Subtotal'                    => 'Sub-total',
   'To'                          => 'Até',
   'Total'                       => 'Total',

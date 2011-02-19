@@ -33,7 +33,6 @@ $self{texts} = {
   'Edit Vendor'                 => 'Editar Proveedor',
   'Employee'                    => 'Empleado',
   'Fax'                         => 'Fax',
-  'Foreign Price'               => 'Precio Internacional',
   'From'                        => 'Desde',
   'GIFI'                        => 'Código GIFI',
   'ID'                          => 'ID',

@@ -45,6 +45,8 @@ sub transactions {
   
   my $rate = ($form->{vc} eq 'customer') ? 'buy' : 'sell';
 
+  ($form->{transdatefrom}, $form->{transdateto}) = $form->from_to($form->{year}, $form->{month}, $form->{interval}) if $form->{year} && $form->{month};
+
   if ($form->{type} =~ /_quotation$/) {
     $quotation = '1';
     $ordnumber = 'quonumber';
@@ -1070,18 +1072,25 @@ sub order_details {
 
 	    push(@{ $form->{description} }, $form->{groupsubtotaldescription});
 
-	    push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+            if (exists $form->{groupsubtotaldescription}) {
+	      push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+	    } else {
+	      push(@{ $form->{linetotal} }, "");
+	    }
+
 	    $subtotal = 0;
 	  }
 
 	} else {
 
-	  map { push(@{ $form->{$_} }, "") } qw(runningnumber number sku qty ship unit bin serialnumber reqdate projectnumber sellprice listprice netprice discount discountrate);
-
 	  # got last item
-	  push(@{ $form->{description} }, $form->{groupsubtotaldescription});
-	  push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
-	  $subtotal = 0;
+          if (exists $form->{groupsubtotaldescription}) {
+	    
+	    map { push(@{ $form->{$_} }, "") } qw(runningnumber number sku qty ship unit bin serialnumber reqdate projectnumber sellprice listprice netprice discount discountrate);
+
+	    push(@{ $form->{description} }, $form->{groupsubtotaldescription});
+	    push(@{ $form->{linetotal} }, $form->format_amount($myconfig, $subtotal, 2));
+	  }
 	}
       }
     }

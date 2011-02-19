@@ -64,6 +64,7 @@ $self{texts} = {
   'Number'                      => 'Nummer',
   'Oct'                         => 'Okt',
   'October'                     => 'Oktober',
+  'Order'                       => 'Order',
   'PDF'                         => 'PDF',
   'Payments'                    => 'Betalningar',
   'Postscript'                  => 'Postscript',
@@ -96,7 +97,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'Leverantör finns ej',
   'as at'                       => 'som vid',
   'for Period'                  => 'för perioden',
-  'to'                          => 'till',
 };
 
 $self{subs} = {

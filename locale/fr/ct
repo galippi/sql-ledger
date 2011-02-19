@@ -40,7 +40,6 @@ $self{texts} = {
   'Edit Vendor'                 => 'Modifier fournisseur',
   'Employee'                    => 'Employé',
   'Fax'                         => 'Fax',
-  'Foreign Price'               => 'Prix en devises',
   'From'                        => 'De',
   'GIFI'                        => 'Code d\'identification comptable ou fiscale',
   'IBAN'                        => 'IBAN',

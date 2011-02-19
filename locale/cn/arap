@@ -1,13 +1,13 @@
 $self{texts} = {
-  'Address'                     => 'µØÖ·',
-  'Continue'                    => '¼ÌÐø',
-  'Customer not on file!'       => '¿Í»§¼ÇÂ¼Ã»ÔÚµµ°¸!',
-  'Description'                 => 'ËµÃ÷',
-  'Number'                      => '±àºÅ',
-  'Project not on file!'        => 'È·ÈÏ³ÉÎªÐÂÕÊÄ¿',
-  'Select from one of the names below' => 'ì¶ÏÂÁÐÃû×ÖÖÐÑ¡ÔñÒ»Ïî',
-  'Select from one of the projects below' => 'ì¶ÏÂÁÐ¹¤³ÌÖÐÑ¡ÔñÒ»Ïî',
-  'Vendor not on file!'         => '´Ë³§ÉÌÎ´ÔÚµµ°¸!',
+  'Address'                     => 'åœ°å€',
+  'Continue'                    => 'ç»§ç»­',
+  'Customer not on file!'       => 'å®¢æˆ·è®°å½•æ²¡åœ¨æ¡£æ¡ˆ!',
+  'Description'                 => 'è¯´æ˜Ž',
+  'Number'                      => 'ç¼–å·',
+  'Project not on file!'        => 'ç¡®è®¤æˆä¸ºæ–°å¸ç›®',
+  'Select from one of the names below' => 'æ–¼ä¸‹åˆ—åå­—ä¸­é€‰æ‹©ä¸€é¡¹',
+  'Select from one of the projects below' => 'æ–¼ä¸‹åˆ—å·¥ç¨‹ä¸­é€‰æ‹©ä¸€é¡¹',
+  'Vendor not on file!'         => 'æ­¤åŽ‚å•†æœªåœ¨æ¡£æ¡ˆ!',
 };
 
 $self{subs} = {
@@ -24,7 +24,7 @@ $self{subs} = {
   'select_name'                 => 'select_name',
   'select_project'              => 'select_project',
   'vendor_invoice_'             => 'vendor_invoice_',
-  '¼ÌÐø'                        => 'continue',
+  'ç»§ç»­'                      => 'continue',
 };
 
 1;

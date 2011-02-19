@@ -71,6 +71,7 @@ $self{texts} = {
   'Number'                      => 'الرقم',
   'Oct'                         => 'اكتوبر',
   'October'                     => 'اكتوبر',
+  'Order'                       => 'امر',
   'Payments'                    => 'المدفوعات',
   'Print'                       => 'طباعة',
   'Project'                     => 'مشروع',
@@ -105,7 +106,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'مورد غير موجود في الملف',
   'as at'                       => 'من',
   'for Period'                  => 'للفترة',
-  'to'                          => 'إلى',
 };
 
 $self{subs} = {

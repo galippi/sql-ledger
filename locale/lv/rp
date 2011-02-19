@@ -64,6 +64,7 @@ $self{texts} = {
   'Number'                      => 'Numurs',
   'Oct'                         => 'Okt',
   'October'                     => 'Oktobrî',
+  'Order'                       => 'Maksâjuma uzdevums',
   'PDF'                         => 'PDF',
   'Payments'                    => 'Maksâjumi',
   'Postscript'                  => 'Postscript',
@@ -98,7 +99,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'Nav tâda pârdevçja!',
   'as at'                       => 'uz',
   'for Period'                  => 'periods',
-  'to'                          => 'lîdz',
 };
 
 $self{subs} = {

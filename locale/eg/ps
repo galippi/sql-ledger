@@ -207,7 +207,6 @@ $self{texts} = {
   'as at'                       => 'من',
   'ea'                          => 'قطعة',
   'for Period'                  => 'للفترة',
-  'to'                          => 'إلى',
 };
 
 $self{subs} = {
@@ -258,6 +257,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -291,6 +291,7 @@ $self{subs} = {
   'تسجيل'                  => 'post',
   'سجل_كجديد'           => 'post_as_new',
   'طباعة'                  => 'print',
+  'print_and_post'              => 'print_and_post',
   'فاتورة_المبيعات' => 'sales_invoice',
   'امر_بيع'               => 'sales_order',
   'اختر_الكل'           => 'select_all',

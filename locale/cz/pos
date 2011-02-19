@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Úèet',
   'Continue'                    => 'Pokraèování',
   'Credit Limit'                => 'Úvìrový limit',
   'Currency'                    => 'Mìna',
@@ -16,6 +17,7 @@ $self{texts} = {
   'Record in'                   => 'Zaúètovat do',
   'Remaining'                   => 'Zbývá',
   'Screen'                      => 'Na obrazovku',
+  'Source'                      => 'Zdroj',
   'Subtotal'                    => 'Mezisouèet',
   'To'                          => 'do',
   'Total'                       => 'Celkem',

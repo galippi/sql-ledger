@@ -11,6 +11,7 @@ $self{texts} = {
   'Debit'                       => 'Debet',
   'Dec'                         => 'des',
   'December'                    => 'desember',
+  'Department'                  => 'Avdeling',
   'Description'                 => 'Beskrivelse',
   'Feb'                         => 'feb',
   'February'                    => 'februar',

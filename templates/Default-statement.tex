@@ -1,9 +1,11 @@
-\documentclass[twoside]{scrartcl}
+\documentclass[english,twoside]{scrartcl}
 \usepackage[frame]{xy}
 \usepackage{tabularx}
 \usepackage[latin1]{inputenc}
+\usepackage{babel}
+\usepackage{graphicx}
 \setlength{\voffset}{0.5cm}
-\setlength{\hoffset}{-2.0cm}
+\setlength{\hoffset}{-1.9cm}
 \setlength{\topmargin}{0cm}
 \setlength{\headheight}{0.5cm}
 \setlength{\headsep}{1cm}
@@ -11,62 +13,53 @@
 \setlength{\oddsidemargin}{1.0cm}
 \setlength{\evensidemargin}{1.0cm}
 \setlength{\textwidth}{19.2cm}
-\setlength{\textheight}{24.5cm}
+\setlength{\textheight}{24.7cm}
 \setlength{\footskip}{1cm}
 \setlength{\parindent}{0pt}
 \renewcommand{\baselinestretch}{1}
 \begin{document}
 
-\newlength{\descrwidth}\setlength{\descrwidth}{10cm}
-
-\newsavebox{\hdr}
-\sbox{\hdr}{
-  \fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
-
-  \parbox{\textwidth}{
-    \parbox[b]{12cm}{
-      <%company%>
-
-      <%address%>}\hfill
-    \begin{tabular}[b]{rrr@{}}
-    Tel & <%tel%>\\
-    Fax & <%fax%>
-    \end{tabular}
-
-    \rule[1.5ex]{\textwidth}{0.5pt}
-  }
-}
-
-\fontfamily{cmss}\fontshape{n}\selectfont
-
-\markboth{<%company%>\hfill <%statementdate%>}{\usebox{\hdr}}
-
 \pagestyle{myheadings}
-%\thispagestyle{empty}     use this with letterhead paper
+\thispagestyle{empty}
 
+\newlength{\descrwidth}\setlength{\descrwidth}{10cm}
 \fontfamily{cmss}\fontsize{10pt}{12pt}\selectfont
 
-\vspace*{1.5cm}
+\vspace*{-1.3cm}
+
+\parbox{\textwidth}{%
+  \parbox[b]{.42\textwidth}{%
+    <%company%>
+
+    <%address%>
+  }
+  \parbox[b]{.2\textwidth}{
+    \includegraphics[scale=0.3]{sql-ledger}
+  }\hfill
+  \begin{tabular}[b]{rr@{}}
+  Telephone & <%tel%>\\
+  Facsimile & <%fax%>
+  \end{tabular}
+
+  \rule[1.5em]{\textwidth}{0.5pt}
+}
+
+  
+\vspace*{0.5cm}
 
 \parbox[t]{1cm}{\hfill}
-\parbox[t]{10.5cm}{
-  
+\parbox[t]{.45\textwidth}{
 <%name%>
 
 <%address1%>
 
-<%if address2%>
 <%address2%>
-<%end address2%>
 
 <%city%> <%state%> <%zipcode%>
 
-<%if country%>
 <%country%>
-<%end country%>
-
 }
-\parbox[t]{7.5cm}{
+\parbox[t]{.45\textwidth}{
 <%if customerphone%>
 Tel: <%customerphone%>
 <%end customerphone%>
@@ -85,22 +78,27 @@ Fax: <%customerfax%>
 
 \vspace{2cm}
 
-\begin{tabular*}{\textwidth}{@{}l@{\extracolsep\fill}ccrrrr@{}}
-  \textbf{Invoice \#} & \textbf{Date} & \textbf{Due} &
+\begin{tabularx}{\textwidth}{|llXccrrrr|}
+  \hline
+  \textbf{Invoice \#} & \textbf{Order \#} & \textbf{Notes} &
+  \textbf{Date} & \textbf{Due} &
   \textbf{Current} & \textbf{30} & \textbf{60} & \textbf{90+} \\
+  \hline
 <%foreach invnumber%>
-  <%invnumber%> & <%invdate%> & <%duedate%> &
+  <%invnumber%> & <%ordnumber%> & <%notes%> & <%invdate%> & <%duedate%> &
   <%c0%> & <%c30%> & <%c60%> & <%c90%> \\
 <%end invnumber%>
-\textbf{Subtotal} & & & <%c0total%> & <%c30total%> & <%c60total%> & <%c90total%>
-\end{tabular*}
-\rule{\textwidth}{1pt}
+  \multicolumn{9}{|l|}{\mbox{}} \\
+  \hline
+  \textbf{Subtotal} & & & & & <%c0total%> & <%c30total%> & <%c60total%> & <%c90total%> \\
+  \hline
+\end{tabularx}
 
 \vspace{0.5cm}
 
 \hfill
-\begin{tabularx}{7cm}{Xr@{}}
-  \textbf{Total outstanding} & <%total%>
+\begin{tabularx}{.4\textwidth}{Xr@{}}
+  \textbf{Total outstanding} & \textbf{<%total%>}
 \end{tabularx}
 
 \vfill
@@ -108,4 +106,5 @@ Fax: <%customerfax%>
 Please make check payable to <%company%>
 
 \end{document}
+
 

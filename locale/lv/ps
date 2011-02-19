@@ -181,7 +181,6 @@ $self{texts} = {
   'as at'                       => 'uz',
   'ea'                          => 'gb',
   'for Period'                  => 'periods',
-  'to'                          => 'lîdz',
 };
 
 $self{subs} = {
@@ -232,6 +231,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -265,6 +265,7 @@ $self{subs} = {
   'iegrâmatot'                  => 'post',
   'iegrâmatot_kâ_jaunu'         => 'post_as_new',
   'drukât'                      => 'print',
+  'print_and_post'              => 'print_and_post',
   'pârdoðanas_rçíins'           => 'sales_invoice',
   'pârdoðanas_uzdevums'         => 'sales_order',
   'iezîmçt_visu'                => 'select_all',

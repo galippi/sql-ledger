@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Conto',
   'Cannot post transaction!'    => 'Non si può salvare la scrittura!',
   'Continue'                    => 'Continua',
   'Credit Limit'                => 'Fido',
@@ -24,6 +25,7 @@ $self{texts} = {
   'Remaining'                   => 'Rimanente',
   'Salesperson'                 => 'Addetto alle vendite',
   'Screen'                      => 'Schermo',
+  'Source'                      => 'Riferimento',
   'Subtotal'                    => 'Totale parziale',
   'To'                          => 'A',
   'Total'                       => 'Totale',

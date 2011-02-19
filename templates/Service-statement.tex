@@ -85,14 +85,14 @@ Fax: <%customerfax%>
 
 \vspace{2cm}
 
-\begin{tabular*}{\textwidth}{@{}l@{\extracolsep\fill}ccrrrr@{}}
-  \textbf{Invoice \#} & \textbf{Date} & \textbf{Due} &
+\begin{tabular*}{\textwidth}{@{}ll@{\extracolsep\fill}ccrrrr@{}}
+  \textbf{Invoice \#} & \textbf{Order \#} & \textbf{Date} & \textbf{Due} &
   \textbf{Current} & \textbf{30} & \textbf{60} & \textbf{90+} \\
 <%foreach invnumber%>
-  <%invnumber%> & <%invdate%> & <%duedate%> &
+  <%invnumber%> & <%ordnumber%> & <%invdate%> & <%duedate%> &
   <%c0%> & <%c30%> & <%c60%> & <%c90%> \\
 <%end invnumber%>
-\textbf{Subtotal} & & & <%c0total%> & <%c30total%> & <%c60total%> & <%c90total%>
+\textbf{Subtotal} & & & & <%c0total%> & <%c30total%> & <%c60total%> & <%c90total%>
 \end{tabular*}
 \rule{\textwidth}{1pt}
 

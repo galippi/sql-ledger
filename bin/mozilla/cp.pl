@@ -687,13 +687,13 @@ sub check_form {
   
   $form->error($locale->text('Cannot process payment for a closed period!')) if ($datepaid <= $closedto);
 
-  $form->{datepaid} = $locale->date(\%myconfig, $form->{datepaid}, 0);
-  $amount = $form->parse_amount($myconfig, $form->{amount});
+  $form->{datepaid} = $locale->date(\%myconfig, $form->{datepaid});
+  $amount = $form->parse_amount(\%myconfig, $form->{amount});
   $form->{amount} = $amount;
   
   for $i (1 .. $form->{rowcount}) {
     if ($form->{"paid_$i"}) {
-      $amount -= $form->parse_amount($myconfig, $form->{"paid_$i"});
+      $amount -= $form->parse_amount(\%myconfig, $form->{"paid_$i"});
       
       push(@{ $form->{paid} }, $form->{"paid_$i"});
       push(@{ $form->{due} }, $form->{"due_$i"});

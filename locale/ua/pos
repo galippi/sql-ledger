@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Рахунок',
   'Cannot post transaction!'    => 'Не можливо виставити проводку!',
   'Continue'                    => 'Продовжити',
   'Credit Limit'                => 'Л╕м╕т кредиту',
@@ -23,6 +24,7 @@ $self{texts} = {
   'Record in'                   => 'Внести в',
   'Remaining'                   => 'Залишилось',
   'Screen'                      => 'Екран',
+  'Source'                      => 'Джерело',
   'Subtotal'                    => 'П╕дсумок по розд╕лу',
   'To'                          => 'До',
   'Total'                       => 'Загальна Сума',

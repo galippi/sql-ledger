@@ -22,6 +22,7 @@ $self{texts} = {
   'Continue'                    => 'Pokraèování',
   'Copies'                      => 'Kopie',
   'Curr'                        => 'Mìna',
+  'Currency'                    => 'Mìna',
   'Customer'                    => 'Odbìratel',
   'Date'                        => 'Datum',
   'Dec'                         => 'Pro',

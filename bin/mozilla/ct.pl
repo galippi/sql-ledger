@@ -633,7 +633,7 @@ sub list_names {
 
   foreach $ref (@{ $form->{CT} }) {
 
-    if ($ref->{$form->{sort}} ne $sameitem && $form->{l_subtotal}) {
+    if ("$ref->{$form->{sort}}$ref->{id}" ne $sameitem && $form->{l_subtotal}) {
       # print subtotal
       if ($subtotal) {
 	map { $column_data{$_} = "<td>&nbsp;</td>" } @column_index;
@@ -641,7 +641,7 @@ sub list_names {
       }
     }
 
-    if ($ref->{$form->{sort}} eq $sameitem && $form->{sort} eq 'name') {
+    if ("$ref->{$form->{sort}}$ref->{id}" eq $sameitem && $form->{sort} eq 'name') {
       map { $column_data{$_} = "<td>&nbsp;</td>" } @column_index;
     } else {
       
@@ -653,7 +653,7 @@ sub list_names {
 
       $email = "";
       if ($form->{sort} =~ /(email|cc)/) {
-	if ($ref->{$form->{sort}} ne $sameitem) {
+	if ("$ref->{$form->{sort}}$ref->{id}" ne $sameitem) {
 	  $email = 1;
 	}
       } else {
@@ -721,7 +721,7 @@ sub list_names {
         </tr>
 |;
     
-    $sameitem = $ref->{$form->{sort}};
+    $sameitem = "$ref->{$form->{sort}}$ref->{id}";
     $subtotal = 1;
 
   }

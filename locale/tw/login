@@ -1,19 +1,19 @@
 $self{texts} = {
-  'About'                       => 'Ãö©ó',
-  'Company'                     => '¤½¥q¦WºÙ',
-  'Continue'                    => 'Ä~Äò',
-  'Database Host'               => '¸ê®Æ®w¥D¾÷',
-  'Dataset'                     => '¸ê®Æ¶°',
-  'Incorrect Dataset version!'  => '¸ê®Æ¶°ª©¥»¿ù»~!',
-  'Incorrect Password!'         => '±K½X¿ù»~!',
-  'Licensed to'                 => '±ÂÅv¤©',
-  'Login'                       => 'µn¤J',
-  'Name'                        => '¦WºÙ',
-  'Password'                    => '±K½X',
-  'User'                        => '¨Ï¥ÎªÌ',
-  'Version'                     => 'ª©¥»',
-  'You did not enter a name!'   => '±z¨Ã¥¼Áä¤J¦WºÙ!',
-  'is not a member!'            => '¨Ã¤£¬O¦¨­û!',
+  'About'                       => 'é—œæ–¼',
+  'Company'                     => 'å…¬å¸åç¨±',
+  'Continue'                    => 'ç¹¼çºŒ',
+  'Database Host'               => 'è³‡æ–™åº«ä¸»æ©Ÿ',
+  'Dataset'                     => 'è³‡æ–™é›†',
+  'Incorrect Dataset version!'  => 'è³‡æ–™é›†ç‰ˆæœ¬éŒ¯èª¤!',
+  'Incorrect Password!'         => 'å¯†ç¢¼éŒ¯èª¤!',
+  'Licensed to'                 => 'æŽˆæ¬Šäºˆ',
+  'Login'                       => 'ç™»å…¥',
+  'Name'                        => 'åç¨±',
+  'Password'                    => 'å¯†ç¢¼',
+  'User'                        => 'ä½¿ç”¨è€…',
+  'Version'                     => 'ç‰ˆæœ¬',
+  'You did not enter a name!'   => 'æ‚¨ä¸¦æœªéµå…¥åç¨±!',
+  'is not a member!'            => 'ä¸¦ä¸æ˜¯æˆå“¡!',
   'localhost'                   => 'localhost',
 };
 
@@ -23,7 +23,7 @@ $self{subs} = {
   'login_screen'                => 'login_screen',
   'logout'                      => 'logout',
   'selectdataset'               => 'selectdataset',
-  'µn¤j'                        => 'login',
+  'ç™»å…¥'                      => 'login',
 };
 
 1;

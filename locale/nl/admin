@@ -45,7 +45,6 @@ $self{texts} = {
   'Login'                       => 'Login',
   'Login name missing!'         => 'Login naam ontbreekt!',
   'Manager'                     => 'Manager',
-  'Menu width'                  => 'Menu breedte',
   'Multibyte Encoding'          => 'Unicode',
   'Name'                        => 'Naam',
   'New Templates'               => 'Nieuwe templates',

@@ -230,7 +230,6 @@ $self{texts} = {
   'ea'                          => 'pza',
   'for Period'                  => 'para el periodo',
   'sent'                        => 'enviado',
-  'to'                          => 'a',
 };
 
 $self{subs} = {
@@ -281,6 +280,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -314,6 +314,7 @@ $self{subs} = {
   'registrar'                   => 'post',
   'registrar_como_nuevo'        => 'post_as_new',
   'vista_preliminar'            => 'print',
+  'print_and_post'              => 'print_and_post',
   'factura_de_venta'            => 'sales_invoice',
   'orden_de_venta'              => 'sales_order',
   'seleccionar_todo'            => 'select_all',

@@ -176,7 +176,6 @@ $self{texts} = {
   'as at'                       => 'líkt og með',
   'ea'                          => 'stk',
   'for Period'                  => 'fyrir tímabilið',
-  'to'                          => 'til',
 };
 
 $self{subs} = {
@@ -227,6 +226,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -260,6 +260,7 @@ $self{subs} = {
   'bókfæra'                     => 'post',
   'bókfæra_sem_nýjan'           => 'post_as_new',
   'prenta'                      => 'print',
+  'print_and_post'              => 'print_and_post',
   'sölureikningur'              => 'sales_invoice',
   'sölupöntun'                  => 'sales_order',
   'velja_allt'                  => 'select_all',

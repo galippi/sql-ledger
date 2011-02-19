@@ -46,6 +46,7 @@ $self{texts} = {
   'Number'                      => 'Numara',
   'Oct'                         => 'Eki',
   'October'                     => 'Ekim',
+  'Order'                       => 'Sipariþ',
   'Payments'                    => 'Ödemeler',
   'Sep'                         => 'Eyl',
   'September'                   => 'Eylül',

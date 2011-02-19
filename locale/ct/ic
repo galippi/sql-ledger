@@ -21,6 +21,7 @@ $self{texts} = {
   'Contact'                     => 'Contacte',
   'Continue'                    => 'Continuar',
   'Copies'                      => 'Còpies',
+  'Currency'                    => 'Moneda',
   'Customer'                    => 'Client',
   'Date'                        => 'Data',
   'Dec'                         => 'Des',

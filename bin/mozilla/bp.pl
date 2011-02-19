@@ -59,15 +59,15 @@ sub search {
 # $locale->text('Customer')
 # $locale->text('Vendor')
 
-  %label = ( invoice => { title => 'Sales Invoices', name => 'Customer', l_invnumber => 'Y' },
-             packing_list => { title => 'Packing Lists', name => 'Customer', l_ordnumber => 'Y' },
-             pick_list => { title => 'Pick Lists', name => 'Customer', l_ordnumber => 'Y' },
-             sales_order => { title => 'Sales Orders', name => 'Customer', l_ordnumber => 'Y' },
-             work_order => { title => 'Work Orders', name => 'Customer', l_ordnumber => 'Y' },
-             purchase_order => { title => 'Purchase Orders', name => 'Vendor', l_ordnumber => 'Y' },
-             bin_list => { title => 'Bin Lists', name => 'Vendor', l_ordnumber => 'Y' },
-             sales_quotation => { title => 'Quotations', name => 'Customer', l_quonumber => 'Y' },
-             request_quotation => { title => 'RFQs', name => 'Vendor', l_quonumber => 'Y' },
+  %label = ( invoice => { title => 'Sales Invoices', name => 'Customer' },
+             packing_list => { title => 'Packing Lists', name => 'Customer' },
+             pick_list => { title => 'Pick Lists', name => 'Customer' },
+             sales_order => { title => 'Sales Orders', name => 'Customer' },
+             work_order => { title => 'Work Orders', name => 'Customer' },
+             purchase_order => { title => 'Purchase Orders', name => 'Vendor' },
+             bin_list => { title => 'Bin Lists', name => 'Vendor' },
+             sales_quotation => { title => 'Quotations', name => 'Customer' },
+             request_quotation => { title => 'RFQs', name => 'Vendor' },
              check => { title => 'Checks', name => 'Vendor' },
              receipt => { title => 'Receipts', name => 'Customer' }
 	   );
@@ -100,6 +100,7 @@ sub search {
 
   $label{packing_list}{invnumber} = $label{invoice}{invnumber};
   $label{packing_list}{ordnumber} = $label{invoice}{ordnumber};
+  $label{pick_list}{invnumber} = $label{invoice}{invnumber};
   $label{pick_list}{ordnumber} = $label{invoice}{ordnumber};
   $label{sales_order}{ordnumber} = $label{invoice}{ordnumber};
   $label{work_order}{ordnumber} = $label{invoice}{ordnumber};
@@ -144,6 +145,28 @@ sub search {
 
     }
   }
+
+
+  # accounting years
+  $form->{selectaccountingyear} = "<option>\n";
+  map { $form->{selectaccountingyear} .= qq|<option>$_\n| } @{ $form->{all_years} };
+  $form->{selectaccountingmonth} = "<option>\n";
+  map { $form->{selectaccountingmonth} .= qq|<option value=$_>|.$locale->text($form->{all_month}{$_}).qq|\n| } sort keys %{ $form->{all_month} };
+
+  $selectfrom = qq|
+        <tr>
+	<th align=right>|.$locale->text('Period').qq|</th>
+	<td colspan=3>
+	<select name=month>$form->{selectaccountingmonth}</select>
+	<select name=year>$form->{selectaccountingyear}</select>
+	<input name=interval class=radio type=radio value=0 checked>|.$locale->text('Current').qq|
+	<input name=interval class=radio type=radio value=1>|.$locale->text('Month').qq|
+	<input name=interval class=radio type=radio value=3>|.$locale->text('Quarter').qq|
+	<input name=interval class=radio type=radio value=12>|.$locale->text('Year').qq|
+	</td>
+      </tr>
+|;
+
   
   $form->header;
   
@@ -179,6 +202,7 @@ sub search {
 	  <td><input name=transdateto size=11 title="$myconfig{dateformat}"></td>
 	</tr>
 	<input type=hidden name=sort value=transdate>
+	$selectfrom
       </table>
     </td>
   </tr>
@@ -352,6 +376,9 @@ sub list_spool {
   if ($form->{type} =~ /(invoice|check|receipt)/) {
     push @columns, "invnumber";
   }
+  if ($form->{type} =~ /(packing|pick)_list/) {
+    push @columns, "invnumber";
+  }
   if ($form->{type} =~ /_(order|list)$/) {
     push @columns, "ordnumber";
   }
@@ -430,15 +457,22 @@ sub list_spool {
       $column_data{checked} = qq|<td><input name=checked_$i type=checkbox style=checkbox $form->{"checked_$i"} $form->{"checked_$i"}></td>|;
     }
     
-    $column_data{invnumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{invnumber}</a></td>
-    <input type=hidden name="reference_$i" value="$ref->{invnumber}">|;
-    
-    $column_data{ordnumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{ordnumber}</a></td>
-    <input type=hidden name="reference_$i" value="$ref->{ordnumber}">|;
-    
-    $column_data{quonumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{quonumber}</a></td>
+    if ($ref->{module} eq 'oe') {
+      $column_data{invnumber} = qq|<td>&nbsp</td>|;
+      $column_data{ordnumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{ordnumber}</a></td>
+      <input type=hidden name="reference_$i" value="$ref->{ordnumber}">|;
+      
+      $column_data{quonumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{quonumber}</a></td>
     <input type=hidden name="reference_$i" value="$ref->{quonumber}">|;
+ 
+    } else {
+      $column_data{ordnumber} = qq|<td>$ref->{ordnumber}</td>|;
+      $column_data{quonumber} = qq|<td>$ref->{quonumber}</td>|;
+      $column_data{invnumber} = qq|<td><a href=$module?action=edit&id=$ref->{id}&path=$form->{path}&login=$form->{login}&password=$form->{password}&type=$form->{type}&callback=$callback>$ref->{invnumber}</a></td>
+    <input type=hidden name="reference_$i" value="$ref->{invnumber}">|;
+    }
     
+   
     $column_data{name} = "<td>$ref->{name}</td>";
     $column_data{spoolfile} = qq|<td><a href=$spool/$ref->{spoolfile}>$ref->{spoolfile}</a></td>
 

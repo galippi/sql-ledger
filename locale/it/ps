@@ -181,7 +181,6 @@ $self{texts} = {
   'as at'                       => 'Al',
   'ea'                          => 'ci',
   'for Period'                  => 'nel periodo',
-  'to'                          => 'fino al',
 };
 
 $self{subs} = {
@@ -232,6 +231,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -265,6 +265,7 @@ $self{subs} = {
   'salva'                       => 'post',
   'salva_come_nuovo'            => 'post_as_new',
   'stampa'                      => 'print',
+  'print_and_post'              => 'print_and_post',
   'fattura_di_vendita'          => 'sales_invoice',
   'ordine_di_vendita'           => 'sales_order',
   'seleziona_tutto'             => 'select_all',

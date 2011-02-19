@@ -354,11 +354,11 @@ Don't forget to restart your webserver!
 
       if (!$permset) {
 	print qq|
-WARNING: permissions for templates, users and spool directory
+WARNING: permissions for templates, users, css and spool directory
 could not be set. Login as root and set permissions
 
-# chown :$webgroup users templates spool
-# chmod 771 users templates spool
+# chown :$webgroup users templates css spool
+# chmod 771 users templates css spool
 
 |;
       }
@@ -399,14 +399,14 @@ Webserver directives were written to
   # if this is not root, check if user is part of $webgroup
   if ($>) {
     if ($permset = ($) =~ getgrnam $webgroup)) {
-      `chown :$webgroup users templates spool`;
-      chmod 0771, 'users', 'templates', 'spool';
+      `chown :$webgroup users templates css spool`;
+      chmod 0771, 'users', 'templates', 'css', 'spool';
     }
   } else {
     # root
     `chown -hR 0:0 *`;
-    `chown $webowner:$webgroup users templates spool`;
-    chmod 0771, 'users', 'templates', 'spool';
+    `chown $webowner:$webgroup users templates css spool`;
+    chmod 0771, 'users', 'templates', 'css', 'spool';
   }
   
   unlink "sql-ledger.conf.default";

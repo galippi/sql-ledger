@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Konts',
   'Cannot post transaction!'    => 'Nevar iegrâmatot darîjumu!',
   'Continue'                    => 'Turpinât',
   'Credit Limit'                => 'Kredîta limits',
@@ -24,6 +25,7 @@ $self{texts} = {
   'Remaining'                   => 'Atlikums',
   'Salesperson'                 => 'Pârdevçjs',
   'Screen'                      => 'Ekrâns',
+  'Source'                      => 'Dokuments',
   'Subtotal'                    => 'Kopâ',
   'To'                          => 'uz',
   'Total'                       => 'Pavisam Kopâ',

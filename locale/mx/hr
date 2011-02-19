@@ -54,7 +54,6 @@ $self{texts} = {
   'Rate missing!'               => '¡Falta la tarifa!',
   'Role'                        => 'Rol',
   'S'                           => 'V',
-  'SIN'                         => 'SIN',
   'Sales'                       => 'Ventas',
   'Save'                        => 'Guardar',
   'Save as new'                 => 'Guardar como nuevo',

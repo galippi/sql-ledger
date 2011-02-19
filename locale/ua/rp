@@ -64,6 +64,7 @@ $self{texts} = {
   'Number'                      => 'Номер',
   'Oct'                         => 'жовтня',
   'October'                     => 'Жовтень',
+  'Order'                       => 'Замовлення',
   'PDF'                         => 'PDF файл формат',
   'Payments'                    => 'Платеж╕',
   'Postscript'                  => 'Postscript',
@@ -96,7 +97,6 @@ $self{texts} = {
   'Vendor not on file!'         => 'Потачальника нема у списку ',
   'as at'                       => 'як в',
   'for Period'                  => 'за Пер╕од',
-  'to'                          => 'до',
 };
 
 $self{subs} = {

@@ -271,7 +271,7 @@ sub form_header {
 	    </tr>
 | if $form->{selectdepartment};
 
-  $n = ($form->{creditremaining} =~ /-/) ? "0" : "1";
+  $n = ($form->{creditremaining} < 0) ? "0" : "1";
 
 
   $form->header;
@@ -616,7 +616,7 @@ print qq|
 
 sub update {
 
-  map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate creditlimit creditremaining);
+  map { $form->{$_} = $form->parse_amount(\%myconfig, $form->{$_}) } qw(exchangerate);
   
   &check_name(vendor);
 

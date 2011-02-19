@@ -187,7 +187,6 @@ $self{texts} = {
   'as at'                       => 'Fordulónap:',
   'ea'                          => 'db',
   'for Period'                  => 'Idõszak:',
-  'to'                          => 'Meddig:',
 };
 
 $self{subs} = {
@@ -238,6 +237,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -271,6 +271,7 @@ $self{subs} = {
   'rögzítés'                    => 'post',
   'rögzítés_új_tranzakcióként'  => 'post_as_new',
   'nyomtatás'                   => 'print',
+  'print_and_post'              => 'print_and_post',
   'vevõszámla'                  => 'sales_invoice',
   'vevõrendelés'                => 'sales_order',
   'mindent_kijelöl'             => 'select_all',

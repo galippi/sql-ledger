@@ -109,6 +109,8 @@ sub all_transactions {
 
   my $fromdate_where;
   my $todate_where;
+
+  ($form->{fromdate}, $form->{todate}) = $form->from_to($form->{year}, $form->{month}, $form->{interval}) if $form->{year} && $form->{month};
   
   if ($form->{fromdate}) {
     $fromdate_where = qq|
@@ -141,7 +143,7 @@ sub all_transactions {
   
   if ($department_id) {
     $dpt_join = qq|
-                   JOIN department t ON (t.id = ac.trans_id)
+                   JOIN department t ON (t.id = a.department_id)
 		  |;
     $dpt_where = qq|
 		   AND t.id = $department_id
@@ -320,11 +322,11 @@ sub all_transactions {
     
     # get all transactions
     $query .= qq|$union
-                 SELECT g.id, g.reference, g.description, ac.transdate,
+                 SELECT a.id, a.reference, a.description, ac.transdate,
 	         $false AS invoice, ac.amount, 'gl' as module, ac.cleared,
 		 '' AS till
-		 FROM gl g
-		 JOIN acc_trans ac ON (ac.trans_id = g.id)
+		 FROM gl a
+		 JOIN acc_trans ac ON (ac.trans_id = a.id)
 		 $dpt_join
 		 WHERE ac.chart_id = $id
 		 $fromdate_where

@@ -400,6 +400,8 @@ sub ap_transactions {
     $form->{open} = $form->{closed} = 0;
   }
 
+  ($form->{transdatefrom}, $form->{transdateto}) = $form->from_to($form->{year}, $form->{month}, $form->{interval}) if $form->{year} && $form->{month};
+
   $where .= " AND a.transdate >= '$form->{transdatefrom}'" if $form->{transdatefrom};
   $where .= " AND a.transdate <= '$form->{transdateto}'" if $form->{transdateto};
   if ($form->{open} || $form->{closed}) {

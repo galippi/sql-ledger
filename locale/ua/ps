@@ -177,7 +177,6 @@ $self{texts} = {
   'as at'                       => 'як в',
   'ea'                          => 'шт.',
   'for Period'                  => 'за Пер╕од',
-  'to'                          => 'до',
 };
 
 $self{subs} = {
@@ -228,6 +227,7 @@ $self{subs} = {
   'post_as_new'                 => 'post_as_new',
   'prepare_invoice'             => 'prepare_invoice',
   'print'                       => 'print',
+  'print_and_post'              => 'print_and_post',
   'print_form'                  => 'print_form',
   'print_options'               => 'print_options',
   'project_selected'            => 'project_selected',
@@ -261,6 +261,7 @@ $self{subs} = {
   'Виставити'                   => 'post',
   'Виставити_як_новий'          => 'post_as_new',
   'Надрукувати'                 => 'print',
+  'print_and_post'              => 'print_and_post',
   'Рахунок_фактура'             => 'sales_invoice',
   'Продажна_Накладна'           => 'sales_order',
   'Вибрати_все'                 => 'select_all',

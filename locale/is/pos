@@ -1,4 +1,5 @@
 $self{texts} = {
+  'Account'                     => 'Reikningur',
   'Cannot post transaction!'    => 'Get ekki bókağ færslu!',
   'Continue'                    => 'Áfram',
   'Credit Limit'                => 'Kreditmörk',
@@ -23,6 +24,7 @@ $self{texts} = {
   'Record in'                   => 'Bóka á',
   'Remaining'                   => 'Eftir',
   'Screen'                      => 'Skjá',
+  'Source'                      => 'Frálag',
   'Subtotal'                    => 'Samtala',
   'To'                          => 'til',
   'Total'                       => 'Samtals',

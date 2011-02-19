@@ -214,6 +214,9 @@ sub all_transactions {
     $arwhere .= " AND lower(ac.source) LIKE '$var'";
     $apwhere .= " AND lower(ac.source) LIKE '$var'";
   }
+
+  ($form->{datefrom}, $form->{dateto}) = $form->from_to($form->{year}, $form->{month}, $form->{interval}) if $form->{year} && $form->{month};
+  
   if ($form->{datefrom}) {
     $glwhere .= " AND ac.transdate >= '$form->{datefrom}'";
     $arwhere .= " AND ac.transdate >= '$form->{datefrom}'";
